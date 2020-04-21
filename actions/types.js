@@ -1,0 +1,9 @@
+export const LOAD_USER = 'GET_USER';
+export const LOGIN_SUCCESS = 'LOGIN_SUCCESS';
+export const LOGIN_FAIL = 'LOGIN_FAIL';
+export const ERROR = 'ERROR';
+export const LOAD_BUSINESSES = 'LOAD_BUSINESSES';
+export const LOAD_BUSINESS = 'LOAD_BUSINESS';
+export const CLEAR_BUSINESSES = 'CLEAR_BUSINESSES';
+export const LOAD_SEARCH = 'LOAD_SEARCH';
+export const LEAVE_SEARCH = 'LEAVE_SEARCH';
