@@ -1,4 +1,4 @@
-import { LOAD_BUSINESSES, LOAD_BUSINESS, CLEAR_BUSINESSES, ERROR, LOAD_SEARCH } from './types';
+import { LOAD_BUSINESSES, LOAD_BUSINESS, CLEAR_BUSINESSES, ERROR, LOAD_SEARCH, LOAD_LANDING } from './types';
 import { BASE_URL, PLACES_API_KEY } from '../config';
 import toQueryString from '../utils/QueryString';
 export const getBusinesses = (params) => async dispatch => {
@@ -49,26 +49,10 @@ export const getBusiness = (googleId, id) => async dispatch => {
         });
     }
 };
-
-export const findPlace = (params) => async dispatch => {
-    try {
-        let p = { ...params, key: PLACES_API_KEY, inputtype: 'textquery' };
-        let url = `https://maps.googleapis.com/maps/api/place/findplacefromtext/json?fields=photos,formatted_address,name,rating,opening_hours,geometry&${toQueryString(p)}`;
-        console.log(url);
-        // const res = await fetch(url, {
-        //     method: 'GET',
-
-        // });
-    } catch (err) {
-
-    }
-};
 export const getNearby = (params) => async dispatch => {
-    console.log("nearby Function called");
     try {
-        let p = { ...params, key: PLACES_API_KEY, radius: "300" };
+        let p = { ...params, key: PLACES_API_KEY };
         let url = `https://maps.googleapis.com/maps/api/place/nearbysearch/json?location=37.2555603,-122.0413537&${toQueryString(p)}`;
-        console.log(url);
         const res = await fetch(url, {
             method: 'GET'
         });
@@ -87,17 +71,40 @@ export const getNearby = (params) => async dispatch => {
         console.log(err);
     }
 };
-export const checkIn = (id) => async dispatch => {
-    console.log("Checking in");
-    console.log(id);
+export const getAll = (params) => async dispatch => {
     try {
-        const res = await fetch("http://sizzleco.herokuapp.com/api/business/addPerson/ChIJvYn1GuBKjoARPxL6JHn5FAc", {
+        let p = { ...params, key: PLACES_API_KEY, type: "point_of_interest" };
+        let url = `https://maps.googleapis.com/maps/api/place/nearbysearch/json?&location=37.2555603,-122.0413537&${toQueryString(p)}`;
+        const res = await fetch(url);
+        const json = await res.json();
+        const ids = json.results.map(x => x.place_id);
+        const local = await fetch(`${BASE_URL}/api/business/ids`, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'
             },
             body: JSON.stringify({
-                googleId: "ChIJvYn1GuBKjoARPxL6JHn5FAc"
+                ids: ids
+            })
+        });
+        const json1 = await local.json();
+        dispatch({
+            type: LOAD_LANDING,
+            payload: { results: json.results, local: json1 }
+        });
+    } catch (err) {
+        console.log(err);
+    }
+};
+export const checkIn = (id) => async dispatch => {
+    try {
+        const res = await fetch(`${BASE_URL}/api/business/addPerson/${id}`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+                googleId: id
             })
         });
         const json = await res.json();

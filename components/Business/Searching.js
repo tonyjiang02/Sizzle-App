@@ -1,14 +1,15 @@
 import React, { useEffect, useState } from 'react';
 import { connect } from 'react-redux';
-import { View, ScrollView, Modal, Text } from 'react-native';
+import { View, ScrollView, Text } from 'react-native';
+import Modal from 'react-native-modal';
 import { Button } from 'react-native-elements';
 import { findPlace, getNearby } from '../../actions/business';
 import { styles } from '../Styles';
 import BusinessList from './BusinessList';
 import Loading from '../layout/Loading';
 const Searching = ({ getNearby, route: { params: { query } }, navigation, business }) => {
-    const [distance, setDistance] = useEffect(3);
-    const [modalVisible, setVisible] = useEffect(false);
+    const [distance, setDistance] = useState(3);
+    const [modalVisible, setVisible] = useState(false);
     const milesToKm = (miles) => {
         return 1.6 * miles;
     };
@@ -24,22 +25,24 @@ const Searching = ({ getNearby, route: { params: { query } }, navigation, busine
         <View style={styles.landing}>
             {business.loadingSearch ? <Loading /> :
                 <View style={{ flex: 1 }}>
-                    <Text>HELLO THERE</Text>
                     <Button
-                        title={distance + " Miles"}
-                        onPress={setVisible(true)}
+                        title={"Search Options"}
+                        onPress={() => { setVisible(true); }}
                     />
-
                     <Modal
-                        animationType="slide"
-                        transparent={true}
-                        visible={modalVisible}
+                        isVisible={modalVisible}
+                        coverScreen={false}
+                        backdropColor={"white"}
+                        backdropOpacity={0.8}
+                        animationInTiming={500}
+                        swipeDirection={['up', 'down']}
+                        onSwipeComplete={(e) => { if (e.swipingDirection === 'down') setVisible(false); }}
                     >
-                        <View style={{ alignContent: center }}>
+                        <View style={{ height: 100, width: "100%", alignContent: "center" }}>
                             <Text>Search Preferences</Text>
                             <View>
                                 <Text>Distance Within</Text>
-                                <View style={{ flexDirection: row }}>
+                                <View style={{ flexDirection: "row" }}>
                                     <Button title="3 Miles"></Button>
                                     <Button title="5 Miles"></Button>
                                     <Button title="10 Miles"></Button>

@@ -7,3 +7,4 @@ export const LOAD_BUSINESS = 'LOAD_BUSINESS';
 export const CLEAR_BUSINESSES = 'CLEAR_BUSINESSES';
 export const LOAD_SEARCH = 'LOAD_SEARCH';
 export const LEAVE_SEARCH = 'LEAVE_SEARCH';
+export const LOAD_LANDING = 'LOAD_LANDING';

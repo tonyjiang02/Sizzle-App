@@ -17,9 +17,6 @@ const input = StyleSheet.create({
         borderColor: "#c0c0c0",
         borderBottomWidth: StyleSheet.hairlineWidth,
         marginBottom: 20
-    },
-    searchInput: {
-
     }
 });
 
