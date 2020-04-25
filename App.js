@@ -25,7 +25,7 @@ export default function App() {
                 console.log("Is Authenticated");
             } else {
                 console.log("Not Authenticated");
-                setAuth(1);
+                setAuth(2);
             }
 
         };
