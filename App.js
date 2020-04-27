@@ -59,5 +59,6 @@ export default function App() {
             )}
         </Provider>
     );
+    <Stack.Screen name="Landing" component={Landing} />
 }
 

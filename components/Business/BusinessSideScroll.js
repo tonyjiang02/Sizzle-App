@@ -1,7 +1,11 @@
 import React, { useEffect, useState } from 'react';
-import { View, ScrollView } from 'react-native';
+import { View, ScrollView, Text } from 'react-native';
 import BusinessSquare from './BusinessSquare';
-const BusinessSideScroll = ({ businesses }) => {
+import BusinessCard from './BusinessCard';
+import CategoryHeader  from './CategoryHeader';
+import { styles } from '../Styles';
+
+const BusinessSideScroll = ({ businesses, category }) => {
     //businesses : {googleData, ourData}
     //bs = googleData
     //db = ourData
@@ -14,14 +18,22 @@ const BusinessSideScroll = ({ businesses }) => {
         });
         updateList(l);
     }, [businesses]);
-
     return (
-        <ScrollView
-            horizontal={true}
-            style={{ height: 200 }}
-        >
-            {list}
-        </ScrollView>
+        <View style={{backgroundColor: "white", paddingBottom: 10}}>
+            <View style={{backgroundColor: '#f2f2f2'}}>
+                <CategoryHeader category={category}/>
+                <ScrollView horizontal={true} style={{ height: 200, paddingLeft: 15, paddingTop: 5}} showsHorizontalScrollIndicator={false}>
+                    <BusinessSquare></BusinessSquare>
+                    <BusinessSquare></BusinessSquare>
+                    <BusinessSquare></BusinessSquare>
+                    <BusinessSquare></BusinessSquare>
+                    <BusinessSquare></BusinessSquare>
+                    <BusinessSquare></BusinessSquare>
+                    <BusinessSquare></BusinessSquare>
+                    <Text style={{padding: 10}}></Text>
+                </ScrollView>
+            </View>
+        </View>
     );
 };
 
