@@ -10,5 +10,6 @@ export default function App() {
             <Index></Index>
         </Provider>
     );
+    <Stack.Screen name="Landing" component={Landing} />
 }
 

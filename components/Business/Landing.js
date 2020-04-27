@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { View, TextInput, SafeAreaView } from 'react-native';
+import { View, TextInput, SafeAreaView, Text } from 'react-native';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { styles } from '../Styles';
@@ -9,7 +9,10 @@ import { getRegisteredBusinesses, getNearby, getAll } from '../../actions/busine
 import Loading from '../layout/Loading';
 import BusinessList from './BusinessList';
 import BusinessSideScroll from './BusinessSideScroll';
+import Header from '../layout/Header';
+import { ScrollView } from 'react-native-gesture-handler';
 export const Landing = ({ getRegisteredBusinesses, getAll, navigation, business: { businesses, loadingAll, dbBusinesses } }) => {
+    
     const [search, updateSearch] = useState("");
     const [sorted, updateSorted] = useState(null);
     const [sorting, updateSorting] = useState(true);
@@ -54,18 +57,31 @@ export const Landing = ({ getRegisteredBusinesses, getAll, navigation, business:
     return (
         <View style={styles.landing}>
             {loadingAll || sorting ? <Loading /> :
-                <View>
+                <View> 
+                    <Header></Header>
                     <SearchBar
                         placeholder="Search"
                         onChangeText={(text) => updateSearch(text)}
                         defaultValue={search}
                         value={search}
                         platform="ios"
-                        containerStyle={{ paddingTop: getStatusBarHeight() }}
+                        containerStyle={{backgroundColor: "white" }}
+                        inputContainerStyle={{backgroundColor: "white", height: 30}}
+                        cancelButtonTitle={"X       "}
+                        cancelButtonProps={{color: '#bdbdbd'}}
                         returnKeyType="search"
                         onSubmitEditing={(e) => query(e.nativeEvent.text)}
                     />
-                    <BusinessSideScroll businesses={sorted.cafe}></BusinessSideScroll>
+                    <ScrollView showsVerticalScrollIndicator={false}>
+                        <BusinessSideScroll businesses={sorted.cafe} category={'Featured'}></BusinessSideScroll>
+                        <BusinessSideScroll businesses={sorted.cafe} category={'Nearby'}></BusinessSideScroll>
+                        <BusinessSideScroll businesses={sorted.cafe} category={'Groceries'}></BusinessSideScroll>
+                        <BusinessSideScroll businesses={sorted.cafe} category={'Restaurants'}></BusinessSideScroll>
+                        <BusinessSideScroll businesses={sorted.cafe} category={'Home Essentials'}></BusinessSideScroll>
+                        <BusinessSideScroll businesses={sorted.cafe} category={'Public'}></BusinessSideScroll>
+                        <BusinessSideScroll businesses={sorted.cafe} category={'Shops'}></BusinessSideScroll>
+                        <Text style={{padding: 70}}></Text>
+                    </ScrollView>
                 </View>
             }
         </View>

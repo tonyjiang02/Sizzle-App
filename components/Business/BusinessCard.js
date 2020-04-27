@@ -8,14 +8,15 @@ const BusinessCard = ({ business, navigation }) => {
     const onPress = () => {
         navigation.navigate('BusinessPage', { business: business });
     };
+
     return (
         <TouchableOpacity onPress={onPress} style={{ flexDirection: "row" }}>
             <View style={{ flex: 1 }}>
                 <Image source={{ uri: 'https://picsum.photos/200/200' }} style={{ height: 100, width: 100 }}></Image>
             </View>
             <View style={{ flex: 2 }}>
-                <Text style={{ flex: 1 }}>{business.name}</Text>
-                <Text style={{ flex: 2, flexWrap: 'wrap' }} adjustsFontSizeToFit>{business.description}</Text>
+                <Text style={{ flex: 1 }}>testbusiness</Text>
+                <Text style={{ flex: 2, flexWrap: 'wrap' }} adjustsFontSizeToFit>testdescription</Text>
             </View>
         </TouchableOpacity>
     );

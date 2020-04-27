@@ -24,7 +24,7 @@ const Searching = ({ getNearby, route: { params: { query } }, navigation, busine
     return (
         <View style={styles.landing}>
             {business.loadingSearch ? <Loading /> :
-                <View style={{ flex: 1 }}>
+                <View style={{ flex: 1}}>
                     <Button
                         title={"Search Options"}
                         onPress={() => { setVisible(true); }}
