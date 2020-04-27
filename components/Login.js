@@ -3,18 +3,14 @@ import { Text, TextInput, View, StyleSheet, KeyboardAvoidingView, TouchableOpaci
 import { connect } from 'react-redux';
 import { login } from '../actions/auth';
 import { styles, input } from './Styles';
-const Login = ({ login, isAuthenticated, navigation }) => {
-    useEffect(() => {
-        if (isAuthenticated) {
-            navigation.navigate('Home');
-        }
-    }, [isAuthenticated]);
+const Login = ({ login, isAuthenticated, navigation, updateAuth }) => {
     const [fields, setFields] = useState({
         email: '',
         password: ''
     });
     const { email, password } = fields;
     const auth = () => {
+        console.log("loggin in");
         login(fields.email, fields.password);
     };
     return (

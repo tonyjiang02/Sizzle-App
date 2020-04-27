@@ -5,6 +5,7 @@ import { AsyncStorage } from 'react-native';
 export const login = (email, password) => async dispatch => {
     //login user using fetch
     //save token to async storage
+    console.log("LOGIN ACTION");
     try {
         const res = await fetch(`${BASE_URL}/api/auth/user`, {
             method: 'POST',

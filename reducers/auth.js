@@ -7,10 +7,11 @@ const initialState = {
     user: null
 };
 
-export default function (state = initialState, action) {
+export default async function (state = initialState, action) {
     const { type, payload } = action;
     switch (type) {
         case LOGIN_SUCCESS:
+            console.log("AUTH REDUCER: LOGIN SUCCESS");
             AsyncStorage.setItem('token', payload.token);
             return {
                 ...state,

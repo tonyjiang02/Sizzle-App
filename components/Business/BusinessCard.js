@@ -4,7 +4,6 @@ import { styles } from '../Styles';
 import { textTruncateBySpace } from '../../utils/TextTruncate';
 const BusinessCard = ({ business, navigation }) => {
     useEffect(() => {
-        console.log(business);
     }, []);
     const onPress = () => {
         navigation.navigate('BusinessPage', { business: business });

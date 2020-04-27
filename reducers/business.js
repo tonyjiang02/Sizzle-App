@@ -43,7 +43,6 @@ export default function (state = initialState, action) {
                 searchBusinesses: []
             };
         case LOAD_LANDING:
-            console.log('LOAD LANDING');
             return {
                 ...state,
                 businesses: payload.results,

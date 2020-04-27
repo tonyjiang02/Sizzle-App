@@ -108,7 +108,6 @@ export const checkIn = (id) => async dispatch => {
             })
         });
         const json = await res.json();
-        console.log(json.msg);
     } catch (error) {
 
     }

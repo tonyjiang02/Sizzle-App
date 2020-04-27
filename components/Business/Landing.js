@@ -36,7 +36,6 @@ export const Landing = ({ getRegisteredBusinesses, getAll, navigation, business:
             health: [],
             other: [],
         };
-        console.log('sorting');
         for (let k = 0; k < businesses.length; k++) {
             for (let i = 0; i < businesses[k].types.length; i++) {
                 if (s[businesses[k].types[i]]) {
@@ -47,7 +46,6 @@ export const Landing = ({ getRegisteredBusinesses, getAll, navigation, business:
             }
         }
         updateSorted(s);
-        console.log(s.cafe);
         updateSorting(false);
     };
     const query = function (input) {
