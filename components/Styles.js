@@ -1,5 +1,4 @@
 import { StyleSheet } from 'react-native';
-import CategoryHeader from './Business/CategoryHeader';
 
 const styles = StyleSheet.create({
     defaultView: {
@@ -21,20 +20,20 @@ const styles = StyleSheet.create({
         paddingBottom: 2,
     },
     headerStyle: {
-        backgroundColor: '#FF9900', 
-        paddingTop: 40, 
+        backgroundColor: '#FF9900',
+        paddingTop: 40,
         paddingBottom: 10
     },
     businessSquareOuter: {
-        flex: 1, 
-        paddingLeft: 5, 
-        paddingRight: 5, 
-        paddingBottom: 10, 
+        flex: 1,
+        paddingLeft: 5,
+        paddingRight: 5,
+        paddingBottom: 10,
         backgroundColor: '#f2f2f2'
     },
     businessSquareInner: {
-        flex: 6, 
-        backgroundColor: 'white', 
+        flex: 6,
+        backgroundColor: 'white',
         padding: 10,
         borderRadius: 10
     }
@@ -56,6 +55,6 @@ const COLORS = {
     orange: 'orange',
     red: 'red',
     blue: 'blue'
-}
+};
 
 export { styles, input, COLORS };

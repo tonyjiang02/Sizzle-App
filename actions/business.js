@@ -1,4 +1,4 @@
-import { LOAD_BUSINESSES, LOAD_BUSINESS, CLEAR_BUSINESSES, ERROR, LOAD_SEARCH, LOAD_LANDING } from './types';
+import { LOAD_BUSINESSES, LOAD_BUSINESS, CLEAR_BUSINESSES, CLEAR_SEARCH, CLEAR_BUSINESS, ERROR, LOAD_SEARCH, LOAD_LANDING, UPDATE_POPULATION } from './types';
 import { BASE_URL, PLACES_API_KEY } from '../config';
 import toQueryString from '../utils/QueryString';
 export const getBusinesses = (params) => async dispatch => {
@@ -29,6 +29,16 @@ export const getRegisteredBusinesses = (params) => async dispatch => {
         });
     }
 };
+export const openBusinessPage = (business, db) => dispatch => {
+    console.log("Open Business Page");
+    dispatch({
+        type: LOAD_BUSINESS,
+        payload: { db: db, business: business }
+    });
+};
+export const test = () => {
+    console.log("test");
+};
 export const getBusiness = (googleId, id) => async dispatch => {
     var res = null;
     try {
@@ -49,14 +59,27 @@ export const getBusiness = (googleId, id) => async dispatch => {
         });
     }
 };
-export const getNearby = (params) => async dispatch => {
+export const getNearby = (params, coords) => async dispatch => {
     try {
-        let p = { ...params, key: PLACES_API_KEY };
-        let url = `https://maps.googleapis.com/maps/api/place/nearbysearch/json?location=37.2555603,-122.0413537&${toQueryString(p)}`;
+        let p = { ...params, key: PLACES_API_KEY, rankby: "distance" };
+        let location = `location=${coords.latitude},${coords.longitude}`;
+        let url = `https://maps.googleapis.com/maps/api/place/nearbysearch/json?&${location}&${toQueryString(p)}`;
         const res = await fetch(url, {
             method: 'GET'
         });
         const json = await res.json();
+        const ids = json.results.map(x => x.place_id);
+        console.log(ids);
+        const local = await fetch(`${BASE_URL}/api/business/ids`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+                ids: ids
+            })
+        });
+        const json1 = await local.json();
         let q;
         if (params.keyword) {
             q = "Nearby";
@@ -65,16 +88,17 @@ export const getNearby = (params) => async dispatch => {
         }
         dispatch({
             type: LOAD_SEARCH,
-            payload: { results: json.results, query: q }
+            payload: { results: json.results, query: q, local: json1 }
         });
     } catch (err) {
         console.log(err);
     }
 };
-export const getAll = (params) => async dispatch => {
+export const getAll = (params, coords) => async dispatch => {
     try {
         let p = { ...params, key: PLACES_API_KEY, type: "point_of_interest" };
-        let url = `https://maps.googleapis.com/maps/api/place/nearbysearch/json?&location=37.2555603,-122.0413537&${toQueryString(p)}`;
+        let location = `location=${coords.latitude},${coords.longitude}`;
+        let url = `https://maps.googleapis.com/maps/api/place/nearbysearch/json?&${location}&${toQueryString(p)}`;
         const res = await fetch(url);
         const json = await res.json();
         const ids = json.results.map(x => x.place_id);
@@ -98,6 +122,7 @@ export const getAll = (params) => async dispatch => {
 };
 export const checkIn = (id) => async dispatch => {
     try {
+        console.log("checking in");
         const res = await fetch(`${BASE_URL}/api/business/addPerson/${id}`, {
             method: 'POST',
             headers: {
@@ -108,6 +133,11 @@ export const checkIn = (id) => async dispatch => {
             })
         });
         const json = await res.json();
+        console.log(json);
+        dispatch({
+            type: UPDATE_POPULATION,
+            payload: json
+        });
     } catch (error) {
 
     }

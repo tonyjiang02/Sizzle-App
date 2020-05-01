@@ -15,32 +15,32 @@ import { Provider } from 'react-redux';
 import store from './store';
 
 const Stack = createStackNavigator();
-const Index = ({ auth: { isAuthenticated } }) => {
-
+const Index = ({ auth }) => {
     const [isAuth, setAuth] = useState(0);
     useEffect(() => {
-        const isAuthenticated = async () => {
-            await AsyncStorage.clear();
-            const token = await AsyncStorage.getItem('token');
-            if (token) {
-                store.dispatch(loadUser());
+        if (isAuth != 2) {
+            console.log("Running Auth Check");
+            const isAuthenticated = async () => {
+                const token = await AsyncStorage.getItem('token');
+                if (token) {
+                    store.dispatch(loadUser());
+                    setAuth(2);
+                    console.log("Is Authenticated");
+                } else {
+                    console.log("Not Authenticated");
+                    setAuth(1);
+                }
+
+            };
+            if (auth.isAuthenticated) {
                 setAuth(2);
-                console.log("Is Authenticated");
+                console.log("Is Authenticated First Time");
             } else {
-                console.log("Not Authenticated");
-                setAuth(1);
+                isAuthenticated();
             }
-
-        };
-        console.log("checking Auth");
-        if (isAuthenticated) {
-            setAuth(2);
-        } else {
-            isAuthenticated();
         }
-
-    }, [isAuthenticated]);
-    authController = () => {
+    }, [auth]);
+    const authController = () => {
         if (isAuth === 1) {
             return (
                 <Stack.Screen name="Login" component={Login} />
@@ -72,4 +72,4 @@ const mapStateToProps = state => ({
     auth: state.auth
 });
 
-export default connect(mapStateToProps, {})(Index);
+export default connect(mapStateToProps, { loadUser })(Index);

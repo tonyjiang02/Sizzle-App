@@ -1,21 +1,18 @@
 import React, { useEffect, useState } from 'react';
 import { View, ScrollView, Text } from 'react-native';
 import BusinessSquare from './BusinessSquare';
-import BusinessCard from './BusinessCard';
 import CategoryHeader from './CategoryHeader';
 import { styles } from '../Styles';
 
-const BusinessSideScroll = ({ businesses, category }) => {
+const BusinessSideScroll = ({ businesses, category, navigation }) => {
     //businesses : {googleData, ourData}
     //bs = googleData
     //db = ourData
     const [list, updateList] = useState([]);
     useEffect(() => {
-        console.log("Side scroll rendered");
-        console.log(businesses.length);
-        const l = businesses.map((tuple) => {
-            <BusinessSquare key={tuple.business.googleId} business={tuple.business} db={tuple.db}></BusinessSquare>;
-        });
+        const l = businesses.map((obj) =>
+            <BusinessSquare key={obj.db._id} business={obj.business} db={obj.db} navigation={navigation}></BusinessSquare>
+        );
         updateList(l);
     }, [businesses]);
     return (
@@ -23,13 +20,7 @@ const BusinessSideScroll = ({ businesses, category }) => {
             <View style={{ backgroundColor: '#f2f2f2' }}>
                 <CategoryHeader category={category} />
                 <ScrollView horizontal={true} style={{ height: 200, paddingLeft: 15, paddingTop: 5 }} showsHorizontalScrollIndicator={false}>
-                    <BusinessSquare></BusinessSquare>
-                    <BusinessSquare></BusinessSquare>
-                    <BusinessSquare></BusinessSquare>
-                    <BusinessSquare></BusinessSquare>
-                    <BusinessSquare></BusinessSquare>
-                    <BusinessSquare></BusinessSquare>
-                    <BusinessSquare></BusinessSquare>
+                    {list}
                     <Text style={{ padding: 10 }}></Text>
                 </ScrollView>
             </View>

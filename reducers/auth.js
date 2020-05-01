@@ -2,12 +2,12 @@ import { LOGIN_SUCCESS, LOGIN_FAIL, LOAD_USER } from '../actions/types';
 import { AsyncStorage } from 'react-native';
 const initialState = {
     token: null,
-    isAuthenticated: null,
+    isAuthenticated: false,
     loading: true,
     user: null
 };
 
-export default async function (state = initialState, action) {
+export default function (state = initialState, action) {
     const { type, payload } = action;
     switch (type) {
         case LOGIN_SUCCESS:

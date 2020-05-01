@@ -1,4 +1,4 @@
-import { LOAD_BUSINESSES, LOAD_BUSINESS, CLEAR_BUSINESSES, LOAD_SEARCH, LEAVE_SEARCH, LOAD_LANDING } from "../actions/types";
+import { LOAD_BUSINESSES, LOAD_BUSINESS, CLEAR_BUSINESSES, LOAD_SEARCH, LEAVE_SEARCH, LOAD_LANDING, UPDATE_POPULATION } from "../actions/types";
 
 
 /*
@@ -23,8 +23,10 @@ export default function (state = initialState, action) {
     const { type, payload } = action;
     switch (type) {
         case LOAD_BUSINESS:
+            console.log("LOAD BUSINESS");
             return {
                 ...state,
+                dbBusiness: payload.db,
                 business: payload.business,
                 loadingOne: false
             };
@@ -33,7 +35,8 @@ export default function (state = initialState, action) {
                 ...state,
                 searchBusinesses: payload.results,
                 loadingSearch: false,
-                query: payload.query
+                query: payload.query,
+                dbSearchBusinesses: payload.local
             };
         case LEAVE_SEARCH:
             return {
@@ -48,6 +51,11 @@ export default function (state = initialState, action) {
                 businesses: payload.results,
                 dbBusinesses: payload.local,
                 loadingAll: false
+            };
+        case UPDATE_POPULATION:
+            return {
+                ...state,
+                dbBusiness: payload
             };
         default:
             return state;

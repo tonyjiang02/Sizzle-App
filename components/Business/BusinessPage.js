@@ -1,13 +1,19 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { connect } from 'react-redux';
 import { View, Image, Text } from 'react-native';
 import { styles } from '../Styles';
 import { Button } from 'react-native-elements';
-import { checkIn } from '../../actions/business';
-const BusinessPage = ({ route: { params: { business } }, checkIn }) => {
+import { checkIn, getBusiness } from '../../actions/business';
+const BusinessPage = ({ route: { params: { business, db } }, checkIn, population }) => {
     const onPressCheckIn = () => {
         checkIn(business.place_id);
     };
+    const refresh = () => {
+        getBusiness(business.place_id, db._id);
+    };
+    useEffect(() => {
+        console.log(db);
+    });
     return (
         <View style={styles.defaultView}>
             <View style={{ flex: 3 }}>
@@ -19,9 +25,12 @@ const BusinessPage = ({ route: { params: { business } }, checkIn }) => {
             <View style={{ flex: 3 }}>
                 <Text>{business.name}</Text>
                 <Text>This is a description</Text>
+                <Text>{population != null ? population : "Loading..."}</Text>
             </View>
         </View>
     );
 };
-
-export default connect(null, { checkIn })(BusinessPage);
+const mapStateToProps = state => ({
+    population: state.business.dbBusiness.population
+});
+export default connect(mapStateToProps, { checkIn })(BusinessPage);

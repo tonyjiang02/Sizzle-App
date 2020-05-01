@@ -11,24 +11,31 @@ import BusinessList from './BusinessList';
 import BusinessSideScroll from './BusinessSideScroll';
 import Header from '../layout/Header';
 import { ScrollView } from 'react-native-gesture-handler';
+import * as Location from 'expo-location';
 export const Landing = ({ getRegisteredBusinesses, getAll, navigation, business: { businesses, loadingAll, dbBusinesses } }) => {
-    
+    const [location, setLocation] = useState(null);
     const [search, updateSearch] = useState("");
     const [sorted, updateSorted] = useState(null);
     const [sorting, updateSorting] = useState(true);
     useEffect(() => {
-        getAll({ radius: 2000 });
+        async function getLocation() {
+            console.log("Asking Location Permissions");
+            let response = await Location.requestPermissionsAsync();
+            if (response.granted) {
+                let location = await Location.getLastKnownPositionAsync();
+                setLocation(location);
+                getAll({ radius: 2000 }, location.coords);
+            } else {
+                console.log("Location permissions not granted.");
+            }
+        }
+        getLocation();
     }, []);
     useEffect(() => {
         if (!loadingAll) {
             sort();
         }
     }, [businesses, loadingAll, dbBusinesses]);
-    // useEffect(() => {
-    //     console.log('business length ' + businesses.length);
-    //     sort();
-    // }, [businesses, loadingAll, dbBusinesses]);
-
     const sort = function () {
         let s = {
             restaurant: [],
@@ -40,11 +47,14 @@ export const Landing = ({ getRegisteredBusinesses, getAll, navigation, business:
             other: [],
         };
         for (let k = 0; k < businesses.length; k++) {
+            let placed = false;
             for (let i = 0; i < businesses[k].types.length; i++) {
                 if (s[businesses[k].types[i]]) {
+                    placed = true;
                     s[businesses[k].types[i]].push({ business: businesses[k], db: dbBusinesses[k] });
                 } else {
-                    s.other.push({ business: businesses[k], db: dbBusinesses[k] });
+                    if (!placed) s.other.push({ business: businesses[k], db: dbBusinesses[k] });
+                    placed = true;
                 }
             }
         }
@@ -52,12 +62,12 @@ export const Landing = ({ getRegisteredBusinesses, getAll, navigation, business:
         updateSorting(false);
     };
     const query = function (input) {
-        navigation.navigate('Searching', { query: input });
+        navigation.navigate('Searching', { query: input, location: location });
     };
     return (
         <View style={styles.landing}>
             {loadingAll || sorting ? <Loading /> :
-                <View> 
+                <View>
                     <Header></Header>
                     <SearchBar
                         placeholder="Search"
@@ -65,22 +75,22 @@ export const Landing = ({ getRegisteredBusinesses, getAll, navigation, business:
                         defaultValue={search}
                         value={search}
                         platform="ios"
-                        containerStyle={{backgroundColor: "white" }}
-                        inputContainerStyle={{backgroundColor: "white", height: 30}}
+                        containerStyle={{ backgroundColor: "white" }}
+                        inputContainerStyle={{ backgroundColor: "white", height: 30 }}
                         cancelButtonTitle={"X       "}
-                        cancelButtonProps={{color: '#bdbdbd'}}
+                        cancelButtonProps={{ color: '#bdbdbd' }}
                         returnKeyType="search"
                         onSubmitEditing={(e) => query(e.nativeEvent.text)}
                     />
                     <ScrollView showsVerticalScrollIndicator={false}>
-                        <BusinessSideScroll businesses={sorted.cafe} category={'Featured'}></BusinessSideScroll>
-                        <BusinessSideScroll businesses={sorted.cafe} category={'Nearby'}></BusinessSideScroll>
-                        <BusinessSideScroll businesses={sorted.cafe} category={'Groceries'}></BusinessSideScroll>
-                        <BusinessSideScroll businesses={sorted.cafe} category={'Restaurants'}></BusinessSideScroll>
-                        <BusinessSideScroll businesses={sorted.cafe} category={'Home Essentials'}></BusinessSideScroll>
-                        <BusinessSideScroll businesses={sorted.cafe} category={'Public'}></BusinessSideScroll>
-                        <BusinessSideScroll businesses={sorted.cafe} category={'Shops'}></BusinessSideScroll>
-                        <Text style={{padding: 70}}></Text>
+                        <BusinessSideScroll businesses={sorted.restaurant} category={'Restaurant'} navigation={navigation}></BusinessSideScroll>
+                        <BusinessSideScroll businesses={sorted.cafe} category={'Cafe'} navigation={navigation}></BusinessSideScroll>
+                        <BusinessSideScroll businesses={sorted.park} category={'Park'} navigation={navigation}></BusinessSideScroll>
+                        <BusinessSideScroll businesses={sorted.tourist_attraction} category={'Attractions'} navigation={navigation}></BusinessSideScroll>
+                        <BusinessSideScroll businesses={sorted.place_of_worship} category={'Places of Worship'} navigation={navigation}></BusinessSideScroll>
+                        <BusinessSideScroll businesses={sorted.health} category={'Health'} navigation={navigation}></BusinessSideScroll>
+                        <BusinessSideScroll businesses={sorted.other} category={'Other'} navigation={navigation}></BusinessSideScroll>
+                        <Text style={{ padding: 70 }}></Text>
                     </ScrollView>
                 </View>
             }

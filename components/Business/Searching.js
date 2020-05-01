@@ -7,7 +7,7 @@ import { findPlace, getNearby } from '../../actions/business';
 import { styles } from '../Styles';
 import BusinessList from './BusinessList';
 import Loading from '../layout/Loading';
-const Searching = ({ getNearby, route: { params: { query } }, navigation, business }) => {
+const Searching = ({ getNearby, route: { params: { query, location } }, navigation, business }) => {
     const [distance, setDistance] = useState(3);
     const [modalVisible, setVisible] = useState(false);
     const milesToKm = (miles) => {
@@ -16,7 +16,7 @@ const Searching = ({ getNearby, route: { params: { query } }, navigation, busine
     useEffect(() => {
         //TODO Only add search results to state pressing the search bar again
         if (query) {
-            getNearby({ keyword: query });
+            getNearby({ keyword: query }, location.coords);
         } else {
             getNearby();
         }
@@ -24,7 +24,7 @@ const Searching = ({ getNearby, route: { params: { query } }, navigation, busine
     return (
         <View style={styles.landing}>
             {business.loadingSearch ? <Loading /> :
-                <View style={{ flex: 1}}>
+                <View style={{ flex: 1 }}>
                     <Button
                         title={"Search Options"}
                         onPress={() => { setVisible(true); }}
@@ -51,6 +51,7 @@ const Searching = ({ getNearby, route: { params: { query } }, navigation, busine
                             </View>
                         </View>
                     </Modal>
+                    <BusinessList navigation={navigation} businesses={business.searchBusinesses} dbBusinesses={business.dbSearchBusinesses}></BusinessList>
                 </View>
             }
         </View>
