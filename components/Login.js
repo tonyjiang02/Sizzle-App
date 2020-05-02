@@ -15,7 +15,7 @@ const Login = ({ login, auth1, business, navigation }) => {
     return (
         <View style={styles.defaultView}>
             <View style={{ flex: 2, justifyContent: "center", alignItems: "center" }}>
-                <Text>This is Sizzle</Text>
+                <Image source={require( '../assets/Sizzle_S_Logo.png' )} style={{height: 100, width: 80, alignSelf: 'center'}} ></Image>
             </View>
             <KeyboardAvoidingView style={{ flex: 1 }} behavior="padding">
                 <TextInput

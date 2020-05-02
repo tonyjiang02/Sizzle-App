@@ -16,7 +16,7 @@ const BusinessSquare = ({ business, navigation, db, openBusinessPage }) => {
 
     let popDisplay = <Text></Text>;
     if (population < 10) {
-        popDisplay = <Text style={{ alignSelf: 'center', color: 'green' }}>Current: {population}</Text>;
+        popDisplay = <Text style={{ paddingBottom: 30, alignSelf: 'center', color: 'green' }}>Current: {population}</Text>;
     }
     else if (population >= 10 && population < 50) {
         popDisplay = <Text style={{ alignSelf: 'center', color: 'orange' }}>Current: {population}</Text>;
@@ -31,8 +31,8 @@ const BusinessSquare = ({ business, navigation, db, openBusinessPage }) => {
     return (
         <TouchableOpacity style={styles.businessSquareOuter} onPress={onPress}>
             <View style={styles.businessSquareInner}>
-                <Image source={{ uri: 'https://picsum.photos/200/300' }} style={{ height: 125, width: 220 }}></Image>
-                <Text style={{ paddingTop: 5, alignSelf: 'center', fontSize: 17 }}>{business.name.length > 28 ? textTruncateBySpace(28, business.name) : business.name}</Text>
+                <Image source={{ uri: 'https://picsum.photos/200/300' }} style={{ height: 135, width: 220 }}></Image>
+                <Text style={{paddingTop: 5, alignSelf: 'center', fontSize: 18, fontWeight: '10' }}>{business.name.length > 28 ? textTruncateBySpace(28, business.name) : business.name}</Text>
                 {popDisplay}
             </View>
         </TouchableOpacity>

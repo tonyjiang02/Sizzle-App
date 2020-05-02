@@ -75,9 +75,9 @@ export const Landing = ({ getRegisteredBusinesses, getAll, navigation, businesse
                         defaultValue={search}
                         value={search}
                         platform="ios"
-                        containerStyle={{ backgroundColor: "white" }}
+                        containerStyle={{ backgroundColor: "white"}}
                         inputContainerStyle={{ backgroundColor: "white", height: 30 }}
-                        cancelButtonTitle={"X       "}
+                        cancelButtonTitle={"| Cancel"}
                         cancelButtonProps={{ color: '#bdbdbd' }}
                         returnKeyType="search"
                         onSubmitEditing={(e) => query(e.nativeEvent.text)}
