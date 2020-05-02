@@ -29,6 +29,9 @@ export const login = (email, password) => async dispatch => {
         });
     }
 };
+export const signup = (email, password) => async dispatch => {
+    console.log("SIGNUP ACTION");
+};
 //Loads basic user data into redux state 
 export const loadUser = () => async dispatch => {
     const token = await AsyncStorage.getItem('token');

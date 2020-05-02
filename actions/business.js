@@ -122,7 +122,6 @@ export const getAll = (params, coords) => async dispatch => {
 };
 export const checkIn = (id) => async dispatch => {
     try {
-        console.log("checking in");
         const res = await fetch(`${BASE_URL}/api/business/addPerson/${id}`, {
             method: 'POST',
             headers: {
@@ -133,7 +132,6 @@ export const checkIn = (id) => async dispatch => {
             })
         });
         const json = await res.json();
-        console.log(json);
         dispatch({
             type: UPDATE_POPULATION,
             payload: json

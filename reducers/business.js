@@ -53,9 +53,23 @@ export default function (state = initialState, action) {
                 loadingAll: false
             };
         case UPDATE_POPULATION:
+            const indexSearch = state.dbSearchBusinesses.findIndex(b => b._id === payload._id);
+            const indexLanding = state.dbBusinesses.findIndex(b => b._id === payload._id);
+            let searchUpdate = state.dbSearchBusinesses;
+            let landingUpdate = state.dbBusinesses;
+            if (indexSearch >= 0) {
+                searchUpdate[indexSearch] = payload;
+            }
+            if (indexLanding >= 0) {
+                landingUpdate[indexLanding] = payload;
+            }
+            console.log(indexSearch);
+            console.log(indexLanding);
             return {
                 ...state,
-                dbBusiness: payload
+                dbBusiness: payload,
+                dbSearchBusinesses: [...searchUpdate],
+                dbBusinesses: [...landingUpdate]
             };
         default:
             return state;

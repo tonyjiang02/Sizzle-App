@@ -12,7 +12,7 @@ import BusinessSideScroll from './BusinessSideScroll';
 import Header from '../layout/Header';
 import { ScrollView } from 'react-native-gesture-handler';
 import * as Location from 'expo-location';
-export const Landing = ({ getRegisteredBusinesses, getAll, navigation, business: { businesses, loadingAll, dbBusinesses } }) => {
+export const Landing = ({ getRegisteredBusinesses, getAll, navigation, businesses, loadingAll, dbBusinesses }) => {
     const [location, setLocation] = useState(null);
     const [search, updateSearch] = useState("");
     const [sorted, updateSorted] = useState(null);
@@ -98,7 +98,9 @@ export const Landing = ({ getRegisteredBusinesses, getAll, navigation, business:
     );
 };
 const mapStateToProps = state => ({
-    business: state.business
+    dbBusinesses: state.business.dbBusinesses,
+    businesses: state.business.businesses,
+    loadingAll: state.business.loadingAll
 });
 
 export default connect(mapStateToProps, { getRegisteredBusinesses, getAll })(Landing);
