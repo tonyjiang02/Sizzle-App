@@ -3,7 +3,6 @@ import { StyleSheet } from 'react-native';
 const styles = StyleSheet.create({
     defaultView: {
         flex: 1,
-        padding: 20
     },
     landing: {
         flex: 1,
@@ -22,21 +21,31 @@ const styles = StyleSheet.create({
     headerStyle: {
         backgroundColor: '#FF9900',
         paddingTop: 40,
-        paddingBottom: 10
+        paddingBottom: 5,
+        flexDirection: 'row',
+        justifyContent: 'space-around'
     },
     businessSquareOuter: {
         flex: 1,
-        paddingLeft: 5,
-        paddingRight: 5,
+        paddingRight: 15,
         paddingBottom: 10,
-        backgroundColor: '#f2f2f2'
+        backgroundColor: '#f2f2f2',
     },
     businessSquareInner: {
         flex: 6,
         backgroundColor: 'white',
-        padding: 10,
-        borderRadius: 10
-    }
+        padding: 0, 
+
+        shadowColor: "#000",
+        shadowOffset: {
+	        width: 0,
+	        height: 1,
+        },
+        shadowOpacity: 0.22,
+        shadowRadius: 2.22,
+
+        elevation: 3,
+    },
 });
 
 const input = StyleSheet.create({
