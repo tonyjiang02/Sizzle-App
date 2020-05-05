@@ -8,10 +8,6 @@ const styles = StyleSheet.create({
         flex: 1,
         backgroundColor: "white",
     },
-    smalltext: {
-        fontFamily: 'sans-serif-light',
-        fontSize: 10,
-    },
     categoryHeaderText: {
         fontSize: 25,
         paddingLeft: 20,
@@ -19,11 +15,7 @@ const styles = StyleSheet.create({
         paddingBottom: 2,
     },
     headerStyle: {
-        backgroundColor: '#FF9900',
-        paddingTop: 40,
-        paddingBottom: 5,
-        flexDirection: 'row',
-        justifyContent: 'space-around'
+        
     },
     businessSquareOuter: {
         flex: 1,
@@ -43,7 +35,24 @@ const styles = StyleSheet.create({
         },
         shadowOpacity: 0.22,
         shadowRadius: 2.22,
-
+        elevation: 3,
+    },
+    businessCardOuter: {
+        paddingHorizontal: 10,
+        paddingVertical: 5,
+        backgroundColor: 'white',
+    },
+    businessCardInner: {
+        flexDirection: 'row',
+        paddingRight: 10,
+        backgroundColor: 'white',
+        shadowColor: "#000",
+        shadowOffset: {
+	        width: 0,
+	        height: 1,
+        },
+        shadowOpacity: 0.22,
+        shadowRadius: 2.22,
         elevation: 3,
     },
 });

@@ -12,6 +12,7 @@ import BusinessSideScroll from './BusinessSideScroll';
 import Header from '../layout/Header';
 import { ScrollView } from 'react-native-gesture-handler';
 import * as Location from 'expo-location';
+import { Ionicons, MaterialCommunityIcons, AntDesign, FontAwesome5, MaterialIcons } from '@expo/vector-icons';
 export const Landing = ({ getRegisteredBusinesses, getAll, navigation, businesses, loadingAll, dbBusinesses }) => {
     const [location, setLocation] = useState(null);
     const [search, updateSearch] = useState("");
@@ -76,7 +77,7 @@ export const Landing = ({ getRegisteredBusinesses, getAll, navigation, businesse
                         value={search}
                         platform="ios"
                         containerStyle={{ backgroundColor: "white"}}
-                        inputContainerStyle={{ backgroundColor: "white", height: 30 }}
+                        inputContainerStyle={{ backgroundColor: "white", height: 22 }}
                         cancelButtonTitle={"| Cancel"}
                         cancelButtonProps={{ color: '#bdbdbd' }}
                         returnKeyType="search"
