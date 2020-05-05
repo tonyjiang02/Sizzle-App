@@ -16,7 +16,7 @@ const BusinessCard = ({ business, navigation, db, openBusinessPage }) => {
 
     let popDisplay = <Text></Text>;
     if (db.population < 10) {
-        popDisplay = <Text style={{ paddingLeft: 3, color: 'green', fontSize: 18, fontWeight: 'bold'}}>9999+</Text>;
+        popDisplay = <Text style={{ paddingLeft: 3, color: 'green', fontSize: 18, fontWeight: 'bold'}}>{db.poopulation}</Text>;
     }
     else if (db.population >= 10 && db.population < 50) {
         popDisplay = <Text style={{ paddingLeft: 3, color: 'orange', fontSize: 18, fontWeight: 'bold' }}>{db.population}</Text>;
