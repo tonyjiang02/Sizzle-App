@@ -11,10 +11,10 @@ const LiveUpdate = ({ /*business, navigation, db, openBusinessPage*/ }) => {
     let testTitle = 'Test Title';
     let testTime = 300000;
     let testTimeDisplay = '';
-    let testDesc = 'asdflkasdflkjsal;fkjasgkhas;dkasdkfad;lfkjas;dlfkhd;lgkhas;ligha;lseigha;klsdhg;alksdhg;lh;li'
+    let testDesc = 'asdflkasdflasdflkasdflkjsal;fkjasgkhas;dkasasdflkasdflasdflkasdflkjsal;fkjasgkhas;dkasasdflkasdflasdflkasdflkjsal;fkjasgkhas;dkasasdflkasdflasdflkasdflkjsal;fkjasgkhas;dkas'
     
     if (testTime < 60){
-        testTimeDisplay = testTime + 'minutes';
+        testTimeDisplay = testTime + 'minutes'; 
     }
     else if (testTime < 1440){
         testTimeDisplay = Math.trunc(testTime/60) + ' hours';
@@ -33,11 +33,11 @@ const LiveUpdate = ({ /*business, navigation, db, openBusinessPage*/ }) => {
     }
     return (
         <View style={styles.defaultView}>
-            <View style={{flex: 1, flexDirection: 'row', alignItems: 'baseline'}}>
+            <View style={{flex: 2, flexDirection: 'row', alignItems: 'baseline'}}>
                 <Text style={{fontFamily: 'AvenirNext-Bold', fontSize: 20, color: 'darkslategrey', paddingRight: 10}}>{testTitle}</Text>
                 <Text style={{fontFamily: 'AvenirNext-Italic', fontSize: 14, color: 'darkslategrey'}}>{testTimeDisplay}</Text>
             </View>
-            <View style={{flex: 3}}>
+            <View style={{flex: 5}}>
                 <Text style={{fontFamily: 'DamascusLight', fontSize: 16, color: 'black'}}>{testDesc}</Text>
             </View>
         </View>

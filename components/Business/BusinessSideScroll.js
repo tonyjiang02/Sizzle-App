@@ -17,7 +17,7 @@ const BusinessSideScroll = ({ businesses, category, navigation }) => {
     }, [businesses]);
     let returnView = <View></View>;
     if (list.length > 0){
-        returnView = <View style={{ backgroundColor: "white", paddingBottom: 5 }}>
+        returnView = <View style={{ backgroundColor: "white", paddingBottom: 10 }}>
             <View style={{ backgroundColor: '#f2f2f2' }}>
                 <CategoryHeader category={category} />
                 <ScrollView horizontal={true} style={{ height: 200, paddingLeft: 15, paddingTop: 5 }} showsHorizontalScrollIndicator={false}>
