@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { connect } from 'react-redux';
 import { View, ScrollView, Text } from 'react-native';
 import Modal from 'react-native-modal';
-import { Button } from 'react-native-elements';
+import { Button,  } from 'react-native-elements';
 import { findPlace, getNearby } from '../../actions/business';
 import { styles } from '../Styles';
 import BusinessList from './BusinessList';
