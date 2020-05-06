@@ -13,27 +13,50 @@ const BusinessSquare = ({ business, navigation, db, openBusinessPage }) => {
         navigation.navigate('BusinessPage', { business: business, db: db });
     };
 
-
     let popDisplay = <Text></Text>;
     if (population < 10) {
-        popDisplay = <Text style={{ paddingBottom: 30, alignSelf: 'center', color: 'green' }}>Current: {population}</Text>;
+        popDisplay = <Text style={{ paddingLeft: 3, alignSelf: 'center', color: 'green', fontSize: 20, fontWeight: 'bold' }}>{population}</Text>;
     }
     else if (population >= 10 && population < 50) {
-        popDisplay = <Text style={{ alignSelf: 'center', color: 'orange' }}>Current: {population}</Text>;
+        popDisplay = <Text style={{ paddingLeft: 3, alignSelf: 'center', color: 'orange', fontSize: 20, fontWeight: 'bold' }}>{population}</Text>;
     }
     else if (population >= 50) {
-        popDisplay = <Text style={{ alignSelf: 'center', color: 'red' }}>Current: {population}</Text>;
+        popDisplay = <Text style={{ paddingLeft: 3, alignSelf: 'center', color: 'red', fontSize: 20, fontWeight: 'bold' }}>{population}</Text>;
     }
     else {
-        popDisplay = <Text style={{ alignSelf: 'center', color: 'gray' }}>Current: {population}</Text>;
+        popDisplay = <Text style={{ paddingLeft: 3, alignSelf: 'center', color: 'gray', fontSize: 20, fontWeight: 'bold' }}>{population}</Text>;
+    }
+    let openStatus = false;
+    let openDisplay = <Text></Text>;
+    let openPicture = <Image source={{ uri: 'https://picsum.photos/200/300' }} style={{ height: 125, width: 235 }}></Image>
+    if (openStatus === true){
+        openDisplay = <Text style={{ paddingHorizontal: 5, alignSelf: 'center', color: 'white', fontSize: 12, 
+                                     borderColor: 'green', borderWidth: 1, padding: 2, backgroundColor: 'green' }}>Open</Text>;
+    }
+    else {
+        openDisplay = <Text style={{ paddingHorizontal: 5, alignSelf: 'center', color: 'white', fontSize: 12, 
+                                    borderColor: 'red', borderWidth: 1, padding: 2, backgroundColor: 'red' }}>Closed</Text>;
+        openPicture = <Image source={{ uri: 'https://picsum.photos/200/300' }} style={{ height: 125, width: 235, opacity: 0.3 }}></Image>
     }
 
     return (
         <TouchableOpacity style={styles.businessSquareOuter} onPress={onPress}>
             <View style={styles.businessSquareInner}>
-                <Image source={{ uri: 'https://picsum.photos/200/300' }} style={{ height: 135, width: 220 }}></Image>
-                <Text style={{paddingTop: 5, alignSelf: 'center', fontSize: 18, fontWeight: '10' }}>{business.name.length > 28 ? textTruncateBySpace(28, business.name) : business.name}</Text>
-                {popDisplay}
+                {openPicture}
+                <Text style={{paddingTop: 5, alignSelf: 'center', fontSize: 18}}>{business.name.length > 20 ? textTruncateBySpace(20, business.name) : business.name}</Text>
+                <View style={{flexDirection: 'row', alignItems: 'center', alignSelf: 'center'}}>
+                    <Text style={{borderRadius: 5, borderColor: 'black', color: 'black', borderWidth: 1, padding: 2, fontSize: 12}}>
+                        1.0mi
+                    </Text>
+                    <View style={{paddingLeft: 20, flexDirection: 'row', alignItems: 'center'}}>
+                        <Image source={require('../../assets/icons/person_icon.png')} style={{width: 9, height: 12}}></Image>
+                        {popDisplay}
+                    </View>
+                    <View style={{paddingLeft: 20}}>
+                        {openDisplay}
+                    </View>
+                </View>
+                
             </View>
         </TouchableOpacity>
     );
