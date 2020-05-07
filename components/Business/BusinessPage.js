@@ -18,16 +18,20 @@ FUTURE INTEGRATIONS:
 
 import React, { useState, useEffect } from 'react';
 import { connect } from 'react-redux';
-import { View, ScrollView, Image, Text, ImageBackground, TouchableOpacity, TouchableHighlight } from 'react-native';
+import { View, ScrollView, Image, Text, ImageBackground, TouchableOpacity, TouchableHighlight, TouchableWithoutFeedback } from 'react-native';
+import Modal from 'react-native-modal';
 import { styles } from '../Styles';
 import { Button } from 'react-native-elements';
 import { checkIn, getBusiness } from '../../actions/business';
 import { LinearGradient } from 'expo-linear-gradient';
-import { Ionicons, MaterialCommunityIcons, AntDesign, FontAwesome5, MaterialIcons } from '@expo/vector-icons';
+import { Ionicons, MaterialCommunityIcons, AntDesign, FontAwesome5, MaterialIcons, Entypo } from '@expo/vector-icons';
 import LiveUpdate from '../Business/LiveUpdate';
 import ReservationScroll from './ReservationScroll';
 
 const BusinessPage = ({ route: { params: { business, db } }, checkIn, population }) => {
+    //modals
+    const [liveUpdatesModalVisible, setLiveUpdatesVisible] = useState(false);
+
     const onPressCheckIn = () => {
         checkIn(business.place_id);
     };
@@ -75,16 +79,51 @@ const BusinessPage = ({ route: { params: { business, db } }, checkIn, population
 
     return (
         <View style={styles.landing}>
-            <ScrollView bounces={false}>
-                <View style={{ borderBottomColor: 'transparent', 
+            <Modal
+                propagateSwipe={true}
+                isVisible={liveUpdatesModalVisible}
+                coverScreen={false}
+                backdropColor={"white"}
+                backdropOpacity={0.8}
+                animationIn={'slideInLeft'}
+                animationOut={'slideOutLeft'}
+                animationInTiming={500}
+                swipeDirection={['left']}
+                onSwipeComplete={(e) => { if (e.swipingDirection === 'left') setLiveUpdatesVisible(false); }}
+            >
+                <View  style={styles.liveUpdatesModalView}>
+                    <TouchableOpacity onPress={() => {setLiveUpdatesVisible(false)}}>
+                        <View style={{height: 10}}></View>
+                        <AntDesign name='leftcircle' color='#ff9900' size={25} style={{alignSelf: 'center'}}></AntDesign>
+                        <Text style={{color: '#ff9900', fontSize: 24, fontFamily: 'Avenir-Heavy', paddingBottom: 10}}>Live Updates</Text>
+                    </TouchableOpacity>
+                    <ScrollView showsVerticalScrollIndicator={false}>
+                        <TouchableWithoutFeedback>
+                            <View>
+                                <LiveUpdate></LiveUpdate>
+                                <LiveUpdate></LiveUpdate>
+                                <LiveUpdate></LiveUpdate>
+                                <LiveUpdate></LiveUpdate>
+                                <LiveUpdate></LiveUpdate>
+                                <LiveUpdate></LiveUpdate>
+                                <LiveUpdate></LiveUpdate>
+                                <LiveUpdate></LiveUpdate>
+                                <LiveUpdate></LiveUpdate>
+                            </View>
+                        </TouchableWithoutFeedback>
+                    </ScrollView>
+                </View>
+            </Modal>
+
+            <ScrollView showsVerticalScrollIndicator={false}>
+                <View style={{ borderBottomColor: 'transparent', borderTopColor: 'transparent',
                             shadowColor: "#000",
                             shadowOffset: {
                                 width: 0,
                                 height: 7,
                             },
                             shadowOpacity: 0.43,
-                            shadowRadius: 9.51,
-                            
+                            shadowRadius: 9.51,     
                             elevation: 15,}}>
                     <ImageBackground source={{ uri: 'https://picsum.photos/300/200' }} style={{ width: '100%', height: 250}}>
                         <LinearGradient
@@ -98,6 +137,7 @@ const BusinessPage = ({ route: { params: { business, db } }, checkIn, population
                                 height: 250,
                             }}
                         />
+                        
                         <View style={{position: 'absolute', bottom: 40, alignItems: 'baseline'}}>
                             <Text style={{color: 'white', fontSize: 30, fontWeight: 'bold', paddingLeft: 20}}>{business.name}</Text>
                             <View style={{paddingLeft: 20, paddingTop: 10, flexDirection: 'row', alignItems: 'center'}}>
@@ -114,11 +154,11 @@ const BusinessPage = ({ route: { params: { business, db } }, checkIn, population
                                 <TouchableOpacity style={{position: 'absolute', left: 330, top: 33 }}> 
                                     {favoriteDisplay}
                                 </TouchableOpacity>
-                            </View>
+                            </View>          
                         </View>
                     </ImageBackground>
 
-                    <View style={{ flexDirection: 'row', alignItems: 'flex-end', backgroundColor: '#E2EDEF', 
+                    <View style={{ flexDirection: 'row', alignItems: 'flex-end', backgroundColor: '#EEFBFC', 
                                     paddingVertical: 6, }}>
                         <TouchableOpacity onPress={onPressCheckIn} style={{alignItems: 'center', flex: 1}}>
                             <MaterialCommunityIcons name='directions' color='royalblue' size={35}/>
@@ -133,13 +173,14 @@ const BusinessPage = ({ route: { params: { business, db } }, checkIn, population
                             <Text style={{color: 'black', fontFamily: 'Avenir-Light'}}>Notify Me</Text>
                         </TouchableOpacity>
                     </View>
-                    <View style={{  paddingHorizontal: 15, height: 120, backgroundColor: '#FDDFDF', borderLeftWidth: 5, borderLeftColor: 'red' }}>
+
+                    <View style={{  paddingHorizontal: 15, height: 110, backgroundColor: '#FDDFDF', borderLeftWidth: 5, borderLeftColor: 'red' }}>
                         <View style={{flexDirection: 'row', paddingTop: 5}}>
                             <Ionicons name= 'md-warning' color='red' size={35} style={{paddingRight: 10, paddingLeft: 10}}/>
                             <Text style={{color: 'red', fontSize: 24, fontFamily: 'Avenir-Heavy', paddingVertical: 5, paddingRight: 10}}>COVID-19</Text>
                         </View>
                         <Text style={{paddingLeft: 15, fontFamily: 'DamascusLight', fontSize: 15}}>This location offers:</Text>
-                        <View style={{flexDirection: 'row', alignItems:'flex-end'}}>
+                        <View style={{flexDirection: 'row', justifyContent: 'center', paddingTop: 3}}>
                             <View style={{alignItems: 'center', flex: 1 }}>
                                 <FontAwesome5 name='truck' color='black' size={15}/>
                                 <Text style={{fontSize: 10}}>Delivery</Text>
@@ -148,30 +189,30 @@ const BusinessPage = ({ route: { params: { business, db } }, checkIn, population
                                 <FontAwesome5 name='shopping-bag' color='black' size={15}/>
                                 <Text style={{fontSize: 10}}>Takeout</Text>
                             </View>
-
                         </View>
                     </View>
                 </View>
 
-                <View style={{paddingTop: 15, paddingBottom: 10, paddingHorizontal: 8}}>
+                <View style={{paddingTop: 15, paddingBottom: 12, paddingHorizontal: 8}}>
                     <View style={styles.businessSquareInner}>
-                        <View style={{ paddingHorizontal: 15, backgroundColor: '#fdeedc', height: 135}}>
-                            <TouchableOpacity style={{flex: 2, flexDirection: 'row', justifyContent: 'flex-start', alignItems: 'baseline'}}>
-                                <Text style={{color: '#ff9900', fontSize: 24, fontFamily: 'Avenir-Heavy', paddingTop: 5, paddingRight: 10}}>Live Updates</Text>
+                        <TouchableOpacity onPress={() => {setLiveUpdatesVisible(true); }} style={{ paddingHorizontal: 15, backgroundColor: '#fdeedc', height: 150}}>
+                            <View style={{flex: 2, flexDirection: 'row', justifyContent: 'flex-start', alignItems: 'baseline'}}>
+                                <Text style={{color: '#ff9900', fontSize:  24, fontFamily: 'Avenir-Heavy', paddingTop: 5, paddingRight: 10}}>Live Updates</Text>
                                 <AntDesign name='rightcircle' color='#ff9900' size={18} style={{paddingTop: 12}}></AntDesign>
-                            </TouchableOpacity>
+                            </View>
                             <View style={{flex: 5}}>
                                 <LiveUpdate></LiveUpdate>
                             </View>
-                        </View>
+                        </TouchableOpacity>
                     </View>
-                </View>
-                <View style={{paddingBottom: 10, paddingHorizontal: 8}}>
+                </View>           
+
+                <View style={{paddingBottom: 12, paddingHorizontal: 8}}>
                     <View style={styles.businessSquareInner}>  
                         <View style={{ paddingHorizontal: 15, backgroundColor: '#E1FDE2', height: 165}}>
                             <TouchableOpacity style={{flex: 1, flexDirection: 'row', justifyContent: 'flex-start'}}>
                                 <Text style={{color: 'green', fontSize: 24, fontFamily: 'Avenir-Heavy', paddingTop: 5, paddingRight: 10}}>Reservations</Text>
-                                <AntDesign name='rightcircle' color='green' size={18} style={{paddingTop: 12}}></AntDesign>
+                                <AntDesign name='upcircle' color='green' size={18} style={{paddingTop: 12}}></AntDesign>
                             </TouchableOpacity>
                             <View style={{flex: 4}}>
                                 <View>
@@ -181,6 +222,42 @@ const BusinessPage = ({ route: { params: { business, db } }, checkIn, population
                         </View>
                     </View>
                 </View>
+
+                <View style={{paddingBottom: 12, paddingHorizontal: 8}}>
+                    <View style={styles.businessSquareInner}>
+                        <View style={{ paddingHorizontal: 15, backgroundColor: '#E3EDFF', height: 250}}>
+                            <View style={{flex: 1, flexDirection: 'row', justifyContent: 'flex-start', alignItems: 'baseline'}}>
+                                <Text style={{color: 'dodgerblue', fontSize: 24, fontFamily: 'Avenir-Heavy', paddingTop: 5, paddingRight: 10}}>Information</Text>
+                            </View>
+                            <View style={{flexDirection: 'column', justifyContent: 'flex-start', flex: 5, paddingHorizontal: 10}}>
+                                <TouchableOpacity style={styles.infoBlock}>
+                                    <AntDesign name='clockcircle' color='black' size={24}/>
+                                    <Text style={{paddingLeft: 10}}>Hours</Text>
+                                </TouchableOpacity>
+
+                                <TouchableOpacity style={styles.infoBlock}>
+                                    <MaterialIcons name='phone' color='black' size={24}/>
+                                    <Text style={{paddingLeft: 10}}>+1-408-123-4567</Text>
+                                </TouchableOpacity>
+
+                                <TouchableOpacity style={styles.infoBlock}> 
+                                    <Entypo name='address' color='black' size={24}/>
+                                    <Text style={{paddingLeft: 10}}>1111 Test Rd Cupertino, CA 95014</Text>
+                                </TouchableOpacity>
+
+                                <TouchableOpacity style={styles.infoBlock}>
+                                    <MaterialIcons name='web' color='black' size={24}/>
+                                    <Text style={{paddingLeft: 10}}>www.business.com</Text>
+                                </TouchableOpacity>
+                                
+
+
+                            </View>
+                            
+                        </View>
+                    </View>
+                </View>
+
                 <View style={{height: 100}}></View>
             </ScrollView>
         </View>

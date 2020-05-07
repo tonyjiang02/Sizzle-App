@@ -55,6 +55,32 @@ const styles = StyleSheet.create({
         shadowRadius: 2.22,
         elevation: 3,
     },
+    liveUpdatesModalView: {
+        marginHorizontal: 10,
+        marginTop: 150,
+        marginBottom: 150,
+        backgroundColor: "#fdeedc",
+        borderRadius: 20,
+        paddingHorizontal: 35,
+        paddingBottom: 35,
+        alignItems: "center",
+        shadowColor: "#000",
+        shadowOffset: {
+          width: 0,
+          height: 2
+        },
+        shadowOpacity: 0.25,
+        shadowRadius: 3.84,
+        elevation: 5
+    },
+    infoBlock: {
+        flexDirection: 'row', 
+        flex: 1, 
+        justifyContent: 'center',
+        borderBottomWidth: 1,
+        borderBottomColor: 'gray',
+        paddingVertical: 3,
+    },  
 });
 
 const input = StyleSheet.create({

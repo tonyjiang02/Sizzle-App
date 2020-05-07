@@ -37,7 +37,7 @@ const LiveUpdate = ({ /*business, navigation, db, openBusinessPage*/ }) => {
                 <Text style={{fontFamily: 'AvenirNext-Bold', fontSize: 20, color: 'darkslategrey', paddingRight: 10}}>{testTitle}</Text>
                 <Text style={{fontFamily: 'AvenirNext-Italic', fontSize: 14, color: 'darkslategrey'}}>{testTimeDisplay}</Text>
             </View>
-            <View style={{flex: 5}}>
+            <View style={{flex: 5, paddingBottom: 10}}>
                 <Text style={{fontFamily: 'DamascusLight', fontSize: 16, color: 'black'}}>{testDesc}</Text>
             </View>
         </View>
