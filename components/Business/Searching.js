@@ -55,7 +55,6 @@ const Searching = ({ getNearby, route: { params: { query, location } }, navigati
                         shadowOpacity: 0.22,
                         shadowRadius: 2.22,
                         elevation: 3}}
-                        cancelButtonTitle=""
                         inputContainerStyle={{backgroundColor: 'white', borderRadius: 0, height: 50}}
                         returnKeyType="search"
                         onSubmitEditing={(e) => newQuery(e.nativeEvent.text)}
