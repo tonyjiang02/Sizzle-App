@@ -6,7 +6,7 @@ const styles = StyleSheet.create({
     },
     landing: {
         flex: 1,
-        backgroundColor: "white",
+        backgroundColor: "#f2f2f2",
     },
     categoryHeaderText: {
         fontSize: 25,
@@ -40,7 +40,7 @@ const styles = StyleSheet.create({
     businessCardOuter: {
         paddingHorizontal: 10,
         paddingVertical: 5,
-        backgroundColor: 'white',
+        backgroundColor: 'transparent',
     },
     businessCardInner: {
         flexDirection: 'row',
@@ -55,6 +55,24 @@ const styles = StyleSheet.create({
         shadowRadius: 2.22,
         elevation: 3,
     },
+    infoOuterBlock: {
+        paddingBottom: 15,
+        backgroundColor: 'azure',
+    },
+    infoInnerBlock: {
+        flexDirection: 'row',
+        padding: 10,
+        backgroundColor: 'white',
+        shadowColor: "#000",
+        shadowOffset: {
+	        width: 0,
+	        height: 1,
+        },
+        shadowOpacity: 0.22,
+        shadowRadius: 2.22,
+        elevation: 3,
+        alignItems: 'center'
+    },  
     liveUpdatesModalView: {
         marginHorizontal: 10,
         marginTop: 150,
@@ -73,14 +91,44 @@ const styles = StyleSheet.create({
         shadowRadius: 3.84,
         elevation: 5
     },
-    infoBlock: {
-        flexDirection: 'row', 
-        flex: 1, 
-        justifyContent: 'center',
-        borderBottomWidth: 1,
-        borderBottomColor: 'gray',
-        paddingVertical: 3,
-    },  
+    reservationsModalView: {
+        marginHorizontal: 10,
+        marginTop: 150,
+        marginBottom: 150,
+        backgroundColor: "#E1FDE2",
+        borderRadius: 20,
+        paddingHorizontal: 35,
+        paddingBottom: 35,
+        alignItems: "center",
+        shadowColor: "#000",
+        shadowOffset: {
+          width: 0,
+          height: 2
+        },
+        shadowOpacity: 0.25,
+        shadowRadius: 3.84,
+        elevation: 5
+    },
+    searchModalView: {
+        marginBottom: 250,
+        backgroundColor: "transparent",
+    },
+    mapStyle: {
+        width: '100%',
+        height: 200,
+      },
+    mapOuterStyle: {
+        backgroundColor: 'white',
+        shadowColor: "#000",
+        shadowOffset: {
+	        width: 0,
+	        height: 1,
+        },
+        shadowOpacity: 0.22,
+        shadowRadius: 2.22,
+        elevation: 3,
+        alignItems: 'center'
+    }
 });
 
 const input = StyleSheet.create({

@@ -19,3 +19,12 @@ export function textTruncate(num, text) {
     let charArr = text.split('');
     return charArr.slice(0, num).join("") + "...";
 }
+
+export function textTruncateBySpaceTwo(num, text) {
+    var finalStr= '';
+    for (let i = 0; i < num-3; i++){
+        finalStr = finalStr + text.substring(i, i+1);
+    }
+    finalStr = finalStr + '...';
+    return finalStr;
+}

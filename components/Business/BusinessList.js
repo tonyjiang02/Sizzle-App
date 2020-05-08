@@ -9,7 +9,8 @@ export const BusinessList = ({ businesses, navigation, dbBusinesses }) => {
     ));
     return (
         <View style={{flex: 20}}>
-            <ScrollView>
+            <ScrollView showsVerticalScrollIndicator={false}>
+                <View style={{height: 5}}></View>
                 {businessList}
             </ScrollView>
         </View>

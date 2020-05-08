@@ -18,7 +18,7 @@ FUTURE INTEGRATIONS:
 
 import React, { useState, useEffect } from 'react';
 import { connect } from 'react-redux';
-import { View, ScrollView, Image, Text, ImageBackground, TouchableOpacity, TouchableHighlight, TouchableWithoutFeedback } from 'react-native';
+import { View, ScrollView, Image, Text, ImageBackground, TouchableOpacity, TouchableHighlight, TouchableWithoutFeedback, Alert } from 'react-native';
 import Modal from 'react-native-modal';
 import { styles } from '../Styles';
 import { Button } from 'react-native-elements';
@@ -27,11 +27,16 @@ import { LinearGradient } from 'expo-linear-gradient';
 import { Ionicons, MaterialCommunityIcons, AntDesign, FontAwesome5, MaterialIcons, Entypo } from '@expo/vector-icons';
 import LiveUpdate from '../Business/LiveUpdate';
 import ReservationScroll from './ReservationScroll';
+import { Linking } from 'expo';
+import MapView from 'react-native-maps';
+import openMap from 'react-native-open-maps';
 
 const BusinessPage = ({ route: { params: { business, db } }, checkIn, population }) => {
     //modals
     const [liveUpdatesModalVisible, setLiveUpdatesVisible] = useState(false);
+    const [reservationsModalVisible, setReservationsVisible] = useState(false);
 
+    //backend
     const onPressCheckIn = () => {
         checkIn(business.place_id);
     };
@@ -42,6 +47,56 @@ const BusinessPage = ({ route: { params: { business, db } }, checkIn, population
         console.log(db);
     });
 
+    //business hours
+    const monBusinessHours = '9am-1pm, 5pm-8pm';
+    const tueBusinessHours = '9am-1pm, 5pm-8pm';
+    const wedBusinessHours = '9am-1pm, 5pm-8pm';
+    const thuBusinessHours = '9am-1pm, 5pm-8pm';
+    const friBusinessHours = '9am-1pm, 5pm-8pm';
+    const satBusinessHours = '9am-1pm, 5pm-8pm';
+    const sunBusinessHours = '9am-1pm, 5pm-8pm';
+
+    //phone number
+    let phoneNumber = '+1 (408) 917-9685';
+    let phoneNumberURL = 'tel:' + phoneNumber;
+
+    //website
+    let website = 'google.com';
+    let websiteURL = 'https://' + website;
+    const createWebAlert = () =>
+        Alert.alert(
+            'Do you want to open the website for ' + business.name + '?',
+            '',
+            [
+                {
+                text: "Cancel",
+                onPress: () => console.log("Cancel Pressed"),
+                style: "cancel"
+                },
+                { text: "OK", onPress: () => Linking.openURL(websiteURL) }
+            ],
+            { cancelable: false }
+            );
+
+    //map
+    const openMapToBusiness = () => {
+        Alert.alert(
+            'Route to ' + business.name + '?',
+            '',
+            [
+                {
+                text: "Cancel",
+                onPress: () => console.log("Cancel Pressed"),
+                style: "cancel"
+                },
+                { text: "OK", onPress: () => openMap({end: business.name, start: "Current Location", travelType: 'drive' }) }
+            ],
+            { cancelable: false }
+            );
+        
+    }
+    
+    //population display
     let popDisplay = <Text></Text>;
     if (population < 10) {
         popDisplay = <Text style={{ paddingLeft: 3, alignSelf: 'center', color: 'green', fontSize: 20, fontWeight: 'bold' }}>{population}</Text>;
@@ -56,6 +111,7 @@ const BusinessPage = ({ route: { params: { business, db } }, checkIn, population
         popDisplay = <Text style={{ paddingLeft: 3, alignSelf: 'center', color: 'gray', fontSize: 20, fontWeight: 'bold' }}>{population}</Text>;
     }
 
+    //open during current time display
     let openStatus = true;
     let openDisplay = <Text></Text>;
     if (openStatus === true){
@@ -115,6 +171,40 @@ const BusinessPage = ({ route: { params: { business, db } }, checkIn, population
                 </View>
             </Modal>
 
+            <Modal
+                propagateSwipe={true}
+                isVisible={reservationsModalVisible}
+                coverScreen={false}
+                backdropColor={"white"}
+                backdropOpacity={0.8}
+                animationIn={'slideInLeft'}
+                animationOut={'slideOutLeft'}
+                animationInTiming={500}
+                swipeDirection={['left']}
+                onSwipeComplete={(e) => { if (e.swipingDirection === 'left') setReservationsVisible(false); }}
+            >
+                <View  style={styles.reservationsModalView}>
+                    <TouchableOpacity onPress={() => {setReservationsVisible(false)}}>
+                        <View style={{height: 10}}></View>
+                        <AntDesign name='leftcircle' color='green' size={25} style={{alignSelf: 'center'}}></AntDesign>
+                        <Text style={{color: 'green', fontSize: 24, fontFamily: 'Avenir-Heavy', paddingBottom: 10}}>Reservations</Text>
+                    </TouchableOpacity>
+                    <ScrollView showsVerticalScrollIndicator={false}>
+                        <TouchableWithoutFeedback>
+                            <View>
+                                <ReservationScroll></ReservationScroll>
+                                <ReservationScroll></ReservationScroll>
+                                <ReservationScroll></ReservationScroll>
+                                <ReservationScroll></ReservationScroll>
+                                <ReservationScroll></ReservationScroll>
+                                <ReservationScroll></ReservationScroll>
+                                <ReservationScroll></ReservationScroll>
+                            </View>
+                        </TouchableWithoutFeedback>
+                    </ScrollView>
+                </View>
+            </Modal>
+
             <ScrollView showsVerticalScrollIndicator={false}>
                 <View style={{ borderBottomColor: 'transparent', borderTopColor: 'transparent',
                             shadowColor: "#000",
@@ -125,7 +215,7 @@ const BusinessPage = ({ route: { params: { business, db } }, checkIn, population
                             shadowOpacity: 0.43,
                             shadowRadius: 9.51,     
                             elevation: 15,}}>
-                    <ImageBackground source={{ uri: 'https://picsum.photos/300/200' }} style={{ width: '100%', height: 250}}>
+                    <ImageBackground source={{ uri: 'https://picsum.photos/600/400' }} style={{ width: '100%', height: 250}}>
                         <LinearGradient
                             colors={['transparent', 'rgba(0,0,0,0.8)']}
                                 style={{
@@ -137,7 +227,6 @@ const BusinessPage = ({ route: { params: { business, db } }, checkIn, population
                                 height: 250,
                             }}
                         />
-                        
                         <View style={{position: 'absolute', bottom: 40, alignItems: 'baseline'}}>
                             <Text style={{color: 'white', fontSize: 30, fontWeight: 'bold', paddingLeft: 20}}>{business.name}</Text>
                             <View style={{paddingLeft: 20, paddingTop: 10, flexDirection: 'row', alignItems: 'center'}}>
@@ -160,7 +249,7 @@ const BusinessPage = ({ route: { params: { business, db } }, checkIn, population
 
                     <View style={{ flexDirection: 'row', alignItems: 'flex-end', backgroundColor: '#EEFBFC', 
                                     paddingVertical: 6, }}>
-                        <TouchableOpacity onPress={onPressCheckIn} style={{alignItems: 'center', flex: 1}}>
+                        <TouchableOpacity onPress={openMapToBusiness} style={{alignItems: 'center', flex: 1}}>
                             <MaterialCommunityIcons name='directions' color='royalblue' size={35}/>
                             <Text style={{color: 'black', fontFamily: "Avenir-Light"}}>Directions</Text>
                         </TouchableOpacity>
@@ -183,11 +272,15 @@ const BusinessPage = ({ route: { params: { business, db } }, checkIn, population
                         <View style={{flexDirection: 'row', justifyContent: 'center', paddingTop: 3}}>
                             <View style={{alignItems: 'center', flex: 1 }}>
                                 <FontAwesome5 name='truck' color='black' size={15}/>
-                                <Text style={{fontSize: 10}}>Delivery</Text>
+                                <Text style={{fontSize: 10, fontFamily: 'DamascusLight'}}>Delivery</Text>
                             </View>
                             <View style={{alignItems: 'center', flex: 1 }}>
                                 <FontAwesome5 name='shopping-bag' color='black' size={15}/>
-                                <Text style={{fontSize: 10}}>Takeout</Text>
+                                <Text style={{fontSize: 10, fontFamily: 'DamascusLight'}}>Takeout</Text>
+                            </View>
+                            <View style={{alignItems: 'center', flex: 1}}>
+                                <MaterialIcons name='local-grocery-store' color='black' size={18}></MaterialIcons>
+                                <Text style={{fontSize: 10, fontFamily: 'DamascusLight'}}>In-Store</Text>
                             </View>
                         </View>
                     </View>
@@ -210,9 +303,9 @@ const BusinessPage = ({ route: { params: { business, db } }, checkIn, population
                 <View style={{paddingBottom: 12, paddingHorizontal: 8}}>
                     <View style={styles.businessSquareInner}>  
                         <View style={{ paddingHorizontal: 15, backgroundColor: '#E1FDE2', height: 165}}>
-                            <TouchableOpacity style={{flex: 1, flexDirection: 'row', justifyContent: 'flex-start'}}>
+                            <TouchableOpacity onPress={() => {setReservationsVisible(true); }} style={{flex: 1, flexDirection: 'row', justifyContent: 'flex-start'}}>
                                 <Text style={{color: 'green', fontSize: 24, fontFamily: 'Avenir-Heavy', paddingTop: 5, paddingRight: 10}}>Reservations</Text>
-                                <AntDesign name='upcircle' color='green' size={18} style={{paddingTop: 12}}></AntDesign>
+                                <AntDesign name='rightcircle' color='green' size={18} style={{paddingTop: 12}}></AntDesign>
                             </TouchableOpacity>
                             <View style={{flex: 4}}>
                                 <View>
@@ -223,41 +316,60 @@ const BusinessPage = ({ route: { params: { business, db } }, checkIn, population
                     </View>
                 </View>
 
-                <View style={{paddingBottom: 12, paddingHorizontal: 8}}>
-                    <View style={styles.businessSquareInner}>
-                        <View style={{ paddingHorizontal: 15, backgroundColor: '#E3EDFF', height: 250}}>
-                            <View style={{flex: 1, flexDirection: 'row', justifyContent: 'flex-start', alignItems: 'baseline'}}>
-                                <Text style={{color: 'dodgerblue', fontSize: 24, fontFamily: 'Avenir-Heavy', paddingTop: 5, paddingRight: 10}}>Information</Text>
+                <View style={{borderBottomWidth: 0.8, borderBottomColor: 'azure'}}></View>
+
+                <View style={{ paddingHorizontal: 25, backgroundColor: 'azure'}}>
+                    <View style={{flex: 1, flexDirection: 'row', justifyContent: 'flex-start', alignItems: 'baseline'}}>
+                        <Text style={{color: 'royalblue', fontSize: 24, fontFamily: 'Avenir-Heavy', paddingTop: 5, paddingRight: 10, paddingBottom: 10}}>Information</Text>
+                    </View>
+
+                    <View style={styles.infoOuterBlock}>
+                        <TouchableOpacity onPress={() => {Linking.openURL(phoneNumberURL)}} style={styles.infoInnerBlock}>
+                            <MaterialIcons name='phone' color='royalblue' size={24}/>
+                            <Text style={{paddingLeft: 10, fontFamily: 'Avenir-Light', fontSize: 17, fontWeight: 'bold'}}>{phoneNumber}</Text>
+                        </TouchableOpacity>
+                    </View>
+                    <View style={styles.infoOuterBlock}>
+                        <TouchableOpacity onPress={createWebAlert} style={styles.infoInnerBlock}>
+                            <MaterialIcons name='web' color='royalblue' size={24}/>
+                            <Text style={{paddingLeft: 10, fontFamily: 'Avenir-Light', fontSize: 17, fontWeight: 'bold'}}>{website}</Text>
+                        </TouchableOpacity>
+                    </View>
+                    
+                    <View style={styles.mapOuterStyle}>         
+                        <MapView style={styles.mapStyle}>
+                        </MapView>    
+                        <View style={{flexDirection: 'row'}}>
+                            <View style={{flexDirection: 'column', flex: 1, paddingLeft: 15, paddingVertical: 15}}>
+                                <Text style={{fontFamily: 'Avenir-Light', fontSize: 17, fontWeight: 'bold'}}>Distance: 1.0mi </Text>
+                                <Text style={{fontFamily: 'Avenir-Light', fontSize: 17, fontWeight: 'bold'}}>ETA: 9 min</Text>
                             </View>
-                            <View style={{flexDirection: 'column', justifyContent: 'flex-start', flex: 5, paddingHorizontal: 10}}>
-                                <TouchableOpacity style={styles.infoBlock}>
-                                    <AntDesign name='clockcircle' color='black' size={24}/>
-                                    <Text style={{paddingLeft: 10}}>Hours</Text>
+                            <View style={{flex: 1.2, justifyContent: 'center', alignItems: 'center'}}>
+                                <TouchableOpacity onPress={openMapToBusiness}>
+                                    <View style={{borderWidth: 1, borderRadius: 5, borderColor: '#ff9900', backgroundColor: '#ff9900', paddingVertical: 12, paddingHorizontal: 8}}>
+                                        <Text style={{fontFamily: 'Avenir-Light', fontSize: 17, fontWeight: 'bold', color: 'white'}}>Take Me There</Text>
+                                    </View>  
                                 </TouchableOpacity>
-
-                                <TouchableOpacity style={styles.infoBlock}>
-                                    <MaterialIcons name='phone' color='black' size={24}/>
-                                    <Text style={{paddingLeft: 10}}>+1-408-123-4567</Text>
-                                </TouchableOpacity>
-
-                                <TouchableOpacity style={styles.infoBlock}> 
-                                    <Entypo name='address' color='black' size={24}/>
-                                    <Text style={{paddingLeft: 10}}>1111 Test Rd Cupertino, CA 95014</Text>
-                                </TouchableOpacity>
-
-                                <TouchableOpacity style={styles.infoBlock}>
-                                    <MaterialIcons name='web' color='black' size={24}/>
-                                    <Text style={{paddingLeft: 10}}>www.business.com</Text>
-                                </TouchableOpacity>
-                                
-
-
                             </View>
-                            
+                        </View>
+                    </View>                 
+
+                    <View style={{paddingVertical: 15, flexDirection: 'row', justifyContent: 'flex-start', flex: 5}}>
+                        <View style={{flexDirection: 'row', alignItems: 'center', flex: 3}}>
+                            <AntDesign name='clockcircle' color='royalblue' size={24}/>
+                            <Text style={{paddingLeft: 5, paddingRight: 15, color: 'royalblue', fontFamily: 'Avenir-Light'}}>Hours: </Text>
+                        </View>
+                        <View style={{flexDirection: 'column', alignItems: 'flex-start', flex: 8}}>
+                            <Text style={{fontFamily: 'Avenir-Light', fontWeight: 'bold', fontSize: 17, paddingVertical: 3}}>Mon: {monBusinessHours}</Text>
+                            <Text style={{fontFamily: 'Avenir-Light', fontWeight: 'bold', fontSize: 17, paddingVertical: 3}}>Tue: {tueBusinessHours}</Text>
+                            <Text style={{fontFamily: 'Avenir-Light', fontWeight: 'bold', fontSize: 17, paddingVertical: 3}}>Wed: {wedBusinessHours}</Text>
+                            <Text style={{fontFamily: 'Avenir-Light', fontWeight: 'bold', fontSize: 17, paddingVertical: 3}}>Thu: {thuBusinessHours}</Text>
+                            <Text style={{fontFamily: 'Avenir-Light', fontWeight: 'bold', fontSize: 17, paddingVertical: 3}}>Fri: {friBusinessHours}</Text>
+                            <Text style={{fontFamily: 'Avenir-Light', fontWeight: 'bold', fontSize: 17, paddingVertical: 3}}>Sat: {satBusinessHours}</Text>
+                            <Text style={{fontFamily: 'Avenir-Light', fontWeight: 'bold', fontSize: 17, paddingVertical: 3}}>Sun: {sunBusinessHours}</Text>
                         </View>
                     </View>
                 </View>
-
                 <View style={{height: 100}}></View>
             </ScrollView>
         </View>
