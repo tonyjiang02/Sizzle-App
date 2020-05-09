@@ -13,6 +13,7 @@ import Searching from './components/Business/Searching';
 import BusinessPage from './components/Business/BusinessPage';
 import { Provider } from 'react-redux';
 import store from './store';
+import Account from './components/Account';
 
 const Stack = createStackNavigator();
 const Index = ({ auth }) => {
@@ -52,6 +53,7 @@ const Index = ({ auth }) => {
                     <Stack.Screen name="Landing" component={Landing} />
                     <Stack.Screen name="Searching" component={Searching} />
                     <Stack.Screen name="BusinessPage" component={BusinessPage} />
+                    <Stack.Screen name="Account" component={Account} />
                 </Fragment>
             );
         }

@@ -12,6 +12,7 @@ import Loading from '../layout/Loading';
 import Header from '../../components/layout/Header'
 import { SearchBar } from 'react-native-elements';
 import { TouchableOpacity } from 'react-native-gesture-handler';
+import { Ionicons, MaterialCommunityIcons, AntDesign, FontAwesome5, MaterialIcons } from '@expo/vector-icons';
 
 const Searching = ({ getNearby, route: { params: { query, location } }, navigation, business }) => {
     const [distance, setDistance] = useState(3);
@@ -19,6 +20,10 @@ const Searching = ({ getNearby, route: { params: { query, location } }, navigati
     const [modalVisible, setVisible] = useState(false);
     const milesToKm = (miles) => {
         return 1.6 * miles;
+    };
+
+    const newQuery = function (input) {
+        navigation.navigate('Searching', { query: input, location: location });
     };
 
     useEffect(() => {
@@ -36,52 +41,60 @@ const Searching = ({ getNearby, route: { params: { query, location } }, navigati
                     <Header></Header>
                     <SearchBar
                         placeholder="Search"
-                        onChangeText={(text) => updateSearch(text)}
+                        onChangeText={(text) => updateSearch(text)} 
                         defaultValue={search}
                         value={search}
                         platform="ios"
-                        containerStyle={{ backgroundColor: "white"}}
-                        inputContainerStyle={{ backgroundColor: "white", height: 22 }}
-                        cancelButtonTitle={"| Cancel"}
-                        cancelButtonProps={{ color: '#bdbdbd' }}
+                        containerStyle={{backgroundColor: 'transparent',
+                        padding: 5, 
+                        shadowColor: "#000",
+                        shadowOffset: {
+                            width: 0,
+                            height: 1,
+                        },
+                        shadowOpacity: 0.22,
+                        shadowRadius: 2.22,
+                        elevation: 3}}
+                        inputContainerStyle={{backgroundColor: 'white', borderRadius: 0, height: 50}}
                         returnKeyType="search"
-                        onSubmitEditing={(e) => query(e.nativeEvent.text)}
-                        style={{flex: 1}}
+                        onSubmitEditing={(e) => newQuery(e.nativeEvent.text)}
                     />
-                    <ScrollView horizontal={true} style={{ height: 20, paddingLeft: 15, paddingVertical: 5, flex: 1 }} showsHorizontalScrollIndicator={false}>
-                    <TouchableOpacity style={{paddingHorizontal: 3}}>
-                            <View style={{flexDirection: 'row', alignItems: 'center', borderRadius: 14, borderColor: 'gray', borderWidth: 0.5, padding: 8}}>
-                                <View style={{paddingRight: 5}}><Image source={require('../../assets/icons/filtericon.png')} style={{height: 7, width: 13}}></Image></View>
-                                <Text style={{color: 'gray', fontWeight: 'bold', fontSize: 11}}>
-                                    Filter
+                    <View style={{flex: 1.1, paddingBottom: 8}}>
+                        <ScrollView horizontal={true} style={{ height: 20, paddingLeft: 15}} showsHorizontalScrollIndicator={false}>
+                        <TouchableOpacity style={{paddingHorizontal: 3}}>
+                                <View style={{flexDirection: 'row', alignItems: 'center', borderRadius: 14, borderColor: 'gray', borderWidth: 0.5, padding: 8}}>
+                                    <View style={{paddingRight: 3}}><MaterialCommunityIcons name='filter' color='gray' size={14}></MaterialCommunityIcons></View>
+                                    <Text style={{color: 'gray', fontWeight: 'bold', fontSize: 11}}>
+                                        Filter
+                                    </Text>
+                                </View>
+                            </TouchableOpacity>
+                            <TouchableOpacity style={{paddingHorizontal: 3}}>
+                                <View style={{flexDirection: 'row', alignItems: 'center', borderRadius: 14, borderColor: 'gray', borderWidth: 0.5, padding: 8}}>
+                                    <View style={{paddingRight: 5}}><MaterialCommunityIcons name='sort' color='gray' size={14}></MaterialCommunityIcons></View>
+                                    <Text style={{color: 'gray', fontWeight: 'bold', fontSize: 11}}>
+                                        Sort
+                                    </Text>
+                                </View>
+                            </TouchableOpacity>
+                            <TouchableOpacity style={{paddingHorizontal: 3}}>
+                                <Text style={{borderRadius: 14, borderColor: 'gray', color: 'gray', fontWeight: 'bold' ,borderWidth: 0.7, padding: 8, fontSize: 11}}>
+                                    Within 5 mi.
                                 </Text>
-                            </View>
-                        </TouchableOpacity>
-                        <TouchableOpacity style={{paddingHorizontal: 3}}>
-                            <View style={{flexDirection: 'row', alignItems: 'center', borderRadius: 14, borderColor: 'gray', borderWidth: 0.5, padding: 8}}>
-                                <View style={{paddingRight: 5}}><Image source={require('../../assets/icons/sorticon.png')} style={{height: 13, width: 13}}></Image></View>
-                                <Text style={{color: 'gray', fontWeight: 'bold', fontSize: 11}}>
-                                    Sort
+                            </TouchableOpacity>
+                            <TouchableOpacity style={{paddingHorizontal: 3}}>
+                                <Text style={{borderRadius: 14, borderColor: 'gray', color: 'gray', fontWeight: 'bold' ,borderWidth: 0.7, padding: 8, fontSize: 11}}>
+                                    Low Population
                                 </Text>
-                            </View>
-                        </TouchableOpacity>
-                        <TouchableOpacity style={{paddingHorizontal: 3}}>
-                            <Text style={{borderRadius: 14, borderColor: 'gray', color: 'gray', fontWeight: 'bold' ,borderWidth: 0.5, padding: 8, fontSize: 11}}>
-                                Within 5 mi.
-                            </Text>
-                        </TouchableOpacity>
-                        <TouchableOpacity style={{paddingHorizontal: 3}}>
-                            <Text style={{borderRadius: 14, borderColor: 'gray', color: 'gray', fontWeight: 'bold' ,borderWidth: 0.5, padding: 8, fontSize: 11}}>
-                                Low Population
-                            </Text>
-                        </TouchableOpacity>
-                        <TouchableOpacity style={{paddingHorizontal: 3}}>
-                            <Text style={{borderRadius: 14, borderColor: 'gray', color: 'gray', fontWeight: 'bold', borderWidth: 0.5, padding: 8, fontSize: 11}}>
-                                Currently Open
-                            </Text>
-                        </TouchableOpacity>
-                        <View style={{width: 30}}></View>
-                    </ScrollView>
+                            </TouchableOpacity>
+                            <TouchableOpacity style={{paddingHorizontal: 3}}>
+                                <Text style={{borderRadius: 14, borderColor: 'gray', color: 'gray', fontWeight: 'bold', borderWidth: 0.7, padding: 8, fontSize: 11}}>
+                                    Currently Open
+                                </Text>
+                            </TouchableOpacity>
+                            <View style={{width: 30}}></View>
+                        </ScrollView>
+                    </View>
                     <Modal
                         isVisible={modalVisible}
                         coverScreen={false}

@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
-import { View, TextInput, SafeAreaView, Text } from 'react-native';
+import { View, TextInput, SafeAreaView, Text, TouchableWithoutFeedback } from 'react-native';
+import Modal from 'react-native-modal';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { styles } from '../Styles';
@@ -10,14 +11,18 @@ import Loading from '../layout/Loading';
 import BusinessList from './BusinessList';
 import BusinessSideScroll from './BusinessSideScroll';
 import Header from '../layout/Header';
-import { ScrollView } from 'react-native-gesture-handler';
+import { ScrollView, TouchableOpacity } from 'react-native-gesture-handler';
 import * as Location from 'expo-location';
 import { Ionicons, MaterialCommunityIcons, AntDesign, FontAwesome5, MaterialIcons } from '@expo/vector-icons';
+import BusinessCard from './BusinessCard';
 export const Landing = ({ getRegisteredBusinesses, getAll, navigation, businesses, loadingAll, dbBusinesses }) => {
     const [location, setLocation] = useState(null);
     const [search, updateSearch] = useState("");
     const [sorted, updateSorted] = useState(null);
     const [sorting, updateSorting] = useState(true);
+    
+    let searchRef = React.createRef();
+    
     useEffect(() => {
         async function getLocation() {
             console.log("Asking Location Permissions");
@@ -69,29 +74,39 @@ export const Landing = ({ getRegisteredBusinesses, getAll, navigation, businesse
         <View style={styles.landing}>
             {loadingAll || sorting ? <Loading /> :
                 <View>
-                    <Header></Header>
+                    <Header navigation={navigation}></Header>
                     <SearchBar
                         placeholder="Search"
-                        onChangeText={(text) => updateSearch(text)}
+                        onChangeText={(text) => updateSearch(text)} 
                         defaultValue={search}
                         value={search}
                         platform="ios"
-                        containerStyle={{ backgroundColor: "white"}}
-                        inputContainerStyle={{ backgroundColor: "white", height: 22 }}
-                        cancelButtonTitle={"| Cancel"}
-                        cancelButtonProps={{ color: '#bdbdbd' }}
+                        containerStyle={{backgroundColor: 'transparent',
+                        padding: 5, 
+                        shadowColor: "#000",
+                        shadowOffset: {
+                            width: 0,
+                            height: 1,
+                        },
+                        shadowOpacity: 0.22,
+                        shadowRadius: 2.22,
+                        elevation: 3}}
+                        inputContainerStyle={{backgroundColor: 'white', borderRadius: 0, height: 50}}
                         returnKeyType="search"
                         onSubmitEditing={(e) => query(e.nativeEvent.text)}
                     />
+
+                    <View style={{borderWidth: 0.4, borderColor: 'gainsboro'}}></View>
+                    
                     <ScrollView showsVerticalScrollIndicator={false}>
-                        <BusinessSideScroll businesses={sorted.restaurant} category={'Restaurant'} navigation={navigation}></BusinessSideScroll>
-                        <BusinessSideScroll businesses={sorted.cafe} category={'Cafe'} navigation={navigation}></BusinessSideScroll>
-                        <BusinessSideScroll businesses={sorted.park} category={'Park'} navigation={navigation}></BusinessSideScroll>
+                        <BusinessSideScroll businesses={sorted.restaurant} category={'Restaurants'} navigation={navigation}></BusinessSideScroll>
+                        <BusinessSideScroll businesses={sorted.cafe} category={'Cafes'} navigation={navigation}></BusinessSideScroll>
+                        <BusinessSideScroll businesses={sorted.park} category={'Parks'} navigation={navigation}></BusinessSideScroll>
                         <BusinessSideScroll businesses={sorted.tourist_attraction} category={'Attractions'} navigation={navigation}></BusinessSideScroll>
                         <BusinessSideScroll businesses={sorted.place_of_worship} category={'Places of Worship'} navigation={navigation}></BusinessSideScroll>
                         <BusinessSideScroll businesses={sorted.health} category={'Health'} navigation={navigation}></BusinessSideScroll>
                         <BusinessSideScroll businesses={sorted.other} category={'Other'} navigation={navigation}></BusinessSideScroll>
-                        <Text style={{ padding: 70 }}></Text>
+                        <Text style={{ padding: 77, backgroundColor: '#f2f2f2' }}></Text>
                     </ScrollView>
                 </View>
             }
