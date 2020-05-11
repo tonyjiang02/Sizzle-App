@@ -8,7 +8,7 @@ import { textTruncateBySpace } from '../../utils/TextTruncate';
 import { openBusinessPage } from '../../actions/business';
 import { Ionicons, MaterialIcons } from '@expo/vector-icons';
 
-const BusinessSquare = ({ business, navigation, db, openBusinessPage }) => {
+const BusinessSquare = ({ business, navigation, db, openBusinessPage, type }) => {
     let population = db.population;
     const onPress = () => {
         openBusinessPage(business, db);
@@ -18,10 +18,15 @@ const BusinessSquare = ({ business, navigation, db, openBusinessPage }) => {
     let popDisplay = <Text></Text>;
 
     //if the business is verified
-    let verified = <View></View>;
-    let isVerified = true;
+    let verifiedDisplay = <View></View>;
+    let image = <Image style={{height: 125, width: 235}}></Image>;
+    let openPictureStyle = styles.openPictureStyle;
+    let isVerified = false;
     if (isVerified===true){
-        verified = <MaterialIcons name='verified-user' color='#ff9900' size={18} style={{paddingLeft: 5}}></MaterialIcons>;
+        verifiedDisplay = <MaterialIcons name='verified-user' color='#ff9900' size={18} style={{paddingLeft: 5}}></MaterialIcons>;
+    }
+    if (isVerified===false){
+        image = <Image source={{ uri: 'https://picsum.photos/600/400' }} style={ openPictureStyle }></Image>
     }
 
     if (population < 10) {
@@ -38,7 +43,7 @@ const BusinessSquare = ({ business, navigation, db, openBusinessPage }) => {
     }
     let openStatus = true;
     let openDisplay = <Text></Text>;
-    let openPicture = <Image source={{ uri: 'https://picsum.photos/200/300' }} style={{ height: 125, width: 235 }}></Image>
+
     if (openStatus === true){
         openDisplay = <Text style={{ paddingHorizontal: 5, alignSelf: 'center', color: 'white', fontSize: 12, 
                                      borderColor: 'green', borderWidth: 1, padding: 2, backgroundColor: 'green' }}>Open</Text>;
@@ -46,16 +51,16 @@ const BusinessSquare = ({ business, navigation, db, openBusinessPage }) => {
     else {
         openDisplay = <Text style={{ paddingHorizontal: 5, alignSelf: 'center', color: 'white', fontSize: 12, 
                                     borderColor: 'red', borderWidth: 1, padding: 2, backgroundColor: 'red' }}>Closed</Text>;
-        openPicture = <Image source={{ uri: 'https://picsum.photos/200/300' }} style={{ height: 125, width: 235, opacity: 0.3 }}></Image>
+        openPictureStyle = styles.closedPictureStyle;
     }
 
     return (
         <TouchableOpacity style={styles.businessSquareOuter} onPress={onPress}>
             <View style={styles.businessSquareInner}>
-                {openPicture}
+                {image}
                 <View style={{flexDirection: 'row', justifyContent: 'center', alignItems: 'center', paddingTop: 5, paddingBottom: 3}}>
                     <Text style={{fontSize: 18}}>{business.name.length > 21 ? textTruncateBySpace(21, business.name) : business.name}</Text>
-                    {verified}
+                    {verifiedDisplay}
                 </View>
                 <View style={{flexDirection: 'row', alignItems: 'center', alignSelf: 'center'}}>
                     <Text style={{borderRadius: 5, borderColor: 'black', color: 'black', borderWidth: 1, padding: 2, fontSize: 12}}>

@@ -76,8 +76,8 @@ const BusinessCard = ({ business, navigation, db, openBusinessPage }) => {
                                 1.0mi
                             </Text>
                         </View>
-                        <View style={{flexDirection: 'row', alignSelf: 'flex-end'}}>
-                            <Ionicons name='md-person' color='black' size={22}/>
+                        <View style={{flexDirection: 'row', alignItems: 'flex-end'}}>
+                            <Ionicons name='md-person' color='black' size={18} style={{paddingBottom: 1}}/>
                             {popDisplay}
                         </View>
                         <View style={{paddingBottom: 3}}>

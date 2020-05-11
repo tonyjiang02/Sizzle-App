@@ -14,8 +14,16 @@ const styles = StyleSheet.create({
         paddingTop: 6,
         paddingBottom: 2,
     },
+    openPictureStyle: {
+        height: 125, 
+        width: 235, 
+    },
+    closedPictureStyle: {
+        height: 125, 
+        width: 235, 
+        opacity: 0.3
+    },
     headerStyle: {
-        
     },
     businessSquareOuter: {
         flex: 1,
@@ -78,6 +86,24 @@ const styles = StyleSheet.create({
         marginTop: 150,
         marginBottom: 150,
         backgroundColor: "#fdeedc",
+        borderRadius: 20,
+        paddingHorizontal: 35,
+        paddingBottom: 35,
+        alignItems: "center",
+        shadowColor: "#000",
+        shadowOffset: {
+          width: 0,
+          height: 2
+        },
+        shadowOpacity: 0.25,
+        shadowRadius: 3.84,
+        elevation: 5
+    },
+    sortModalView: {
+        marginHorizontal: 10,
+        marginTop: 150,
+        marginBottom: 150,
+        backgroundColor: "white",
         borderRadius: 20,
         paddingHorizontal: 35,
         paddingBottom: 35,

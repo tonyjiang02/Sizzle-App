@@ -97,7 +97,7 @@ export const Landing = ({ getRegisteredBusinesses, getAll, navigation, businesse
                         returnKeyType="search"
                         onSubmitEditing={(e) => query(e.nativeEvent.text)}
                     />
-                    <View style={{borderBottomColor: 'gainsboro', borderBottomWidth: 0.4}}></View>
+                    <View style={{borderBottomColor: 'gainsboro', borderBottomWidth: 0.7 }}></View>
                     <ScrollView showsVerticalScrollIndicator={false}>
                         <BusinessSideScroll businesses={sorted.restaurant} category={'Restaurants'} navigation={navigation}></BusinessSideScroll>
                         <BusinessSideScroll businesses={sorted.cafe} category={'Cafes'} navigation={navigation}></BusinessSideScroll>
@@ -106,7 +106,7 @@ export const Landing = ({ getRegisteredBusinesses, getAll, navigation, businesse
                         <BusinessSideScroll businesses={sorted.place_of_worship} category={'Places of Worship'} navigation={navigation}></BusinessSideScroll>
                         <BusinessSideScroll businesses={sorted.health} category={'Health'} navigation={navigation}></BusinessSideScroll>
                         <BusinessSideScroll businesses={sorted.other} category={'Other'} navigation={navigation}></BusinessSideScroll>
-                        <Text style={{ padding: 77, backgroundColor: '#f2f2f2' }}></Text>
+                        <Text style={{ padding: 85, backgroundColor: '#f2f2f2' }}></Text>
                     </ScrollView>
                 </View>
             }
