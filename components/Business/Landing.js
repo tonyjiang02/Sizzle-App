@@ -1,5 +1,5 @@
-import React, { useState, useEffect } from 'react';
-import { View, TextInput, SafeAreaView, Text, TouchableWithoutFeedback } from 'react-native';
+import React, { useState, useEffect, useRef } from 'react';
+import { View, TextInput, SafeAreaView, Text, TouchableWithoutFeedback, Animated } from 'react-native';
 import Modal from 'react-native-modal';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
@@ -70,6 +70,7 @@ export const Landing = ({ getRegisteredBusinesses, getAll, navigation, businesse
     const query = function (input) {
         navigation.navigate('Searching', { query: input, location: location });
     };
+
     return (
         <View style={styles.landing}>
             {loadingAll || sorting ? <Loading /> :
@@ -80,9 +81,10 @@ export const Landing = ({ getRegisteredBusinesses, getAll, navigation, businesse
                         onChangeText={(text) => updateSearch(text)} 
                         defaultValue={search}
                         value={search}
-                        platform="ios"
+                        platform={"ios"}
                         containerStyle={{backgroundColor: 'transparent',
-                        padding: 5, 
+                        paddingVertical: 5, 
+                        paddingHorizontal: 5,
                         shadowColor: "#000",
                         shadowOffset: {
                             width: 0,
@@ -91,13 +93,11 @@ export const Landing = ({ getRegisteredBusinesses, getAll, navigation, businesse
                         shadowOpacity: 0.22,
                         shadowRadius: 2.22,
                         elevation: 3}}
-                        inputContainerStyle={{backgroundColor: 'white', borderRadius: 0, height: 50}}
+                        inputContainerStyle={{backgroundColor: 'white', borderRadius: 6, height: 50}}
                         returnKeyType="search"
                         onSubmitEditing={(e) => query(e.nativeEvent.text)}
                     />
-
-                    <View style={{borderWidth: 0.4, borderColor: 'gainsboro'}}></View>
-                    
+                    <View style={{borderBottomColor: 'gainsboro', borderBottomWidth: 0.4}}></View>
                     <ScrollView showsVerticalScrollIndicator={false}>
                         <BusinessSideScroll businesses={sorted.restaurant} category={'Restaurants'} navigation={navigation}></BusinessSideScroll>
                         <BusinessSideScroll businesses={sorted.cafe} category={'Cafes'} navigation={navigation}></BusinessSideScroll>

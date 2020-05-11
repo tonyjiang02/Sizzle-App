@@ -2,13 +2,13 @@
 
 import React, { useEffect, useState } from 'react';
 import { connect } from 'react-redux';
-import { View, ScrollView, Text, Image } from 'react-native';
+import { View, ScrollView, Text, Image, Animated } from 'react-native';
 import Modal from 'react-native-modal';
 import { Button,  } from 'react-native-elements';
 import { findPlace, getNearby } from '../../actions/business';
 import { styles } from '../Styles';
 import BusinessList from './BusinessList';
-import Loading from '../layout/Loading';
+import SearchLoading from '../layout/SearchLoading';
 import Header from '../../components/layout/Header'
 import { SearchBar } from 'react-native-elements';
 import { TouchableOpacity } from 'react-native-gesture-handler';
@@ -16,7 +16,7 @@ import { Ionicons, MaterialCommunityIcons, AntDesign, FontAwesome5, MaterialIcon
 
 const Searching = ({ getNearby, route: { params: { query, location } }, navigation, business }) => {
     const [distance, setDistance] = useState(3);
-    const [search, updateSearch] = useState("");
+    const [search, updateSearch] = useState('');
     const [modalVisible, setVisible] = useState(false);
     const milesToKm = (miles) => {
         return 1.6 * miles;
@@ -36,11 +36,11 @@ const Searching = ({ getNearby, route: { params: { query, location } }, navigati
     }, []);
     return (
         <View style={styles.landing}>
-            {business.loadingSearch ? <Loading /> :
+            {business.loadingSearch ? <SearchLoading /> :
                 <View style={{ flex: 1 }}>
-                    <Header></Header>
+                    <Header navigation={navigation}></Header>
                     <SearchBar
-                        placeholder="Search"
+                        placeholder={query}
                         onChangeText={(text) => updateSearch(text)} 
                         defaultValue={search}
                         value={search}
@@ -55,7 +55,7 @@ const Searching = ({ getNearby, route: { params: { query, location } }, navigati
                         shadowOpacity: 0.22,
                         shadowRadius: 2.22,
                         elevation: 3}}
-                        inputContainerStyle={{backgroundColor: 'white', borderRadius: 0, height: 50}}
+                        inputContainerStyle={{backgroundColor: 'white', borderRadius: 6, height: 50}}
                         returnKeyType="search"
                         onSubmitEditing={(e) => newQuery(e.nativeEvent.text)}
                     />
@@ -92,6 +92,11 @@ const Searching = ({ getNearby, route: { params: { query, location } }, navigati
                                     Currently Open
                                 </Text>
                             </TouchableOpacity>
+                            <TouchableOpacity style={{paddingHorizontal: 3}}>
+                                <Text style={{borderRadius: 14, borderColor: 'gray', color: 'gray', fontWeight: 'bold', borderWidth: 0.7, padding: 8, fontSize: 11}}>
+                                    Verified
+                                </Text>
+                            </TouchableOpacity>
                             <View style={{width: 30}}></View>
                         </ScrollView>
                     </View>
@@ -117,7 +122,7 @@ const Searching = ({ getNearby, route: { params: { query, location } }, navigati
                             </View>
                         </View>
                     </Modal>
-                    <View style={{borderTopWidth: 1, borderTopColor: 'gainsboro'}}></View>
+                    <View style={{borderTopWidth: 0.4, borderTopColor: 'gainsboro'}}></View>
                     <BusinessList navigation={navigation} businesses={business.searchBusinesses} dbBusinesses={business.dbSearchBusinesses}></BusinessList>
                 </View>
             }
