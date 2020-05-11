@@ -14,6 +14,8 @@ import BusinessPage from './components/Business/BusinessPage';
 import { Provider } from 'react-redux';
 import store from './store';
 import Account from './components/Account';
+import Checkin from './components/Checkin';
+import SearchLoading from './components/layout/SearchLoading'
 
 const Stack = createStackNavigator();
 const Index = ({ auth }) => {
@@ -54,6 +56,8 @@ const Index = ({ auth }) => {
                     <Stack.Screen name="Searching" component={Searching} />
                     <Stack.Screen name="BusinessPage" component={BusinessPage} />
                     <Stack.Screen name="Account" component={Account} />
+                    <Stack.Screen name="Checkin" component={Checkin} />
+                    <Stack.Screen name="SearchLoading" component={SearchLoading}></Stack.Screen>
                 </Fragment>
             );
         }

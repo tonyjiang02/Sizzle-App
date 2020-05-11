@@ -47,6 +47,13 @@ const BusinessPage = ({ route: { params: { business, db } }, checkIn, population
         console.log(db);
     });
 
+    //business verification
+    let verified = <View></View>;
+    let isVerified = true;
+    if (isVerified===true){
+        verified = <MaterialIcons name='verified-user' color='#ff9900' size={28}></MaterialIcons>;
+    }
+
     //business hours
     const monBusinessHours = '9am-1pm, 5pm-8pm';
     const tueBusinessHours = '9am-1pm, 5pm-8pm';
@@ -239,6 +246,9 @@ const BusinessPage = ({ route: { params: { business, db } }, checkIn, population
                                 </View> 
                                 <View style={{paddingLeft: 20, flexDirection: 'row', alignItems: 'center'}}>
                                     {openDisplay}
+                                </View>
+                                <View style={{paddingLeft: 20, flexDirection: 'row', alignItems: 'center'}}>
+                                    {verified}
                                 </View>            
                                 <TouchableOpacity style={{position: 'absolute', left: 330, top: 33 }}> 
                                     {favoriteDisplay}
