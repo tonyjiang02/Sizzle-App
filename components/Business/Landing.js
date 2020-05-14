@@ -20,6 +20,7 @@ export const Landing = ({ getRegisteredBusinesses, getAll, navigation, businesse
     const [search, updateSearch] = useState("");
     const [sorted, updateSorted] = useState(null);
     const [sorting, updateSorting] = useState(true);
+    const [introModalVisible, setIntroVisible] = useState(true);
     
     let searchRef = React.createRef();
     
@@ -75,6 +76,59 @@ export const Landing = ({ getRegisteredBusinesses, getAll, navigation, businesse
         <View style={styles.landing}>
             {loadingAll || sorting ? <Loading /> :
                 <View>
+                    <Modal
+                        propagateSwipe={true}
+                        isVisible={introModalVisible}
+                        coverScreen={false}
+                        backdropColor={"white"}
+                        backdropOpacity={0.8}
+                        animationIn={'slideInUp'}
+                        animationOut={'slideInDown'}
+                        animationInTiming={500}
+                        swipeDirection={['down']}
+                        onSwipeComplete={(e) => { if (e.swipingDirection === 'down') setIntroVisible(false); }}
+                    >
+                        <View  style={styles.introModalView}>
+                            <TouchableOpacity onPress={() => {setLiveUpdatesVisible(false)}}>
+                                <View style={{height: 10, paddingTop: 25}}></View>
+                                <AntDesign name='downcircle' color='#ff9900' size={25} style={{alignSelf: 'center', paddingBottom: 30}}></AntDesign>
+                            </TouchableOpacity>
+                            <View style={{height: 400}}>
+                                <View style={{flexDirection: 'row', paddingBottom: 30}}>
+                                    <MaterialCommunityIcons name='map-marker-check' color='#ff9900' size={60} style={{flex: 1}}/>
+                                    <View style={{flexDirection: 'column', flex: 4, paddingLeft: 10}}>
+                                        <Text style={{fontSize: 24, fontFamily: 'AvenirNext-Bold', color: '#ff9900'}}>Check-in</Text>
+                                        <View style={{paddingRight: 20}}>
+                                            <Text style={{fontFamily: 'Avenir-Light', fontSize: 16}}>Track your travel history and help update our live population counters</Text>
+                                        </View>
+                                    </View>
+                                </View>
+                                <View style={{flexDirection: 'row', paddingBottom: 30}}>
+                                    <View style={{flexDirection: 'column', flex: 1}}>
+                                        <Ionicons name='md-person' color='black' size={50} style={{alignSelf: 'center'}}/>
+                                    </View>
+                                    <View style={{flexDirection: 'column', flex: 4, paddingLeft: 10}}>
+                                        <Text style={{fontSize: 24, fontFamily: 'AvenirNext-Bold', color: 'black'}}>Population</Text>
+                                        <View style={{paddingRight: 20}}>
+                                            <Text style={{fontFamily: 'Avenir-Light', fontSize: 16}}>View the current number of checked in users at any location</Text>
+                                        </View>
+                                    </View>
+                                </View>
+                                <View style={{flexDirection: 'row', paddingBottom: 30}}>
+                                    <View style={{flexDirection: 'column', flex: 1}}>
+                                        <MaterialIcons name='verified-user' color='lightgreen' size={50} style={{alignSelf: 'center', paddingTop: 5}}></MaterialIcons>
+                                    </View>
+                                    <View style={{flexDirection: 'column', flex: 4, paddingLeft: 10}}>
+                                        <Text style={{fontSize: 24, fontFamily: 'AvenirNext-Bold', color: 'lightgreen'}}>Verified</Text>
+                                        <View style={{paddingRight: 20}}>
+                                            <Text style={{fontFamily: 'Avenir-Light', fontSize: 16}}>Check for live updates and make reservations at verified businesses</Text>
+                                        </View>
+                                    </View>
+                                </View>
+                            </View>
+                        </View>
+                    </Modal>
+
                     <Header navigation={navigation}></Header>
                     <SearchBar
                         placeholder="Search"
