@@ -1,4 +1,4 @@
-import { LOGIN_SUCCESS, LOGIN_FAIL, ERROR, LOAD_USER } from './types';
+import { LOGIN_SUCCESS, LOGIN_FAIL, ERROR, LOAD_USER, LOGOUT_USER } from './types';
 import { BASE_URL } from '../config';
 import { AsyncStorage } from 'react-native';
 //saves user token into local storage (only handles localstorage of token)
@@ -28,6 +28,13 @@ export const login = (email, password) => async dispatch => {
             payload: err
         });
     }
+};
+export const logout = () => async dispatch => {
+    console.log("Logout Action");
+    await AsyncStorage.removeItem('token');
+    dispatch({
+        type: LOGOUT_USER
+    });
 };
 export const signup = (email, password) => async dispatch => {
     console.log("SIGNUP ACTION");

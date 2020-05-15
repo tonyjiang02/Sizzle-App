@@ -120,7 +120,9 @@ export const getAll = (params, coords) => async dispatch => {
         console.log(err);
     }
 };
-export const checkIn = (id) => async dispatch => {
+export const checkIn = (id) => async (dispatch, getState) => {
+    const token = getState().auth.token;
+    console.log("Token " + token);
     try {
         const res = await fetch(`${BASE_URL}/api/business/addPerson/${id}`, {
             method: 'POST',

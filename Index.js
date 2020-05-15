@@ -15,33 +15,34 @@ import { Provider } from 'react-redux';
 import store from './store';
 import Account from './components/Account';
 import Checkin from './components/Checkin';
-import SearchLoading from './components/layout/SearchLoading'
+import SearchLoading from './components/layout/SearchLoading';
 
 const Stack = createStackNavigator();
 const Index = ({ auth }) => {
     const [isAuth, setAuth] = useState(0);
     useEffect(() => {
-        if (isAuth != 2) {
-            console.log("Running Auth Check");
-            const isAuthenticated = async () => {
-                const token = await AsyncStorage.getItem('token');
-                if (token) {
-                    store.dispatch(loadUser());
-                    setAuth(2);
-                    console.log("Is Authenticated");
-                } else {
-                    console.log("Not Authenticated");
-                    setAuth(1);
-                }
-
-            };
-            if (auth.isAuthenticated) {
+        console.log("Auth State Changed");
+        console.log("Running Auth Check");
+        const isAuthenticated = async () => {
+            const token = await AsyncStorage.getItem('token');
+            if (token) {
+                store.dispatch(loadUser());
                 setAuth(2);
-                console.log("Is Authenticated First Time");
+                console.log("Is Authenticated");
             } else {
-                isAuthenticated();
+                console.log("Not Authenticated");
+                setAuth(1);
             }
+
+        };
+        if (auth.isAuthenticated) {
+            setAuth(2);
+            console.log("Is Authenticated First Time");
+        } else {
+            console.log("Checking local storage");
+            isAuthenticated();
         }
+
     }, [auth]);
     const authController = () => {
         if (isAuth === 1) {

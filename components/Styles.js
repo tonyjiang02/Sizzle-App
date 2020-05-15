@@ -15,12 +15,12 @@ const styles = StyleSheet.create({
         paddingBottom: 2,
     },
     openPictureStyle: {
-        height: 125, 
-        width: 235, 
+        height: 125,
+        width: 235,
     },
     closedPictureStyle: {
-        height: 125, 
-        width: 235, 
+        height: 125,
+        width: 235,
         opacity: 0.3
     },
     headerStyle: {
@@ -34,12 +34,12 @@ const styles = StyleSheet.create({
     businessSquareInner: {
         flex: 6,
         backgroundColor: 'white',
-        padding: 0, 
+        padding: 0,
 
         shadowColor: "#000",
         shadowOffset: {
-	        width: 0,
-	        height: 1,
+            width: 0,
+            height: 1,
         },
         shadowOpacity: 0.22,
         shadowRadius: 2.22,
@@ -56,8 +56,8 @@ const styles = StyleSheet.create({
         backgroundColor: 'white',
         shadowColor: "#000",
         shadowOffset: {
-	        width: 0,
-	        height: 1,
+            width: 0,
+            height: 1,
         },
         shadowOpacity: 0.22,
         shadowRadius: 2.22,
@@ -73,14 +73,14 @@ const styles = StyleSheet.create({
         backgroundColor: 'white',
         shadowColor: "#000",
         shadowOffset: {
-	        width: 0,
-	        height: 1,
+            width: 0,
+            height: 1,
         },
         shadowOpacity: 0.22,
         shadowRadius: 2.22,
         elevation: 3,
         alignItems: 'center'
-    },  
+    },
     liveUpdatesModalView: {
         marginHorizontal: 10,
         marginTop: 150,
@@ -92,8 +92,8 @@ const styles = StyleSheet.create({
         alignItems: "center",
         shadowColor: "#000",
         shadowOffset: {
-          width: 0,
-          height: 2
+            width: 0,
+            height: 2
         },
         shadowOpacity: 0.25,
         shadowRadius: 3.84,
@@ -110,8 +110,8 @@ const styles = StyleSheet.create({
         alignItems: "center",
         shadowColor: "#000",
         shadowOffset: {
-          width: 0,
-          height: 2
+            width: 0,
+            height: 2
         },
         shadowOpacity: 0.25,
         shadowRadius: 3.84,
@@ -128,8 +128,8 @@ const styles = StyleSheet.create({
         alignItems: "center",
         shadowColor: "#000",
         shadowOffset: {
-          width: 0,
-          height: 2
+            width: 0,
+            height: 2
         },
         shadowOpacity: 0.25,
         shadowRadius: 3.84,
@@ -142,13 +142,13 @@ const styles = StyleSheet.create({
     mapStyle: {
         width: '100%',
         height: 200,
-      },
+    },
     mapOuterStyle: {
         backgroundColor: 'white',
         shadowColor: "#000",
         shadowOffset: {
-	        width: 0,
-	        height: 1,
+            width: 0,
+            height: 1,
         },
         shadowOpacity: 0.22,
         shadowRadius: 2.22,
