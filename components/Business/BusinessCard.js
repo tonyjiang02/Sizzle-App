@@ -20,7 +20,7 @@ const BusinessCard = ({ business, navigation, db, openBusinessPage }) => {
     let verified = <View></View>;
     let isVerified = true;
     if (isVerified===true){
-        verified = <MaterialIcons name='verified-user' color='#ff9900' size={22} style={{paddingBottom: 3}}></MaterialIcons>;
+        verified = <MaterialIcons name='verified-user' color='lightgreen' size={22} style={{paddingBottom: 3}}></MaterialIcons>;
     }
     let number = 9999999;
     //population display

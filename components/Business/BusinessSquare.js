@@ -23,7 +23,7 @@ const BusinessSquare = ({ business, navigation, db, openBusinessPage, type }) =>
     let openPictureStyle = styles.openPictureStyle;
     let isVerified = false;
     if (isVerified===true){
-        verifiedDisplay = <MaterialIcons name='verified-user' color='#ff9900' size={18} style={{paddingLeft: 5}}></MaterialIcons>;
+        verifiedDisplay = <MaterialIcons name='verified-user' color='lightgreen' size={18} style={{paddingLeft: 5}}></MaterialIcons>;
     }
     if (isVerified===false){
         image = <Image source={{ uri: 'https://picsum.photos/600/400' }} style={ openPictureStyle }></Image>

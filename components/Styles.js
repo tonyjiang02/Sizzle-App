@@ -117,6 +117,22 @@ const styles = StyleSheet.create({
         shadowRadius: 3.84,
         elevation: 5
     },
+    introModalView: {
+        marginHorizontal: 10,
+        marginBottom: 150,
+        backgroundColor: "white",
+        borderRadius: 20,
+        paddingHorizontal: 10,
+        paddingBottom: 35,
+        shadowColor: "#000",
+        shadowOffset: {
+          width: 0,
+          height: 2
+        },
+        shadowOpacity: 0.25,
+        shadowRadius: 3.84,
+        elevation: 5
+    },
     reservationsModalView: {
         marginHorizontal: 10,
         marginTop: 150,
