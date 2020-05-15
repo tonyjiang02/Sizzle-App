@@ -22,6 +22,12 @@ const Outlines = ({ type }) => {
             </View>
         )
     }
+    if (type==='BusinessSideScroll'){
+        return (
+            <View style={{height: 200, width: Dimensions.get('window').width, backgroundColor: 'gainsboro', borderRadius: 6}}>
+            </View>
+        )
+    }
     return (
         <View></View>
     )

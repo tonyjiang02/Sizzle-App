@@ -175,10 +175,24 @@ const styles = StyleSheet.create({
 
 const input = StyleSheet.create({
     formInput: {
-        height: 40,
-        borderColor: "#c0c0c0",
-        borderBottomWidth: StyleSheet.hairlineWidth,
-        marginBottom: 20
+        height: 50,
+        backgroundColor: '#f2f2f2',
+        borderColor: "#f2f2f2",
+        borderWidth: 0.5,
+        paddingLeft: 10,
+        width: 300,
+        borderRadius: 12, 
+        marginBottom: 20,
+        color: 'black',
+        alignSelf: 'flex-start',
+        shadowColor: "#000",
+        shadowOffset: {
+            width: 0,
+            height: 2
+        },
+        shadowOpacity: 0.25,
+        shadowRadius: 3.84,
+        elevation: 5
     }
 });
 
