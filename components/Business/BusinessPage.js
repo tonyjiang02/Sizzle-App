@@ -53,7 +53,7 @@ const BusinessPage = ({ route: { params: { business, db } }, checkIn, auth }) =>
     //business verification
     let verified = <View></View>;
     if (isVerified === true) {
-        verified = <MaterialIcons name='verified-user' color='#ff9900' size={28}></MaterialIcons>;
+        verified = <MaterialIcons name='verified-user' color='lightgreen' size={28}></MaterialIcons>;
     }
 
     //business hours

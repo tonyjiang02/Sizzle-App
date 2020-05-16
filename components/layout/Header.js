@@ -17,7 +17,7 @@ const Header = ({ getRegisteredBusinesses, getAll, navigation, businesses, loadi
     }
 
     return (
-        <View style={{height: 85, backgroundColor: '#ff9900', flexDirection: 'row', alignItems: 'flex-end', paddingBottom: 3, paddingHorizontal: 10, justifyContent: 'space-around'}}>
+        <View style={{height: 90, backgroundColor: '#ff9900', flexDirection: 'row', alignItems: 'flex-end', paddingBottom: 3, paddingHorizontal: 10, justifyContent: 'space-around'}}>
             <TouchableOpacity onPress={onAccountPress} style={{paddingBottom: 5}}>
                 <View style={{borderWidth: 0.5, borderColor: 'white', paddingHorizontal: 2.5, paddingTop: 4, paddingBottom: 2, borderRadius: 12, flexDirection: 'row'}}>
                     <MaterialCommunityIcons name='account-circle' color='white' size={25} style={{paddingLeft: 1.5}}/>
