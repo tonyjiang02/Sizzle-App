@@ -123,7 +123,6 @@ const styles = StyleSheet.create({
         backgroundColor: "white",
         borderRadius: 20,
         paddingHorizontal: 10,
-        paddingBottom: 35,
         shadowColor: "#000",
         shadowOffset: {
           width: 0,
@@ -181,8 +180,8 @@ const input = StyleSheet.create({
         borderWidth: 0.5,
         paddingLeft: 10,
         width: 300,
-        borderRadius: 12, 
-        marginBottom: 20,
+        borderRadius: 5, 
+        marginBottom: 15,
         color: 'black',
         alignSelf: 'flex-start',
         shadowColor: "#000",
