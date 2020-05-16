@@ -138,6 +138,7 @@ export const checkIn = (id) => async (dispatch, getState) => {
             type: UPDATE_POPULATION,
             payload: json
         });
+        return json.population;
     } catch (error) {
 
     }

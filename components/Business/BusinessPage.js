@@ -34,14 +34,15 @@ import openMap from 'react-native-open-maps';
 const BusinessPage = ({ route: { params: { business, db } }, checkIn, auth }) => {
     //destructuring
     console.log(db);
-    const { id, name, owner, googleId, publicId, isVerified, images, coverImageUrl, website, phone, address, openStatus, hours, description, population, reservations } = db;
+    let { id, name, owner, googleId, publicId, isVerified, images, coverImageUrl, website, phone, address, openStatus, hours, description, population, reservations, announcements } = db;
     //modals
     const [liveUpdatesModalVisible, setLiveUpdatesVisible] = useState(false);
     const [reservationsModalVisible, setReservationsVisible] = useState(false);
-
+    const [livePopulation, setLivePopulation] = useState(population)
     //backend
-    const onPressCheckIn = () => {
-        checkIn(business.place_id);
+    const onPressCheckIn = async () => {
+        const newPopulation = await checkIn(business.place_id);
+        setLivePopulation(newPopulation);
     };
     const refresh = () => {
         getBusiness(business.place_id, db._id);
@@ -63,6 +64,7 @@ const BusinessPage = ({ route: { params: { business, db } }, checkIn, auth }) =>
         let close = `${day.close.hour}:${day.close.minutes === '0' ? '00' : day.close.minutes}${day.close.am ? 'am' : 'pm'}`;
         return open + close;
     };
+    //make page specifically for unverified
     const monBusinessHours = hoursToString(hours.monday);
     const tueBusinessHours = hoursToString(hours.tuesday);
     const wedBusinessHours = hoursToString(hours.wednesday);
@@ -112,17 +114,17 @@ const BusinessPage = ({ route: { params: { business, db } }, checkIn, auth }) =>
 
     //population display
     let popDisplay = <Text></Text>;
-    if (population < 10) {
-        popDisplay = <Text style={{ paddingLeft: 3, alignSelf: 'center', color: 'green', fontSize: 20, fontWeight: 'bold' }}>{population}</Text>;
+    if (livePopulation < 10) {
+        popDisplay = <Text style={{ paddingLeft: 3, alignSelf: 'center', color: 'green', fontSize: 20, fontWeight: 'bold' }}>{livePopulation}</Text>;
     }
-    else if (population >= 10 && population < 50) {
-        popDisplay = <Text style={{ paddingLeft: 3, alignSelf: 'center', color: 'orange', fontSize: 20, fontWeight: 'bold' }}>{population}</Text>;
+    else if (livePopulation >= 10 && livePopulation < 50) {
+        popDisplay = <Text style={{ paddingLeft: 3, alignSelf: 'center', color: 'orange', fontSize: 20, fontWeight: 'bold' }}>{livePopulation}</Text>;
     }
-    else if (population >= 50) {
-        popDisplay = <Text style={{ paddingLeft: 3, alignSelf: 'center', color: 'red', fontSize: 20, fontWeight: 'bold' }}>{population}</Text>;
+    else if (livePopulation >= 50) {
+        popDisplay = <Text style={{ paddingLeft: 3, alignSelf: 'center', color: 'red', fontSize: 20, fontWeight: 'bold' }}>{livePopulation}</Text>;
     }
     else {
-        popDisplay = <Text style={{ paddingLeft: 3, alignSelf: 'center', color: 'gray', fontSize: 20, fontWeight: 'bold' }}>{population}</Text>;
+        popDisplay = <Text style={{ paddingLeft: 3, alignSelf: 'center', color: 'gray', fontSize: 20, fontWeight: 'bold' }}>{livePopulation}</Text>;
     }
 
     //open during current time display
@@ -152,7 +154,12 @@ const BusinessPage = ({ route: { params: { business, db } }, checkIn, auth }) =>
     else if (isFavorite === false) {
         favoriteDisplay = <Ionicons name="md-heart-empty" color='white' size={35} />;
     }
-
+    //Live updates display
+    console.log(announcements);
+    announcements = announcements.reverse();
+    const updates = announcements.map((a, i) => (
+        <LiveUpdate title={a.title} content={a.content} key={i}></LiveUpdate>
+    ))
     return (
         <View style={styles.landing}>
             <Modal
@@ -176,15 +183,7 @@ const BusinessPage = ({ route: { params: { business, db } }, checkIn, auth }) =>
                     <ScrollView showsVerticalScrollIndicator={false}>
                         <TouchableWithoutFeedback>
                             <View>
-                                <LiveUpdate></LiveUpdate>
-                                <LiveUpdate></LiveUpdate>
-                                <LiveUpdate></LiveUpdate>
-                                <LiveUpdate></LiveUpdate>
-                                <LiveUpdate></LiveUpdate>
-                                <LiveUpdate></LiveUpdate>
-                                <LiveUpdate></LiveUpdate>
-                                <LiveUpdate></LiveUpdate>
-                                <LiveUpdate></LiveUpdate>
+                                {updates}
                             </View>
                         </TouchableWithoutFeedback>
                     </ScrollView>
@@ -321,7 +320,7 @@ const BusinessPage = ({ route: { params: { business, db } }, checkIn, auth }) =>
                                 <AntDesign name='rightcircle' color='#ff9900' size={18} style={{ paddingTop: 12 }}></AntDesign>
                             </View>
                             <View style={{ flex: 5 }}>
-                                <LiveUpdate></LiveUpdate>
+                                <LiveUpdate title={announcements[0].title ? announcements[0].title : ""} content={announcements[0].content ? announcements[0].content : ""}></LiveUpdate>
                             </View>
                         </TouchableOpacity>
                     </View>

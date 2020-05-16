@@ -21,9 +21,9 @@ export const Landing = ({ getRegisteredBusinesses, getAll, navigation, businesse
     const [sorted, updateSorted] = useState(null);
     const [sorting, updateSorting] = useState(true);
     const [introModalVisible, setIntroVisible] = useState(true);
-    
+
     let searchRef = React.createRef();
-    
+
     useEffect(() => {
         async function getLocation() {
             console.log("Asking Location Permissions");
@@ -88,40 +88,40 @@ export const Landing = ({ getRegisteredBusinesses, getAll, navigation, businesse
                         swipeDirection={['down']}
                         onSwipeComplete={(e) => { if (e.swipingDirection === 'down') setIntroVisible(false); }}
                     >
-                        <View  style={styles.introModalView}>
-                            <TouchableOpacity onPress={() => {setLiveUpdatesVisible(false)}}>
-                                <View style={{height: 10, paddingTop: 25}}></View>
-                                <AntDesign name='downcircle' color='#ff9900' size={25} style={{alignSelf: 'center', paddingBottom: 30}}></AntDesign>
+                        <View style={styles.introModalView}>
+                            <TouchableOpacity onPress={() => { setIntroVisible(false) }}>
+                                <View style={{ height: 10, paddingTop: 25 }}></View>
+                                <AntDesign name='downcircle' color='#ff9900' size={25} style={{ alignSelf: 'center', paddingBottom: 30 }}></AntDesign>
                             </TouchableOpacity>
-                            <View style={{height: 400}}>
-                                <View style={{flexDirection: 'row', paddingBottom: 30}}>
-                                    <MaterialCommunityIcons name='map-marker-check' color='#ff9900' size={60} style={{flex: 1}}/>
-                                    <View style={{flexDirection: 'column', flex: 4, paddingLeft: 10}}>
-                                        <Text style={{fontSize: 24, fontFamily: 'AvenirNext-Bold', color: '#ff9900'}}>Check-in</Text>
-                                        <View style={{paddingRight: 20}}>
-                                            <Text style={{fontFamily: 'Avenir-Light', fontSize: 16}}>Track your travel history and help update our live population counters</Text>
+                            <View style={{ height: 400 }}>
+                                <View style={{ flexDirection: 'row', paddingBottom: 30 }}>
+                                    <MaterialCommunityIcons name='map-marker-check' color='#ff9900' size={60} style={{ flex: 1 }} />
+                                    <View style={{ flexDirection: 'column', flex: 4, paddingLeft: 10 }}>
+                                        <Text style={{ fontSize: 24, fontFamily: 'AvenirNext-Bold', color: '#ff9900' }}>Check-in</Text>
+                                        <View style={{ paddingRight: 20 }}>
+                                            <Text style={{ fontFamily: 'Avenir-Light', fontSize: 16 }}>Track your travel history and help update our live population counters</Text>
                                         </View>
                                     </View>
                                 </View>
-                                <View style={{flexDirection: 'row', paddingBottom: 30}}>
-                                    <View style={{flexDirection: 'column', flex: 1}}>
-                                        <Ionicons name='md-person' color='black' size={50} style={{alignSelf: 'center'}}/>
+                                <View style={{ flexDirection: 'row', paddingBottom: 30 }}>
+                                    <View style={{ flexDirection: 'column', flex: 1 }}>
+                                        <Ionicons name='md-person' color='black' size={50} style={{ alignSelf: 'center' }} />
                                     </View>
-                                    <View style={{flexDirection: 'column', flex: 4, paddingLeft: 10}}>
-                                        <Text style={{fontSize: 24, fontFamily: 'AvenirNext-Bold', color: 'black'}}>Population</Text>
-                                        <View style={{paddingRight: 20}}>
-                                            <Text style={{fontFamily: 'Avenir-Light', fontSize: 16}}>View the current number of checked in users at any location</Text>
+                                    <View style={{ flexDirection: 'column', flex: 4, paddingLeft: 10 }}>
+                                        <Text style={{ fontSize: 24, fontFamily: 'AvenirNext-Bold', color: 'black' }}>Population</Text>
+                                        <View style={{ paddingRight: 20 }}>
+                                            <Text style={{ fontFamily: 'Avenir-Light', fontSize: 16 }}>View the current number of checked in users at any location</Text>
                                         </View>
                                     </View>
                                 </View>
-                                <View style={{flexDirection: 'row', paddingBottom: 30}}>
-                                    <View style={{flexDirection: 'column', flex: 1}}>
-                                        <MaterialIcons name='verified-user' color='lightgreen' size={50} style={{alignSelf: 'center', paddingTop: 5}}></MaterialIcons>
+                                <View style={{ flexDirection: 'row', paddingBottom: 30 }}>
+                                    <View style={{ flexDirection: 'column', flex: 1 }}>
+                                        <MaterialIcons name='verified-user' color='lightgreen' size={50} style={{ alignSelf: 'center', paddingTop: 5 }}></MaterialIcons>
                                     </View>
-                                    <View style={{flexDirection: 'column', flex: 4, paddingLeft: 10}}>
-                                        <Text style={{fontSize: 24, fontFamily: 'AvenirNext-Bold', color: 'lightgreen'}}>Verified</Text>
-                                        <View style={{paddingRight: 20}}>
-                                            <Text style={{fontFamily: 'Avenir-Light', fontSize: 16}}>Check for live updates and make reservations at verified businesses</Text>
+                                    <View style={{ flexDirection: 'column', flex: 4, paddingLeft: 10 }}>
+                                        <Text style={{ fontSize: 24, fontFamily: 'AvenirNext-Bold', color: 'lightgreen' }}>Verified</Text>
+                                        <View style={{ paddingRight: 20 }}>
+                                            <Text style={{ fontFamily: 'Avenir-Light', fontSize: 16 }}>Check for live updates and make reservations at verified businesses</Text>
                                         </View>
                                     </View>
                                 </View>
@@ -132,26 +132,28 @@ export const Landing = ({ getRegisteredBusinesses, getAll, navigation, businesse
                     <Header navigation={navigation}></Header>
                     <SearchBar
                         placeholder="Search"
-                        onChangeText={(text) => updateSearch(text)} 
+                        onChangeText={(text) => updateSearch(text)}
                         defaultValue={search}
                         value={search}
                         platform={"ios"}
-                        containerStyle={{backgroundColor: 'transparent',
-                        paddingVertical: 5, 
-                        paddingHorizontal: 5,
-                        shadowColor: "#000",
-                        shadowOffset: {
-                            width: 0,
-                            height: 1,
-                        },
-                        shadowOpacity: 0.22,
-                        shadowRadius: 2.22,
-                        elevation: 3}}
-                        inputContainerStyle={{backgroundColor: 'white', borderRadius: 6, height: 50}}
+                        containerStyle={{
+                            backgroundColor: 'transparent',
+                            paddingVertical: 5,
+                            paddingHorizontal: 5,
+                            shadowColor: "#000",
+                            shadowOffset: {
+                                width: 0,
+                                height: 1,
+                            },
+                            shadowOpacity: 0.22,
+                            shadowRadius: 2.22,
+                            elevation: 3
+                        }}
+                        inputContainerStyle={{ backgroundColor: 'white', borderRadius: 6, height: 50 }}
                         returnKeyType="search"
                         onSubmitEditing={(e) => query(e.nativeEvent.text)}
                     />
-                    <View style={{borderBottomColor: 'gainsboro', borderBottomWidth: 0.7 }}></View>
+                    <View style={{ borderBottomColor: 'gainsboro', borderBottomWidth: 0.7 }}></View>
                     <ScrollView showsVerticalScrollIndicator={false}>
                         <BusinessSideScroll businesses={sorted.restaurant} category={'Restaurants'} navigation={navigation}></BusinessSideScroll>
                         <BusinessSideScroll businesses={sorted.cafe} category={'Cafes'} navigation={navigation}></BusinessSideScroll>
