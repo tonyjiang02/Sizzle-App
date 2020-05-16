@@ -100,7 +100,7 @@ const Searching = ({ getNearby, route: { params: { query, location } }, navigati
                 shadowOpacity: 0.22,
                 shadowRadius: 2.22,
                 elevation: 3}}
-                inputContainerStyle={{backgroundColor: 'white', borderRadius: 6, height: 50}}
+                inputContainerStyle={{backgroundColor: 'white', borderRadius: 5, height: 50}}
                 returnKeyType="search"
                 onSubmitEditing={(e) => newQuery(e.nativeEvent.text)}
             />

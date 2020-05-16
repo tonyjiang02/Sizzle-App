@@ -18,14 +18,14 @@ const Login = ({ login, auth1, business, navigation }) => {
 
     return (
         <LinearGradient
-            colors={['#ffdaa4', '#ff9900']}
+            colors={['#ff9900','#FFDF7D', '#AED6FB', '#A38EFA' ]}
             style={{flex: 1}}
         >
             <KeyboardAvoidingView style={{ flex: 1, alignItems: 'center', paddingTop: 50}}>
                 <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
                     <View>
                         <View style={{ backgroundColor: 'transparent', alignItems: 'center', paddingTop: 30}}>
-                            <Image source={require( '../assets/logos/sizzle_clear.png' )} style={{height: 150, width: 220}} ></Image>
+                            <Image source={require( '../assets/logos/Sizzle_White_Transparent.png' )} style={{height: 150, width: 220}} ></Image>
                         </View>
                         <View>
                             <TextInput
@@ -50,12 +50,14 @@ const Login = ({ login, auth1, business, navigation }) => {
                                 secureTextEntry={true}
                                 autoCorrect={false}
                             />
-                            <TouchableOpacity onPress={auth} style={{height: 50, backgroundColor: 'deepskyblue', width: 300, borderRadius: 12, marginBottom: 20, shadowColor: "#000",
+                            <TouchableOpacity onPress={auth} style={{height: 50, backgroundColor: '#ff9900', width: 300, borderRadius: 5, marginBottom: 20, shadowColor: "#000",
                                 shadowOffset: {width: 0, height: 2}, shadowOpacity: 0.25, shadowRadius: 3.84, elevation: 5, justifyContent: 'center'}}>
-                                <Text style={{ color: 'black', alignSelf: 'center', fontFamily: 'AvenirNext-Bold'}}>Log In</Text>
+                                <Text style={{ color: 'white', alignSelf: 'center', fontFamily: 'AvenirNext-Bold', fontSize: 16}}>Log In</Text>
                             </TouchableOpacity>
+                            <View style={{height: 270, borderBottomColor: 'gainsboro', borderBottomWidth: 0.7}}></View>
+                            <View style={{height: 20}}></View>
                             <View style={{flexDirection: 'row', justifyContent: 'center'}}>
-                                <Text style={{fontFamily: 'Avenir-Light', fontSize: 18}}>New user? </Text>
+                                <Text style={{fontFamily: 'Avenir-Light', fontSize: 20, color: 'white'}}>New user? </Text>
                                 <TouchableOpacity>
                                     <Text style={{fontFamily: 'Avenir-Light', fontSize: 18, color: 'orangered', fontWeight: 'bold' }}>Sign Up</Text>
                                 </TouchableOpacity>

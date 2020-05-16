@@ -149,7 +149,7 @@ export const Landing = ({ getRegisteredBusinesses, getAll, navigation, businesse
                             shadowRadius: 2.22,
                             elevation: 3
                         }}
-                        inputContainerStyle={{ backgroundColor: 'white', borderRadius: 6, height: 50 }}
+                        inputContainerStyle={{ backgroundColor: 'white', borderRadius: 5, height: 50 }}
                         returnKeyType="search"
                         onSubmitEditing={(e) => query(e.nativeEvent.text)}
                     />
