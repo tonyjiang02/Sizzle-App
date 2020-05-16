@@ -2,7 +2,7 @@ import { LOGIN_SUCCESS, LOGIN_FAIL, ERROR, LOAD_USER, LOGOUT_USER } from './type
 import { BASE_URL } from '../config';
 import { AsyncStorage } from 'react-native';
 //saves user token into local storage (only handles localstorage of token)
-export const login = (email, password) => async dispatch => {
+export const login = (email, password) => async (dispatch, getState) => {
     //login user using fetch
     //save token to async storage
     console.log("LOGIN ACTION");
@@ -47,10 +47,11 @@ export const loadUser = () => async dispatch => {
             const res = await fetch(`${BASE_URL}/api/auth/user`, {
                 method: 'GET',
                 headers: {
-                    'Content-Type': 'application/json'
+                    'x-auth-token': token
                 }
             });
             const json = await res.json();
+            console.log(json);
             dispatch({
                 type: LOAD_USER,
                 payload: json
