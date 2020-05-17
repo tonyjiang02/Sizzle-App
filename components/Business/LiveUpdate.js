@@ -7,42 +7,75 @@ import { textTruncateBySpace } from '../../utils/TextTruncate';
 import { openBusinessPage } from '../../actions/business';
 import { Ionicons, MaterialCommunityIcons, AntDesign, FontAwesome5, MaterialIcons } from '@expo/vector-icons';
 import { connect } from 'react-redux';
+import { getFontSize, getIconSize } from '../../utils/fontsizes';
+
 const LiveUpdate = ({ title, content }) => {
     useEffect(() => {
         console.log(`Live Update Title: ${title} Content: ${content}`);
     }, [])
     let testTitle = title;
-    let testTime = 300000;
+    let testTime = 60;
     let testTimeDisplay = '';
     let testDesc = content;
 
     if (testTime < 60) {
-        testTimeDisplay = testTime + 'minutes';
+        testTimeDisplay = testTime + 'min.';
     }
     else if (testTime < 1440) {
-        testTimeDisplay = Math.trunc(testTime / 60) + ' hours';
+        if ( Math.trunc(testTime / 60) === 1){
+            testTimeDisplay = Math.trunc(testTime / 60) + ' hr.';
+        }
+        else{
+            testTimeDisplay = Math.trunc(testTime / 60) + ' hrs.';
+        }
     }
     else if (testTime < 10080) {
-        testTimeDisplay = Math.trunc(testTime / 1440) + ' days';
+        if (Math.trunc(testTime / 1440) === 1){
+            testTimeDisplay = Math.trunc(testTime / 1440) + ' day';
+        }
+        else{
+            testTimeDisplay = Math.trunc(testTime / 1440) + ' days';
+        }
     }
     else if (testTime < 40320) {
-        testTimeDisplay = Math.trunc(testTime / 10080) + ' weeks';
+        if (Math.trunc(testTime / 10080) === 1){
+            testTimeDisplay = Math.trunc(testTime / 10080) + ' wk.';
+        }
+        else{
+            testTimeDisplay = Math.trunc(testTime / 10080) + ' wks.';
+        }
     }
     else if (testTime < 483840) {
-        testTimeDisplay = Math.trunc(testTime / 40320) + ' months';
+        if (Math.trunc(testTime / 40320) === 1){
+            testTimeDisplay = Math.trunc(testTime / 40320) + ' mo.';
+        }
+        else{
+            testTimeDisplay = Math.trunc(testTime / 40320) + ' mos.';
+        }
     }
     else {
-        testTimeDisplay = Math.trunc(testTime / 525600) + ' years';
+        if (Math.trunc(testTime / 525600) === 1){
+            testTimeDisplay = Math.trunc(testTime / 525600) + ' yr.';
+        }
+        else{
+            testTimeDisplay = Math.trunc(testTime / 525600) + ' yrs.';
+        }
     }
     return (
         <View style={styles.defaultView}>
+            <View style={{height: 5}}></View>
             <View style={{ flex: 2, flexDirection: 'row', alignItems: 'baseline' }}>
-                <Text style={{ fontFamily: 'AvenirNext-Bold', fontSize: 20, color: 'darkslategrey', paddingRight: 10 }}>{testTitle}</Text>
-                <Text style={{ fontFamily: 'AvenirNext-Italic', fontSize: 14, color: 'darkslategrey' }}>{testTimeDisplay}</Text>
+                <View style={{flex: 4}}>
+                    <Text style={{ fontFamily: 'AvenirNext-Bold', fontSize: getFontSize(20), color: 'darkslategrey', paddingRight: 10 }}>{testTitle}</Text>
+                </View>
+                <View style={{flex: 1}}>
+                    <Text style={{ fontFamily: 'AvenirNext-Italic', fontSize: getFontSize(14), color: 'darkslategrey' }}>{testTimeDisplay}</Text>
+                </View>
             </View>
             <View style={{ flex: 5, paddingBottom: 10 }}>
-                <Text style={{ fontFamily: 'DamascusLight', fontSize: 16, color: 'black' }}>{testDesc}</Text>
+                <Text style={{ fontFamily: 'DamascusLight', fontSize: getFontSize(16), color: 'black' }}>{testDesc}</Text>
             </View>
+            <View style={{borderTopWidth: 0.5, borderTopColor: 'gainsboro'}}></View>
         </View>
 
     );

@@ -13,6 +13,7 @@ import Header from '../../components/layout/Header'
 import { SearchBar } from 'react-native-elements';
 import { TouchableOpacity } from 'react-native-gesture-handler';
 import { Ionicons, MaterialCommunityIcons, AntDesign, FontAwesome5, MaterialIcons } from '@expo/vector-icons';
+import { getFontSize, getIconSize } from '../../utils/fontsizes';
 
 const Searching = ({ getNearby, route: { params: { query, location } }, navigation, business }) => {
     const [distance, setDistance] = useState(3);
@@ -35,45 +36,45 @@ const Searching = ({ getNearby, route: { params: { query, location } }, navigati
     //filter buttons
     let withinFiveMilesDisplay = <Text></Text>
     if (checkWithinFiveMiles === false){
-        withinFiveMilesDisplay = <Text style={{borderRadius: 14, borderColor: 'gray', color: 'gray', fontWeight: 'bold' ,borderWidth: 0.7, padding: 9, fontSize: 11}}>Within 5 mi.</Text>
+        withinFiveMilesDisplay = <Text style={{borderRadius: 14, borderColor: 'gray', color: 'gray', fontWeight: 'bold' ,borderWidth: 0.7, padding: 9, fontSize: getFontSize(11)}}>Within 5 mi.</Text>
     }
     else if (checkWithinFiveMiles === true){
         withinFiveMilesDisplay = 
         <View style={{borderRadius: 14, borderColor: '#ff9900', backgroundColor: '#ff9900',  padding: 10}}>
-            <Text style={{color: 'white', fontWeight: 'bold', fontSize: 11}}>Within 5 mi.</Text>
+            <Text style={{color: 'white', fontWeight: 'bold', fontSize: getFontSize(11)}}>Within 5 mi.</Text>
         </View>
     }
 
     let lowPopulationDisplay = <Text></Text>
     if (checkLowPopulation === false){
-        lowPopulationDisplay = <Text style={{borderRadius: 14, borderColor: 'gray', color: 'gray', fontWeight: 'bold' ,borderWidth: 0.7, padding: 9, fontSize: 11}}>Low Population</Text>
+        lowPopulationDisplay = <Text style={{borderRadius: 14, borderColor: 'gray', color: 'gray', fontWeight: 'bold' ,borderWidth: 0.7, padding: 9, fontSize: getFontSize(11)}}>Low Population</Text>
     }
     else if (checkLowPopulation === true){
         lowPopulationDisplay = 
         <View style={{borderRadius: 14, borderColor: '#ff9900', backgroundColor: '#ff9900',  padding: 10}}>
-            <Text style={{color: 'white', fontWeight: 'bold', fontSize: 11}}>Low Population</Text>
+            <Text style={{color: 'white', fontWeight: 'bold', fontSize: getFontSize(11)}}>Low Population</Text>
         </View>
     }
 
     let currentlyOpenDisplay = <Text></Text>
     if (checkCurrentlyOpen === false){
-        currentlyOpenDisplay = <Text style={{borderRadius: 14, borderColor: 'gray', color: 'gray', fontWeight: 'bold' ,borderWidth: 0.7, padding: 9, fontSize: 11}}>Open</Text>
+        currentlyOpenDisplay = <Text style={{borderRadius: 14, borderColor: 'gray', color: 'gray', fontWeight: 'bold' ,borderWidth: 0.7, padding: 9, fontSize: getFontSize(11)}}>Open</Text>
     }
     else if (checkCurrentlyOpen === true){
         currentlyOpenDisplay = 
         <View style={{borderRadius: 14, borderColor: '#ff9900', backgroundColor: '#ff9900',  padding: 10}}>
-            <Text style={{color: 'white', fontWeight: 'bold', fontSize: 11}}>Open</Text>
+            <Text style={{color: 'white', fontWeight: 'bold', fontSize: getFontSize(11)}}>Open</Text>
         </View>
     }
 
     let checkVerifiedDisplay = <Text></Text>
     if (checkVerified === false){
-        checkVerifiedDisplay = <Text style={{borderRadius: 14, borderColor: 'gray', color: 'gray', fontWeight: 'bold' ,borderWidth: 0.7, padding: 9, fontSize: 11}}>Verified Only</Text>
+        checkVerifiedDisplay = <Text style={{borderRadius: 14, borderColor: 'gray', color: 'gray', fontWeight: 'bold' ,borderWidth: 0.7, padding: 9, fontSize: getFontSize(11)}}>Verified Only</Text>
     }
     else if (checkVerified === true){
         checkVerifiedDisplay = 
         <View style={{borderRadius: 14, borderColor: '#ff9900', backgroundColor: '#ff9900',  padding: 10}}>
-            <Text style={{color: 'white', fontWeight: 'bold', fontSize: 11}}>Verified Only</Text>
+            <Text style={{color: 'white', fontWeight: 'bold', fontSize: getFontSize(11)}}>Verified Only</Text>
         </View>
     }
 
@@ -105,17 +106,17 @@ const Searching = ({ getNearby, route: { params: { query, location } }, navigati
                 onSubmitEditing={(e) => newQuery(e.nativeEvent.text)}
             />
             <View style={{flex: 1.1, paddingBottom: 8}}>
-                <View flexDirection='row' style={{ height: 40, paddingLeft: 10}} showsHorizontalScrollIndicator={false}>
-                    <TouchableOpacity onPress={() => {setWithinFiveMiles(!checkWithinFiveMiles)}} style={{paddingHorizontal: 3}}>
+                <View flexDirection='row' style={{ height: 40, justifyContent: 'space-between', paddingHorizontal: 10}} showsHorizontalScrollIndicator={false}>
+                    <TouchableOpacity onPress={() => {setWithinFiveMiles(!checkWithinFiveMiles)}} style={{paddingHorizontal: 3, flex: 1}}>
                         {withinFiveMilesDisplay}
                     </TouchableOpacity >
-                    <TouchableOpacity onPress={() => {setLowPopulation(!checkLowPopulation)}} style={{paddingHorizontal: 3}}>
+                    <TouchableOpacity onPress={() => {setLowPopulation(!checkLowPopulation)}} style={{paddingHorizontal: 3, flex: 1}}>
                         {lowPopulationDisplay}
                     </TouchableOpacity>
-                    <TouchableOpacity onPress={() => {setCurrentlyOpen(!checkCurrentlyOpen)}} style={{paddingHorizontal: 3}}>
+                    <TouchableOpacity onPress={() => {setCurrentlyOpen(!checkCurrentlyOpen)}} style={{paddingHorizontal: 3, flex: 1}}>
                         {currentlyOpenDisplay}
                     </TouchableOpacity>
-                    <TouchableOpacity onPress={() => {setVerified(!checkVerified)}} style={{paddingHorizontal: 3}}>
+                    <TouchableOpacity onPress={() => {setVerified(!checkVerified)}} style={{paddingHorizontal: 3, flex: 1}}>
                         {checkVerifiedDisplay}
                     </TouchableOpacity>
                     <View style={{width: 30}}></View>

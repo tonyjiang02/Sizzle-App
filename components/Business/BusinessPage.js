@@ -30,6 +30,7 @@ import ReservationScroll from './ReservationScroll';
 import { Linking } from 'expo';
 import MapView from 'react-native-maps';
 import openMap from 'react-native-open-maps';
+import { getFontSize, getIconSize } from '../../utils/fontsizes';
 
 const BusinessPage = ({ route: { params: { business, db } }, checkIn, auth }) => {
     //destructuring
@@ -54,7 +55,7 @@ const BusinessPage = ({ route: { params: { business, db } }, checkIn, auth }) =>
     //business verification
     let verified = <View></View>;
     if (isVerified === true) {
-        verified = <MaterialIcons name='verified-user' color='lightgreen' size={28}></MaterialIcons>;
+        verified = <MaterialIcons name='verified-user' color='lightgreen' size={getIconSize(20)}></MaterialIcons>;
     }
 
     //business hours
@@ -115,16 +116,16 @@ const BusinessPage = ({ route: { params: { business, db } }, checkIn, auth }) =>
     //population display
     let popDisplay = <Text></Text>;
     if (livePopulation < 10) {
-        popDisplay = <Text style={{ paddingLeft: 3, alignSelf: 'center', color: 'green', fontSize: 20, fontWeight: 'bold' }}>{livePopulation}</Text>;
+        popDisplay = <Text style={{ paddingLeft: 3, alignSelf: 'center', color: 'green', fontSize: getFontSize(22), fontWeight: 'bold' }}>{livePopulation}</Text>;
     }
     else if (livePopulation >= 10 && livePopulation < 50) {
-        popDisplay = <Text style={{ paddingLeft: 3, alignSelf: 'center', color: 'orange', fontSize: 20, fontWeight: 'bold' }}>{livePopulation}</Text>;
+        popDisplay = <Text style={{ paddingLeft: 3, alignSelf: 'center', color: 'orange', fontSize: getFontSize(22), fontWeight: 'bold' }}>{livePopulation}</Text>;
     }
     else if (livePopulation >= 50) {
-        popDisplay = <Text style={{ paddingLeft: 3, alignSelf: 'center', color: 'red', fontSize: 20, fontWeight: 'bold' }}>{livePopulation}</Text>;
+        popDisplay = <Text style={{ paddingLeft: 3, alignSelf: 'center', color: 'red', fontSize: getFontSize(22), fontWeight: 'bold' }}>{livePopulation}</Text>;
     }
     else {
-        popDisplay = <Text style={{ paddingLeft: 3, alignSelf: 'center', color: 'gray', fontSize: 20, fontWeight: 'bold' }}>{livePopulation}</Text>;
+        popDisplay = <Text style={{ paddingLeft: 3, alignSelf: 'center', color: 'gray', fontSize: getFontSize(22), fontWeight: 'bold' }}>{livePopulation}</Text>;
     }
 
     //open during current time display
@@ -132,13 +133,13 @@ const BusinessPage = ({ route: { params: { business, db } }, checkIn, auth }) =>
     if (openStatus === true) {
         openDisplay = <Text style={{
             paddingHorizontal: 10, alignSelf: 'center', color: 'white',
-            borderColor: 'green', borderWidth: 1, padding: 2, fontSize: 16, backgroundColor: 'green'
+            borderColor: 'green', borderWidth: 1, padding: 2, fontSize: getFontSize(16), backgroundColor: 'green'
         }}>Open</Text>;
     }
     else {
         openDisplay = <Text style={{
             paddingHorizontal: 10, alignSelf: 'center', color: 'white',
-            borderColor: 'red', borderWidth: 1, padding: 2, fontSize: 16, backgroundColor: 'red'
+            borderColor: 'red', borderWidth: 1, padding: 2, fontSize: getFontSize(16), backgroundColor: 'red'
         }}>Closed</Text>;
     }
 
@@ -147,12 +148,12 @@ const BusinessPage = ({ route: { params: { business, db } }, checkIn, auth }) =>
         return (auth.user.favorites.includes(id));
     };
     const isFavorite = inFavorites();
-    let favoriteDisplay = <Ionicons name="md-heart-empty" color='white' size={35} />;
+    let favoriteDisplay = <Ionicons name="md-heart-empty" color='white' size={getIconSize(21)} />;
     if (isFavorite === true) {
-        favoriteDisplay = <Ionicons name="md-heart" color='red' size={35} />;
+        favoriteDisplay = <Ionicons name="md-heart" color='red' size={getIconSize(21)} />;
     }
     else if (isFavorite === false) {
-        favoriteDisplay = <Ionicons name="md-heart-empty" color='white' size={35} />;
+        favoriteDisplay = <Ionicons name="md-heart-empty" color='white' size={getIconSize(21)} />;
     }
     //Live updates display
     console.log(announcements);
@@ -176,9 +177,9 @@ const BusinessPage = ({ route: { params: { business, db } }, checkIn, auth }) =>
             >
                 <View style={styles.liveUpdatesModalView}>
                     <TouchableOpacity onPress={() => { setLiveUpdatesVisible(false); }}>
-                        <View style={{ height: 10 }}></View>
-                        <AntDesign name='leftcircle' color='#ff9900' size={25} style={{ alignSelf: 'center' }}></AntDesign>
-                        <Text style={{ color: '#ff9900', fontSize: 24, fontFamily: 'Avenir-Heavy', paddingBottom: 10 }}>Live Updates</Text>
+                        <View style={{ height: 5 }}></View>
+                        <AntDesign name='leftcircle' color='#ff9900' size={getIconSize(19)} style={{ alignSelf: 'center' }}></AntDesign>
+                        <Text style={{ color: '#ff9900', fontSize: getFontSize(24), fontFamily: 'Avenir-Heavy', paddingBottom: 10 }}>Live Updates</Text>
                     </TouchableOpacity>
                     <ScrollView showsVerticalScrollIndicator={false}>
                         <TouchableWithoutFeedback>
@@ -205,8 +206,8 @@ const BusinessPage = ({ route: { params: { business, db } }, checkIn, auth }) =>
                 <View style={styles.reservationsModalView}>
                     <TouchableOpacity onPress={() => { setReservationsVisible(false); }}>
                         <View style={{ height: 10 }}></View>
-                        <AntDesign name='leftcircle' color='green' size={25} style={{ alignSelf: 'center' }}></AntDesign>
-                        <Text style={{ color: 'green', fontSize: 24, fontFamily: 'Avenir-Heavy', paddingBottom: 10 }}>Reservations</Text>
+                        <AntDesign name='leftcircle' color='green' size={getIconSize(19)} style={{ alignSelf: 'center' }}></AntDesign>
+                        <Text style={{ color: 'green', fontSize: getFontSize(24), fontFamily: 'Avenir-Heavy', paddingBottom: 10 }}>Reservations</Text>
                     </TouchableOpacity>
                     <ScrollView showsVerticalScrollIndicator={false}>
                         <TouchableWithoutFeedback>
@@ -249,13 +250,13 @@ const BusinessPage = ({ route: { params: { business, db } }, checkIn, auth }) =>
                             }}
                         />
                         <View style={{ position: 'absolute', bottom: 40, alignItems: 'baseline' }}>
-                            <Text style={{ color: 'white', fontSize: 30, fontWeight: 'bold', paddingLeft: 20 }}>{business.name}</Text>
+                            <Text style={{ color: 'white', fontSize: getFontSize(30), fontWeight: 'bold', paddingLeft: 20 }}>{business.name}</Text>
                             <View style={{ paddingLeft: 20, paddingTop: 10, flexDirection: 'row', alignItems: 'center' }}>
-                                <Text style={{ borderRadius: 5, borderColor: 'white', color: 'white', borderWidth: 1, padding: 3, fontSize: 16 }}>
+                                <Text style={{ borderRadius: 5, borderColor: 'white', color: 'white', borderWidth: 1, padding: 3, fontSize: getFontSize(16) }}>
                                     1.0mi
                                 </Text>
                                 <View style={{ flexDirection: 'row', alignItems: 'center', paddingLeft: 20 }}>
-                                    <Ionicons name='md-person' color='white' size={22} />
+                                    <Ionicons name='md-person' color='white' size={getIconSize(19)}/>
                                     {popDisplay}
                                 </View>
                                 <View style={{ paddingLeft: 20, flexDirection: 'row', alignItems: 'center' }}>
@@ -264,11 +265,11 @@ const BusinessPage = ({ route: { params: { business, db } }, checkIn, auth }) =>
                                 <View style={{ paddingLeft: 20, flexDirection: 'row', alignItems: 'center' }}>
                                     {verified}
                                 </View>
-                                <TouchableOpacity style={{ position: 'absolute', left: 330, top: 33 }}>
-                                    {favoriteDisplay}
-                                </TouchableOpacity>
                             </View>
                         </View>
+                        <TouchableOpacity style={{ position: 'absolute', right: 15, bottom: 5}}>
+                            {favoriteDisplay}
+                        </TouchableOpacity>
                     </ImageBackground>
 
                     <View style={{
@@ -276,38 +277,23 @@ const BusinessPage = ({ route: { params: { business, db } }, checkIn, auth }) =>
                         paddingVertical: 6,
                     }}>
                         <TouchableOpacity onPress={openMapToBusiness} style={{ alignItems: 'center', flex: 1 }}>
-                            <MaterialCommunityIcons name='directions' color='royalblue' size={35} />
+                            <MaterialCommunityIcons name='directions' color='royalblue' size={getIconSize(21)} />
                             <Text style={{ color: 'black', fontFamily: "Avenir-Light" }}>Directions</Text>
                         </TouchableOpacity>
                         <TouchableOpacity onPress={onPressCheckIn} style={{ alignItems: 'center', flex: 1 }}>
-                            <MaterialCommunityIcons name='map-marker-check' color='#ff9900' size={40} />
+                            <MaterialCommunityIcons name='map-marker-check' color='#ff9900' size={getIconSize(22)} />
                             <Text style={{ color: '#ff9900', fontFamily: 'Avenir-Light', fontWeight: 'bold' }}>Check In</Text>
                         </TouchableOpacity>
-                        <TouchableOpacity onPress={onPressCheckIn} style={{ alignItems: 'center', flex: 1 }}>
-                            <Ionicons name='md-notifications' color='indianred' size={35} />
-                            <Text style={{ color: 'black', fontFamily: 'Avenir-Light' }}>Notify Me</Text>
+                        <TouchableOpacity onPress={() => { Linking.openURL(phoneNumberURL); }} style={{ alignItems: 'center', flex: 1 }}>
+                            <MaterialIcons name='phone' color='royalblue' size={getIconSize(20)} style={{paddingBottom: 5}} />
+                            <Text style={{ color: 'black', fontFamily: 'Avenir-Light' }}>Call</Text>
                         </TouchableOpacity>
                     </View>
 
                     <View style={{ paddingHorizontal: 15, height: 110, backgroundColor: '#FDDFDF', borderLeftWidth: 5, borderLeftColor: 'red' }}>
                         <View style={{ flexDirection: 'row', paddingTop: 5 }}>
-                            <Ionicons name='md-warning' color='red' size={35} style={{ paddingRight: 10, paddingLeft: 10 }} />
-                            <Text style={{ color: 'red', fontSize: 24, fontFamily: 'Avenir-Heavy', paddingVertical: 5, paddingRight: 10 }}>COVID-19</Text>
-                        </View>
-                        <Text style={{ paddingLeft: 15, fontFamily: 'DamascusLight', fontSize: 15 }}>This location offers:</Text>
-                        <View style={{ flexDirection: 'row', justifyContent: 'center', paddingTop: 3 }}>
-                            <View style={{ alignItems: 'center', flex: 1 }}>
-                                <FontAwesome5 name='truck' color='black' size={15} />
-                                <Text style={{ fontSize: 10, fontFamily: 'DamascusLight' }}>Delivery</Text>
-                            </View>
-                            <View style={{ alignItems: 'center', flex: 1 }}>
-                                <FontAwesome5 name='shopping-bag' color='black' size={15} />
-                                <Text style={{ fontSize: 10, fontFamily: 'DamascusLight' }}>Takeout</Text>
-                            </View>
-                            <View style={{ alignItems: 'center', flex: 1 }}>
-                                <MaterialIcons name='local-grocery-store' color='black' size={18}></MaterialIcons>
-                                <Text style={{ fontSize: 10, fontFamily: 'DamascusLight' }}>In-Store</Text>
-                            </View>
+                            <Ionicons name='md-warning' color='red' size={getIconSize(21)} style={{ paddingRight: 10, paddingLeft: 10 }} />
+                            <Text style={{ color: 'red', fontSize: getFontSize(24), fontFamily: 'Avenir-Heavy', paddingVertical: 5, paddingRight: 10 }}>COVID-19</Text>
                         </View>
                     </View>
                 </View>
@@ -316,8 +302,8 @@ const BusinessPage = ({ route: { params: { business, db } }, checkIn, auth }) =>
                     <View style={styles.businessSquareInner}>
                         <TouchableOpacity onPress={() => { setLiveUpdatesVisible(true); }} style={{ paddingHorizontal: 15, backgroundColor: '#fdeedc', height: 150 }}>
                             <View style={{ flex: 2, flexDirection: 'row', justifyContent: 'flex-start', alignItems: 'baseline' }}>
-                                <Text style={{ color: '#ff9900', fontSize: 24, fontFamily: 'Avenir-Heavy', paddingTop: 5, paddingRight: 10 }}>Live Updates</Text>
-                                <AntDesign name='rightcircle' color='#ff9900' size={18} style={{ paddingTop: 12 }}></AntDesign>
+                                <Text style={{ color: '#ff9900', fontSize: getFontSize(24), fontFamily: 'Avenir-Heavy', paddingTop: 5, paddingRight: 10 }}>Live Updates</Text>
+                                <AntDesign name='rightcircle' color='#ff9900' size={getIconSize(18)} style={{ paddingTop: 12 }}></AntDesign>
                             </View>
                             <View style={{ flex: 5 }}>
                                 <LiveUpdate title={announcements[0].title ? announcements[0].title : ""} content={announcements[0].content ? announcements[0].content : ""}></LiveUpdate>
@@ -330,8 +316,8 @@ const BusinessPage = ({ route: { params: { business, db } }, checkIn, auth }) =>
                     <View style={styles.businessSquareInner}>
                         <View style={{ paddingHorizontal: 15, backgroundColor: '#E1FDE2', height: 165 }}>
                             <TouchableOpacity onPress={() => { setReservationsVisible(true); }} style={{ flex: 1, flexDirection: 'row', justifyContent: 'flex-start' }}>
-                                <Text style={{ color: 'green', fontSize: 24, fontFamily: 'Avenir-Heavy', paddingTop: 5, paddingRight: 10 }}>Reservations</Text>
-                                <AntDesign name='rightcircle' color='green' size={18} style={{ paddingTop: 12 }}></AntDesign>
+                                <Text style={{ color: 'green', fontSize: getFontSize(24), fontFamily: 'Avenir-Heavy', paddingTop: 5, paddingRight: 10 }}>Reservations</Text>
+                                <AntDesign name='rightcircle' color='green' size={getIconSize(18)} style={{ paddingTop: 11 }}></AntDesign>
                             </TouchableOpacity>
                             <View style={{ flex: 4 }}>
                                 <View>
@@ -346,19 +332,19 @@ const BusinessPage = ({ route: { params: { business, db } }, checkIn, auth }) =>
 
                 <View style={{ paddingHorizontal: 25, backgroundColor: 'azure' }}>
                     <View style={{ flex: 1, flexDirection: 'row', justifyContent: 'flex-start', alignItems: 'baseline' }}>
-                        <Text style={{ color: 'royalblue', fontSize: 24, fontFamily: 'Avenir-Heavy', paddingTop: 5, paddingRight: 10, paddingBottom: 10 }}>Information</Text>
+                        <Text style={{ color: 'royalblue', fontSize: getFontSize(24), fontFamily: 'Avenir-Heavy', paddingTop: 5, paddingRight: 10, paddingBottom: 10 }}>Information</Text>
                     </View>
 
                     <View style={styles.infoOuterBlock}>
                         <TouchableOpacity onPress={() => { Linking.openURL(phoneNumberURL); }} style={styles.infoInnerBlock}>
-                            <MaterialIcons name='phone' color='royalblue' size={24} />
-                            <Text style={{ paddingLeft: 10, fontFamily: 'Avenir-Light', fontSize: 17, fontWeight: 'bold' }}>{phoneNumber}</Text>
+                            <MaterialIcons name='phone' color='royalblue' size={getIconSize(18)} />
+                            <Text style={{ paddingLeft: 10, fontFamily: 'Avenir-Light', fontSize: getFontSize(17), fontWeight: 'bold' }}>{phoneNumber}</Text>
                         </TouchableOpacity>
                     </View>
                     <View style={styles.infoOuterBlock}>
                         <TouchableOpacity onPress={createWebAlert} style={styles.infoInnerBlock}>
-                            <MaterialIcons name='web' color='royalblue' size={24} />
-                            <Text style={{ paddingLeft: 10, fontFamily: 'Avenir-Light', fontSize: 17, fontWeight: 'bold' }}>{website}</Text>
+                            <MaterialIcons name='web' color='royalblue' size={getIconSize(18)} />
+                            <Text style={{ paddingLeft: 10, fontFamily: 'Avenir-Light', fontSize: getFontSize(17), fontWeight: 'bold' }}>{website}</Text>
                         </TouchableOpacity>
                     </View>
 
@@ -367,13 +353,13 @@ const BusinessPage = ({ route: { params: { business, db } }, checkIn, auth }) =>
                         </MapView>
                         <View style={{ flexDirection: 'row' }}>
                             <View style={{ flexDirection: 'column', flex: 1, paddingLeft: 15, paddingVertical: 15 }}>
-                                <Text style={{ fontFamily: 'Avenir-Light', fontSize: 17, fontWeight: 'bold' }}>Distance: 1.0mi </Text>
-                                <Text style={{ fontFamily: 'Avenir-Light', fontSize: 17, fontWeight: 'bold' }}>ETA: 9 min</Text>
+                                <Text style={{ fontFamily: 'Avenir-Light', fontSize: getFontSize(17), fontWeight: 'bold' }}>Distance: 1.0mi </Text>
+                                <Text style={{ fontFamily: 'Avenir-Light', fontSize: getFontSize(17), fontWeight: 'bold' }}>ETA: 9 min</Text>
                             </View>
                             <View style={{ flex: 1.2, justifyContent: 'center', alignItems: 'center' }}>
                                 <TouchableOpacity onPress={openMapToBusiness}>
                                     <View style={{ borderWidth: 1, borderRadius: 5, borderColor: '#ff9900', backgroundColor: '#ff9900', paddingVertical: 12, paddingHorizontal: 8 }}>
-                                        <Text style={{ fontFamily: 'Avenir-Light', fontSize: 17, fontWeight: 'bold', color: 'white' }}>Take Me There</Text>
+                                        <Text style={{ fontFamily: 'Avenir-Light', fontSize: getFontSize(17), fontWeight: 'bold', color: 'white' }}>Take Me There</Text>
                                     </View>
                                 </TouchableOpacity>
                             </View>
@@ -382,17 +368,17 @@ const BusinessPage = ({ route: { params: { business, db } }, checkIn, auth }) =>
 
                     <View style={{ paddingVertical: 15, flexDirection: 'row', justifyContent: 'flex-start', flex: 5 }}>
                         <View style={{ flexDirection: 'row', alignItems: 'center', flex: 3 }}>
-                            <AntDesign name='clockcircle' color='royalblue' size={24} />
+                            <AntDesign name='clockcircle' color='royalblue' size={getIconSize(18)} />
                             <Text style={{ paddingLeft: 5, paddingRight: 15, color: 'royalblue', fontFamily: 'Avenir-Light' }}>Hours: </Text>
                         </View>
                         <View style={{ flexDirection: 'column', alignItems: 'flex-start', flex: 8 }}>
-                            <Text style={{ fontFamily: 'Avenir-Light', fontWeight: 'bold', fontSize: 17, paddingVertical: 3 }}>Mon: {monBusinessHours}</Text>
-                            <Text style={{ fontFamily: 'Avenir-Light', fontWeight: 'bold', fontSize: 17, paddingVertical: 3 }}>Tue: {tueBusinessHours}</Text>
-                            <Text style={{ fontFamily: 'Avenir-Light', fontWeight: 'bold', fontSize: 17, paddingVertical: 3 }}>Wed: {wedBusinessHours}</Text>
-                            <Text style={{ fontFamily: 'Avenir-Light', fontWeight: 'bold', fontSize: 17, paddingVertical: 3 }}>Thu: {thuBusinessHours}</Text>
-                            <Text style={{ fontFamily: 'Avenir-Light', fontWeight: 'bold', fontSize: 17, paddingVertical: 3 }}>Fri: {friBusinessHours}</Text>
-                            <Text style={{ fontFamily: 'Avenir-Light', fontWeight: 'bold', fontSize: 17, paddingVertical: 3 }}>Sat: {satBusinessHours}</Text>
-                            <Text style={{ fontFamily: 'Avenir-Light', fontWeight: 'bold', fontSize: 17, paddingVertical: 3 }}>Sun: {sunBusinessHours}</Text>
+                            <Text style={{ fontFamily: 'Avenir-Light', fontWeight: 'bold', fontSize: getFontSize(17), paddingVertical: 3 }}>Mon: {monBusinessHours}</Text>
+                            <Text style={{ fontFamily: 'Avenir-Light', fontWeight: 'bold', fontSize: getFontSize(17), paddingVertical: 3 }}>Tue: {tueBusinessHours}</Text>
+                            <Text style={{ fontFamily: 'Avenir-Light', fontWeight: 'bold', fontSize: getFontSize(17), paddingVertical: 3 }}>Wed: {wedBusinessHours}</Text>
+                            <Text style={{ fontFamily: 'Avenir-Light', fontWeight: 'bold', fontSize: getFontSize(17), paddingVertical: 3 }}>Thu: {thuBusinessHours}</Text>
+                            <Text style={{ fontFamily: 'Avenir-Light', fontWeight: 'bold', fontSize: getFontSize(17), paddingVertical: 3 }}>Fri: {friBusinessHours}</Text>
+                            <Text style={{ fontFamily: 'Avenir-Light', fontWeight: 'bold', fontSize: getFontSize(17), paddingVertical: 3 }}>Sat: {satBusinessHours}</Text>
+                            <Text style={{ fontFamily: 'Avenir-Light', fontWeight: 'bold', fontSize: getFontSize(17), paddingVertical: 3 }}>Sun: {sunBusinessHours}</Text>
                         </View>
                     </View>
                 </View>
