@@ -28,18 +28,22 @@ import { Ionicons, MaterialCommunityIcons, AntDesign, FontAwesome5, MaterialIcon
 import LiveUpdate from '../Business/LiveUpdate';
 import ReservationScroll from './ReservationScroll';
 import { Linking } from 'expo';
-import MapView from 'react-native-maps';
+import { straightLineDistance, kmToMi } from '../../utils/businessUtils';
+import MapView, { Marker } from 'react-native-maps';
 import openMap from 'react-native-open-maps';
 import { getFontSize, getIconSize } from '../../utils/fontsizes';
+import * as Location from 'expo-location';
 
 const BusinessPage = ({ route: { params: { business, db } }, checkIn, auth }) => {
     //destructuring
     console.log(db);
+    let { vicinity, geometry } = business;
     let { id, name, owner, googleId, publicId, isVerified, images, coverImageUrl, website, phone, address, openStatus, hours, description, population, reservations, announcements } = db;
+    let location = geometry.location;
     //modals
     const [liveUpdatesModalVisible, setLiveUpdatesVisible] = useState(false);
     const [reservationsModalVisible, setReservationsVisible] = useState(false);
-    const [livePopulation, setLivePopulation] = useState(population)
+    const [livePopulation, setLivePopulation] = useState(population);
     //backend
     const onPressCheckIn = async () => {
         const newPopulation = await checkIn(business.place_id);
@@ -49,7 +53,7 @@ const BusinessPage = ({ route: { params: { business, db } }, checkIn, auth }) =>
         getBusiness(business.place_id, db._id);
     };
     useEffect(() => {
-        console.log(db);
+        getDistance();
     });
 
     //business verification
@@ -73,6 +77,15 @@ const BusinessPage = ({ route: { params: { business, db } }, checkIn, auth }) =>
     const friBusinessHours = hoursToString(hours.friday);
     const satBusinessHours = hoursToString(hours.saturday);
     const sunBusinessHours = hoursToString(hours.sunday);
+    //distance 
+    let [lineDistance, setLineDistance] = useState(null);
+    const getDistance = async () => {
+        const currentLocation = await Location.getLastKnownPositionAsync();
+        console.log(currentLocation.coords);
+        var mi = kmToMi(straightLineDistance(currentLocation.coords, { latitude: parseFloat(location.lat), longitude: parseFloat(location.lng) }));
+        var rounded = Math.round(mi * 100) / 100;
+        setLineDistance(rounded);
+    };
 
     //phone number
     let phoneNumber = '+1 (408) 917-9685';
@@ -106,7 +119,7 @@ const BusinessPage = ({ route: { params: { business, db } }, checkIn, auth }) =>
                     onPress: () => console.log("Cancel Pressed"),
                     style: "cancel"
                 },
-                { text: "OK", onPress: () => openMap({ end: address, start: "Current Location", travelType: 'drive' }) }
+                { text: "OK", onPress: () => openMap({ end: name + " " + address, start: "Current Location", travelType: 'drive' }) }
             ],
             { cancelable: false }
         );
@@ -160,7 +173,7 @@ const BusinessPage = ({ route: { params: { business, db } }, checkIn, auth }) =>
     announcements = announcements.reverse();
     const updates = announcements.map((a, i) => (
         <LiveUpdate title={a.title} content={a.content} key={i}></LiveUpdate>
-    ))
+    ));
     return (
         <View style={styles.landing}>
             <Modal
@@ -253,10 +266,10 @@ const BusinessPage = ({ route: { params: { business, db } }, checkIn, auth }) =>
                             <Text style={{ color: 'white', fontSize: getFontSize(30), fontWeight: 'bold', paddingLeft: 20 }}>{business.name}</Text>
                             <View style={{ paddingLeft: 20, paddingTop: 10, flexDirection: 'row', alignItems: 'center' }}>
                                 <Text style={{ borderRadius: 5, borderColor: 'white', color: 'white', borderWidth: 1, padding: 3, fontSize: getFontSize(16) }}>
-                                    1.0mi
+                                    {lineDistance}
                                 </Text>
                                 <View style={{ flexDirection: 'row', alignItems: 'center', paddingLeft: 20 }}>
-                                    <Ionicons name='md-person' color='white' size={getIconSize(19)}/>
+                                    <Ionicons name='md-person' color='white' size={getIconSize(19)} />
                                     {popDisplay}
                                 </View>
                                 <View style={{ paddingLeft: 20, flexDirection: 'row', alignItems: 'center' }}>
@@ -267,7 +280,7 @@ const BusinessPage = ({ route: { params: { business, db } }, checkIn, auth }) =>
                                 </View>
                             </View>
                         </View>
-                        <TouchableOpacity style={{ position: 'absolute', right: 15, bottom: 5}}>
+                        <TouchableOpacity style={{ position: 'absolute', right: 15, bottom: 5 }}>
                             {favoriteDisplay}
                         </TouchableOpacity>
                     </ImageBackground>
@@ -285,7 +298,7 @@ const BusinessPage = ({ route: { params: { business, db } }, checkIn, auth }) =>
                             <Text style={{ color: '#ff9900', fontFamily: 'Avenir-Light', fontWeight: 'bold' }}>Check In</Text>
                         </TouchableOpacity>
                         <TouchableOpacity onPress={() => { Linking.openURL(phoneNumberURL); }} style={{ alignItems: 'center', flex: 1 }}>
-                            <MaterialIcons name='phone' color='royalblue' size={getIconSize(20)} style={{paddingBottom: 5}} />
+                            <MaterialIcons name='phone' color='royalblue' size={getIconSize(20)} style={{ paddingBottom: 5 }} />
                             <Text style={{ color: 'black', fontFamily: 'Avenir-Light' }}>Call</Text>
                         </TouchableOpacity>
                     </View>
@@ -349,12 +362,21 @@ const BusinessPage = ({ route: { params: { business, db } }, checkIn, auth }) =>
                     </View>
 
                     <View style={styles.mapOuterStyle}>
-                        <MapView style={styles.mapStyle}>
+                        <MapView style={styles.mapStyle} showsUserLocation={true} initialRegion={{
+                            latitude: location.lat,
+                            longitude: location.lng,
+                            latitudeDelta: 0.002,
+                            longitudeDelta: 0.001,
+                        }}>
+                            <Marker
+                                coordinate={{ latitude: parseFloat(location.lat), longitude: parseFloat(location.lng) }}
+                                title={name}
+                            />
                         </MapView>
                         <View style={{ flexDirection: 'row' }}>
                             <View style={{ flexDirection: 'column', flex: 1, paddingLeft: 15, paddingVertical: 15 }}>
-                                <Text style={{ fontFamily: 'Avenir-Light', fontSize: getFontSize(17), fontWeight: 'bold' }}>Distance: 1.0mi </Text>
-                                <Text style={{ fontFamily: 'Avenir-Light', fontSize: getFontSize(17), fontWeight: 'bold' }}>ETA: 9 min</Text>
+                                <Text style={{ fontFamily: 'Avenir-Light', fontSize: getFontSize(17), fontWeight: 'bold' }}>Distance: {lineDistance}mi </Text>
+                                {/* <Text style={{ fontFamily: 'Avenir-Light', fontSize: getFontSize(17), fontWeight: 'bold' }}>ETA: 9 min</Text> */}
                             </View>
                             <View style={{ flex: 1.2, justifyContent: 'center', alignItems: 'center' }}>
                                 <TouchableOpacity onPress={openMapToBusiness}>

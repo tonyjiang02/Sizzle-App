@@ -63,7 +63,7 @@ export const getNearby = (params, coords) => async dispatch => {
     try {
         let p = { ...params, key: PLACES_API_KEY, rankby: "distance" };
         let location = `location=${coords.latitude},${coords.longitude}`;
-        let url = `https://maps.googleapis.com/maps/api/place/nearbysearch/json?&${location}&${toQueryString(p)}`;
+        let url = `https://maps.googleapis.com/maps/api/place/nearbysearch/json?&${location}&${toQueryString(p)}&fields=formatted_address,name,place_id,opening_hours,types`;
         const res = await fetch(url, {
             method: 'GET'
         });
@@ -98,7 +98,7 @@ export const getAll = (params, coords) => async dispatch => {
     try {
         let p = { ...params, key: PLACES_API_KEY, type: "point_of_interest" };
         let location = `location=${coords.latitude},${coords.longitude}`;
-        let url = `https://maps.googleapis.com/maps/api/place/nearbysearch/json?&${location}&${toQueryString(p)}`;
+        let url = `https://maps.googleapis.com/maps/api/place/nearbysearch/json?&${location}&${toQueryString(p)}&fields=formatted_address,name,place_id,opening_hours,types`;
         const res = await fetch(url);
         const json = await res.json();
         const ids = json.results.map(x => x.place_id);
