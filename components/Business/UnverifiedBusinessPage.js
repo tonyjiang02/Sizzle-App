@@ -31,10 +31,15 @@ import { Linking } from 'expo';
 import MapView from 'react-native-maps';
 import openMap from 'react-native-open-maps';
 
-const BusinessPage = ({ route: { params: { business, db } }, checkIn, auth }) => {
-    //destructuring
+const UnverifiedBusinessPage = ({ route: { params: { business, db } }, checkIn, auth }) => {
+    //destructuring and additional vars
     console.log(db);
-    let { id, name, owner, googleId, publicId, isVerified, images, coverImageUrl, website, phone, address, openStatus, hours, description, population, reservations, announcements } = db;
+    let { googleId, population } = db;
+    let { name, formatted_address } = business;
+    let isVerified = false;
+    //todo
+    let straightLineDistance = null;
+    let favorites = auth.user.favorites;
     //modals
     const [liveUpdatesModalVisible, setLiveUpdatesVisible] = useState(false);
     const [reservationsModalVisible, setReservationsVisible] = useState(false);
@@ -50,35 +55,22 @@ const BusinessPage = ({ route: { params: { business, db } }, checkIn, auth }) =>
     useEffect(() => {
         console.log(db);
     });
+    //get phone data and website data
+    const getAdditionalData = () => {
 
+    }
     //business verification
     let verified = <View></View>;
     if (isVerified === true) {
         verified = <MaterialIcons name='verified-user' color='lightgreen' size={28}></MaterialIcons>;
     }
 
-    //business hours
-    const hoursToString = (day) => {
-        let open = `${day.open.hour}:${day.open.minutes === '0' ? '00' : day.open.minutes}${day.open.am ? 'am' : 'pm'}`;
-        open += "-";
-        let close = `${day.close.hour}:${day.close.minutes === '0' ? '00' : day.close.minutes}${day.close.am ? 'am' : 'pm'}`;
-        return open + close;
-    };
-    //make page specifically for unverified
-    const monBusinessHours = hoursToString(hours.monday);
-    const tueBusinessHours = hoursToString(hours.tuesday);
-    const wedBusinessHours = hoursToString(hours.wednesday);
-    const thuBusinessHours = hoursToString(hours.thursday);
-    const friBusinessHours = hoursToString(hours.friday);
-    const satBusinessHours = hoursToString(hours.saturday);
-    const sunBusinessHours = hoursToString(hours.sunday);
-
     //phone number
-    let phoneNumber = '+1 (408) 917-9685';
+    let phoneNumber = 'Not Found';
     let phoneNumberURL = 'tel:' + phoneNumber;
 
     //website
-    let websiteURL = 'https://' + website;
+    let websiteURL = 'Not available';
     const createWebAlert = () =>
         Alert.alert(
             'Do you want to open the website for ' + business.name + '?',
@@ -105,7 +97,7 @@ const BusinessPage = ({ route: { params: { business, db } }, checkIn, auth }) =>
                     onPress: () => console.log("Cancel Pressed"),
                     style: "cancel"
                 },
-                { text: "OK", onPress: () => openMap({ end: address, start: "Current Location", travelType: 'drive' }) }
+                { text: "OK", onPress: () => openMap({ end: formatted_address, start: "Current Location", travelType: 'drive' }) }
             ],
             { cancelable: false }
         );
@@ -129,6 +121,7 @@ const BusinessPage = ({ route: { params: { business, db } }, checkIn, auth }) =>
 
     //open during current time display
     let openDisplay = <Text></Text>;
+    let openStatus = true;
     if (openStatus === true) {
         openDisplay = <Text style={{
             paddingHorizontal: 10, alignSelf: 'center', color: 'white',
@@ -154,76 +147,8 @@ const BusinessPage = ({ route: { params: { business, db } }, checkIn, auth }) =>
     else if (isFavorite === false) {
         favoriteDisplay = <Ionicons name="md-heart-empty" color='white' size={35} />;
     }
-    //Live updates display
-    console.log(announcements);
-    announcements = announcements.reverse();
-    const updates = announcements.map((a, i) => (
-        <LiveUpdate title={a.title} content={a.content} key={i}></LiveUpdate>
-    ))
     return (
         <View style={styles.landing}>
-            <Modal
-                propagateSwipe={true}
-                isVisible={liveUpdatesModalVisible}
-                coverScreen={false}
-                backdropColor={"white"}
-                backdropOpacity={0.8}
-                animationIn={'slideInLeft'}
-                animationOut={'slideOutLeft'}
-                animationInTiming={500}
-                swipeDirection={['left']}
-                onSwipeComplete={(e) => { if (e.swipingDirection === 'left') setLiveUpdatesVisible(false); }}
-            >
-                <View style={styles.liveUpdatesModalView}>
-                    <TouchableOpacity onPress={() => { setLiveUpdatesVisible(false); }}>
-                        <View style={{ height: 10 }}></View>
-                        <AntDesign name='leftcircle' color='#ff9900' size={25} style={{ alignSelf: 'center' }}></AntDesign>
-                        <Text style={{ color: '#ff9900', fontSize: 24, fontFamily: 'Avenir-Heavy', paddingBottom: 10 }}>Live Updates</Text>
-                    </TouchableOpacity>
-                    <ScrollView showsVerticalScrollIndicator={false}>
-                        <TouchableWithoutFeedback>
-                            <View>
-                                {updates}
-                            </View>
-                        </TouchableWithoutFeedback>
-                    </ScrollView>
-                </View>
-            </Modal>
-
-            <Modal
-                propagateSwipe={true}
-                isVisible={reservationsModalVisible}
-                coverScreen={false}
-                backdropColor={"white"}
-                backdropOpacity={0.8}
-                animationIn={'slideInLeft'}
-                animationOut={'slideOutLeft'}
-                animationInTiming={500}
-                swipeDirection={['left']}
-                onSwipeComplete={(e) => { if (e.swipingDirection === 'left') setReservationsVisible(false); }}
-            >
-                <View style={styles.reservationsModalView}>
-                    <TouchableOpacity onPress={() => { setReservationsVisible(false); }}>
-                        <View style={{ height: 10 }}></View>
-                        <AntDesign name='leftcircle' color='green' size={25} style={{ alignSelf: 'center' }}></AntDesign>
-                        <Text style={{ color: 'green', fontSize: 24, fontFamily: 'Avenir-Heavy', paddingBottom: 10 }}>Reservations</Text>
-                    </TouchableOpacity>
-                    <ScrollView showsVerticalScrollIndicator={false}>
-                        <TouchableWithoutFeedback>
-                            <View>
-                                <ReservationScroll></ReservationScroll>
-                                <ReservationScroll></ReservationScroll>
-                                <ReservationScroll></ReservationScroll>
-                                <ReservationScroll></ReservationScroll>
-                                <ReservationScroll></ReservationScroll>
-                                <ReservationScroll></ReservationScroll>
-                                <ReservationScroll></ReservationScroll>
-                            </View>
-                        </TouchableWithoutFeedback>
-                    </ScrollView>
-                </View>
-            </Modal>
-
             <ScrollView showsVerticalScrollIndicator={false}>
                 <View style={{
                     borderBottomColor: 'transparent', borderTopColor: 'transparent',
@@ -249,7 +174,7 @@ const BusinessPage = ({ route: { params: { business, db } }, checkIn, auth }) =>
                             }}
                         />
                         <View style={{ position: 'absolute', bottom: 40, alignItems: 'baseline' }}>
-                            <Text style={{ color: 'white', fontSize: 30, fontWeight: 'bold', paddingLeft: 20 }}>{business.name}</Text>
+                            <Text style={{ color: 'white', fontSize: 30, fontWeight: 'bold', paddingLeft: 20 }}>{name}</Text>
                             <View style={{ paddingLeft: 20, paddingTop: 10, flexDirection: 'row', alignItems: 'center' }}>
                                 <Text style={{ borderRadius: 5, borderColor: 'white', color: 'white', borderWidth: 1, padding: 3, fontSize: 16 }}>
                                     1.0mi
@@ -312,36 +237,6 @@ const BusinessPage = ({ route: { params: { business, db } }, checkIn, auth }) =>
                     </View>
                 </View>
 
-                <View style={{ paddingTop: 15, paddingBottom: 12, paddingHorizontal: 8 }}>
-                    <View style={styles.businessSquareInner}>
-                        <TouchableOpacity onPress={() => { setLiveUpdatesVisible(true); }} style={{ paddingHorizontal: 15, backgroundColor: '#fdeedc', height: 150 }}>
-                            <View style={{ flex: 2, flexDirection: 'row', justifyContent: 'flex-start', alignItems: 'baseline' }}>
-                                <Text style={{ color: '#ff9900', fontSize: 24, fontFamily: 'Avenir-Heavy', paddingTop: 5, paddingRight: 10 }}>Live Updates</Text>
-                                <AntDesign name='rightcircle' color='#ff9900' size={18} style={{ paddingTop: 12 }}></AntDesign>
-                            </View>
-                            <View style={{ flex: 5 }}>
-                                <LiveUpdate title={announcements[0].title ? announcements[0].title : ""} content={announcements[0].content ? announcements[0].content : ""}></LiveUpdate>
-                            </View>
-                        </TouchableOpacity>
-                    </View>
-                </View>
-
-                <View style={{ paddingBottom: 12, paddingHorizontal: 8 }}>
-                    <View style={styles.businessSquareInner}>
-                        <View style={{ paddingHorizontal: 15, backgroundColor: '#E1FDE2', height: 165 }}>
-                            <TouchableOpacity onPress={() => { setReservationsVisible(true); }} style={{ flex: 1, flexDirection: 'row', justifyContent: 'flex-start' }}>
-                                <Text style={{ color: 'green', fontSize: 24, fontFamily: 'Avenir-Heavy', paddingTop: 5, paddingRight: 10 }}>Reservations</Text>
-                                <AntDesign name='rightcircle' color='green' size={18} style={{ paddingTop: 12 }}></AntDesign>
-                            </TouchableOpacity>
-                            <View style={{ flex: 4 }}>
-                                <View>
-                                    <ReservationScroll style={{ alignItems: 'flex-start' }}></ReservationScroll>
-                                </View>
-                            </View>
-                        </View>
-                    </View>
-                </View>
-
                 <View style={{ borderBottomWidth: 0.8, borderBottomColor: 'azure' }}></View>
 
                 <View style={{ paddingHorizontal: 25, backgroundColor: 'azure' }}>
@@ -386,13 +281,7 @@ const BusinessPage = ({ route: { params: { business, db } }, checkIn, auth }) =>
                             <Text style={{ paddingLeft: 5, paddingRight: 15, color: 'royalblue', fontFamily: 'Avenir-Light' }}>Hours: </Text>
                         </View>
                         <View style={{ flexDirection: 'column', alignItems: 'flex-start', flex: 8 }}>
-                            <Text style={{ fontFamily: 'Avenir-Light', fontWeight: 'bold', fontSize: 17, paddingVertical: 3 }}>Mon: {monBusinessHours}</Text>
-                            <Text style={{ fontFamily: 'Avenir-Light', fontWeight: 'bold', fontSize: 17, paddingVertical: 3 }}>Tue: {tueBusinessHours}</Text>
-                            <Text style={{ fontFamily: 'Avenir-Light', fontWeight: 'bold', fontSize: 17, paddingVertical: 3 }}>Wed: {wedBusinessHours}</Text>
-                            <Text style={{ fontFamily: 'Avenir-Light', fontWeight: 'bold', fontSize: 17, paddingVertical: 3 }}>Thu: {thuBusinessHours}</Text>
-                            <Text style={{ fontFamily: 'Avenir-Light', fontWeight: 'bold', fontSize: 17, paddingVertical: 3 }}>Fri: {friBusinessHours}</Text>
-                            <Text style={{ fontFamily: 'Avenir-Light', fontWeight: 'bold', fontSize: 17, paddingVertical: 3 }}>Sat: {satBusinessHours}</Text>
-                            <Text style={{ fontFamily: 'Avenir-Light', fontWeight: 'bold', fontSize: 17, paddingVertical: 3 }}>Sun: {sunBusinessHours}</Text>
+
                         </View>
                     </View>
                 </View>
@@ -405,4 +294,4 @@ const mapStateToProps = state => ({
     population: state.business.dbBusiness.population,
     auth: state.auth
 });
-export default connect(mapStateToProps, { checkIn })(BusinessPage);
+export default connect(mapStateToProps, { checkIn })(UnverifiedBusinessPage);
