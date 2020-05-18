@@ -17,6 +17,8 @@ import Account from './components/Account';
 import Checkin from './components/Checkin';
 import SearchLoading from './components/layout/SearchLoading';
 import ExampleBusinessPage from './components/Business/ExampleBusinessPage';
+import UnverifiedBusinessPage from './components/Business/UnverifiedBusinessPage';
+
 
 const Stack = createStackNavigator();
 const Index = ({ auth }) => {
@@ -61,6 +63,7 @@ const Index = ({ auth }) => {
                     <Stack.Screen name="Checkin" component={Checkin} />
                     <Stack.Screen name="SearchLoading" component={SearchLoading}></Stack.Screen>
                     <Stack.Screen name="ExampleBusinessPage" component={ExampleBusinessPage} />
+                    <Stack.Screen name="UnverifiedBusinessPage" component={UnverifiedBusinessPage} />
                 </Fragment>
             );
         }

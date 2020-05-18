@@ -28,22 +28,23 @@ import { Ionicons, MaterialCommunityIcons, AntDesign, FontAwesome5, MaterialIcon
 import LiveUpdate from '../Business/LiveUpdate';
 import ReservationScroll from './ReservationScroll';
 import { Linking } from 'expo';
-import MapView from 'react-native-maps';
+import { straightLineDistance, kmToMi } from '../../utils/businessUtils';
+import MapView, { Marker } from 'react-native-maps';
 import openMap from 'react-native-open-maps';
+import * as Location from 'expo-location';
 
 const UnverifiedBusinessPage = ({ route: { params: { business, db } }, checkIn, auth }) => {
     //destructuring and additional vars
-    console.log(db);
-    let { googleId, population } = db;
-    let { name, formatted_address } = business;
+    let { id, googleId, population, coverImageUrl } = db;
+    let { name, vicinity, geometry } = business;
+    let location = geometry.location;
     let isVerified = false;
     //todo
-    let straightLineDistance = null;
     let favorites = auth.user.favorites;
     //modals
     const [liveUpdatesModalVisible, setLiveUpdatesVisible] = useState(false);
     const [reservationsModalVisible, setReservationsVisible] = useState(false);
-    const [livePopulation, setLivePopulation] = useState(population)
+    const [livePopulation, setLivePopulation] = useState(population);
     //backend
     const onPressCheckIn = async () => {
         const newPopulation = await checkIn(business.place_id);
@@ -53,12 +54,21 @@ const UnverifiedBusinessPage = ({ route: { params: { business, db } }, checkIn, 
         getBusiness(business.place_id, db._id);
     };
     useEffect(() => {
-        console.log(db);
+        getDistance();
     });
+    //distance
+    let [lineDistance, setLineDistance] = useState(null);
+    const getDistance = async () => {
+        const currentLocation = await Location.getLastKnownPositionAsync();
+        console.log(currentLocation.coords);
+        var mi = kmToMi(straightLineDistance(currentLocation.coords, { latitude: parseFloat(location.lat), longitude: parseFloat(location.lng) }));
+        var rounded = Math.round(mi * 100) / 100;
+        setLineDistance(rounded);
+    };
     //get phone data and website data
     const getAdditionalData = () => {
 
-    }
+    };
     //business verification
     let verified = <View></View>;
     if (isVerified === true) {
@@ -97,7 +107,7 @@ const UnverifiedBusinessPage = ({ route: { params: { business, db } }, checkIn, 
                     onPress: () => console.log("Cancel Pressed"),
                     style: "cancel"
                 },
-                { text: "OK", onPress: () => openMap({ end: formatted_address, start: "Current Location", travelType: 'drive' }) }
+                { text: "OK", onPress: () => openMap({ end: name + " " + vicinity, start: "Current Location", travelType: 'drive' }) }
             ],
             { cancelable: false }
         );
@@ -253,17 +263,26 @@ const UnverifiedBusinessPage = ({ route: { params: { business, db } }, checkIn, 
                     <View style={styles.infoOuterBlock}>
                         <TouchableOpacity onPress={createWebAlert} style={styles.infoInnerBlock}>
                             <MaterialIcons name='web' color='royalblue' size={24} />
-                            <Text style={{ paddingLeft: 10, fontFamily: 'Avenir-Light', fontSize: 17, fontWeight: 'bold' }}>{website}</Text>
+                            <Text style={{ paddingLeft: 10, fontFamily: 'Avenir-Light', fontSize: 17, fontWeight: 'bold' }}>{websiteURL}</Text>
                         </TouchableOpacity>
                     </View>
 
                     <View style={styles.mapOuterStyle}>
-                        <MapView style={styles.mapStyle}>
+                        <MapView style={styles.mapStyle} showsUserLocation={true} initialRegion={{
+                            latitude: location.lat,
+                            longitude: location.lng,
+                            latitudeDelta: 0.002,
+                            longitudeDelta: 0.001,
+                        }}>
+                            <Marker
+                                coordinate={{ latitude: parseFloat(location.lat), longitude: parseFloat(location.lng) }}
+                                title={name}
+                            />
                         </MapView>
                         <View style={{ flexDirection: 'row' }}>
                             <View style={{ flexDirection: 'column', flex: 1, paddingLeft: 15, paddingVertical: 15 }}>
-                                <Text style={{ fontFamily: 'Avenir-Light', fontSize: 17, fontWeight: 'bold' }}>Distance: 1.0mi </Text>
-                                <Text style={{ fontFamily: 'Avenir-Light', fontSize: 17, fontWeight: 'bold' }}>ETA: 9 min</Text>
+                                <Text style={{ fontFamily: 'Avenir-Light', fontSize: 17, fontWeight: 'bold' }}>Distance: {lineDistance} miles </Text>
+                                {/* <Text style={{ fontFamily: 'Avenir-Light', fontSize: 17, fontWeight: 'bold' }}>ETA: 9 min</Text> */}
                             </View>
                             <View style={{ flex: 1.2, justifyContent: 'center', alignItems: 'center' }}>
                                 <TouchableOpacity onPress={openMapToBusiness}>

@@ -114,7 +114,7 @@ const Searching = ({ getNearby, route: { params: { query, location } }, navigati
                     <TouchableOpacity onPress={() => {setLowPopulation(!checkLowPopulation)}} style={{paddingHorizontal: 3, flex: 1}}>
                         {lowPopulationDisplay}
                     </TouchableOpacity>
-                    <TouchableOpacity onPress={() => {setCurrentlyOpen(!checkCurrentlyOpen)}} style={{paddingHorizontal: 3, flex: 1}}>
+                    <TouchableOpacity onPress={() => { setCurrentlyOpen(!checkCurrentlyOpen) }} style={{ paddingHorizontal: 3, flex: 1 }}>
                         {currentlyOpenDisplay}
                     </TouchableOpacity>
                     <TouchableOpacity onPress={() => {setVerified(!checkVerified)}} style={{paddingHorizontal: 3, flex: 1}}>

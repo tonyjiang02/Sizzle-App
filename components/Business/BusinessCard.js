@@ -12,10 +12,16 @@ import { getFontSize, getIconSize } from '../../utils/fontsizes';
 const BusinessCard = ({ business, navigation, db, openBusinessPage }) => {
     useEffect(() => {
     }, []);
-    let { isVerified, openStatus, coverImageUrl } = db;
+    let { vicinity } = business;
+    let { isVerified, openStatus, coverImageUrl, population } = db;
     const onPress = () => {
         openBusinessPage(business, db);
-        navigation.navigate('BusinessPage', { business: business, db: db });
+        if (db.isVerified) {
+            navigation.navigate('BusinessPage', { business: business, db: db });
+        } else {
+            navigation.navigate('UnverifiedBusinessPage', { business: business, db: db });
+        }
+
     };
 
     //business verification
@@ -47,20 +53,20 @@ const BusinessCard = ({ business, navigation, db, openBusinessPage }) => {
 
     //open status
     let openDisplay = <Text></Text>;
-    let openPicture = <Image source={coverImageUrl ? { uri: coverImageUrl } : { uri: 'https://picsum.photos/200/200' }} style={{ height: 115, width: 115 }}></Image >;
-    if (openStatus === true) {
-        openDisplay = <Text style={{
-            paddingHorizontal: 2, alignSelf: 'center', color: 'white', fontSize: getFontSize(12),
-            borderColor: 'green', borderWidth: 1, paddingVertical: 1, backgroundColor: 'green'
-        }}>Open</Text>;
-    }
-    else {
-        openDisplay = <Text style={{
-            alignSelf: 'center', color: 'white', fontSize: getFontSize(12),
-            borderColor: 'red', borderWidth: 1, padding: 3, backgroundColor: 'red'
-        }}>Closed</Text>;
-        openPicture = <Image source={{ uri: 'https://picsum.photos/200/200' }} style={{ height: 115, width: 115, opacity: 0.3 }}></Image>;
-    }
+    let openPicture = <Image source={coverImageUrl ? { uri: coverImageUrl } : { uri: 'https://picsum.photos/200/200' }} style={{ height: 115, width: 115 }}></Image>;
+
+    // if (openStatus === true) {
+    //     openDisplay = <Text style={{
+    //         paddingHorizontal: 2, alignSelf: 'center', color: 'white', fontSize: getFontSize(12),
+    //         borderColor: 'green', borderWidth: 1, paddingVertical: 1, backgroundColor: 'green'
+    //     }}>Open</Text>;
+    // }
+    // else {
+    //     openDisplay = <Text style={{
+    //         alignSelf: 'center', color: 'white', fontSize: getFontSize(12),
+    //         borderColor: 'red', borderWidth: 1, padding: 3, backgroundColor: 'red'
+    //     }}>Closed</Text>;
+    // }
 
     return (
         <View style={styles.businessCardOuter}>
@@ -71,17 +77,17 @@ const BusinessCard = ({ business, navigation, db, openBusinessPage }) => {
                 <View style={{ flex: 17 }}>
                     <View style={{ flex: 5, paddingBottom: 8 }}>
                         <Text style={{ fontSize: getFontSize(20), paddingTop: 10, flexWrap: 'wrap' }}>{business.name.length > 33 ? textTruncateBySpaceTwo(33, business.name) : business.name}</Text>
-                        <Text style={{ fontSize: getFontSize(12), paddingBottom: 5 }}>{textTruncateBySpace(28, '11111 Test Rd., Cupertino, CA')}</Text>
+                        <Text style={{ fontSize: getFontSize(12), paddingBottom: 5 }}>{textTruncateBySpace(28, vicinity)}</Text>
                     </View>
                     <View style={{ flex: 3, flexDirection: 'row', justifyContent: 'space-around', alignItems: 'flex-end', paddingBottom: 10 }}>
                         {verified}
-                        <View style={{ paddingBottom: 3 }}>
+                        {/* <View style={{ paddingBottom: 3 }}>
                             <Text style={{ borderRadius: 5, borderColor: 'black', color: 'black', borderWidth: 1, padding: 3, fontSize: getFontSize(10) }}>
                                 1.0mi
                             </Text>
-                        </View>
+                        </View> */}
                         <View style={{ flexDirection: 'row', alignItems: 'center' }}>
-                            <Ionicons name='md-person' color='black' size={getIconSize(18.5)}/>
+                            <Ionicons name='md-person' color='black' size={getIconSize(18.5)} />
                             {popDisplay}
                         </View>
                         <View style={{ paddingBottom: 3 }}>

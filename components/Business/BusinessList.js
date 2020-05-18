@@ -8,9 +8,9 @@ export const BusinessList = ({ businesses, navigation, dbBusinesses }) => {
         <BusinessCard key={biz._id ? biz_.id : biz.id} business={biz} navigation={navigation} db={dbBusinesses[i]}></BusinessCard>
     ));
     return (
-        <View style={{flex: 20}}>
+        <View style={{ flex: 20 }}>
             <ScrollView showsVerticalScrollIndicator={false}>
-                <View style={{height: 5}}></View>
+                <View style={{ height: 5 }}></View>
                 {businessList}
             </ScrollView>
         </View>
