@@ -35,49 +35,6 @@ const Searching = ({ getNearby, route: { params: { query, location } }, navigati
 
     //filter buttons
     let withinFiveMilesDisplay = <Text></Text>
-<<<<<<< HEAD
-    if (checkWithinFiveMiles === false) {
-        withinFiveMilesDisplay = <Text style={{ borderRadius: 14, borderColor: 'gray', color: 'gray', fontWeight: 'bold', borderWidth: 0.7, padding: 9, fontSize: 11 }}>Within 5 mi.</Text>
-    }
-    else if (checkWithinFiveMiles === true) {
-        withinFiveMilesDisplay =
-            <View style={{ borderRadius: 14, borderColor: '#ff9900', backgroundColor: '#ff9900', padding: 10 }}>
-                <Text style={{ color: 'white', fontWeight: 'bold', fontSize: 11 }}>Within 5 mi.</Text>
-            </View>
-    }
-
-    let lowPopulationDisplay = <Text></Text>
-    if (checkLowPopulation === false) {
-        lowPopulationDisplay = <Text style={{ borderRadius: 14, borderColor: 'gray', color: 'gray', fontWeight: 'bold', borderWidth: 0.7, padding: 9, fontSize: 11 }}>Low Population</Text>
-    }
-    else if (checkLowPopulation === true) {
-        lowPopulationDisplay =
-            <View style={{ borderRadius: 14, borderColor: '#ff9900', backgroundColor: '#ff9900', padding: 10 }}>
-                <Text style={{ color: 'white', fontWeight: 'bold', fontSize: 11 }}>Low Population</Text>
-            </View>
-    }
-
-    let currentlyOpenDisplay = <Text></Text>
-    if (checkCurrentlyOpen === false) {
-        currentlyOpenDisplay = <Text style={{ borderRadius: 14, borderColor: 'gray', color: 'gray', fontWeight: 'bold', borderWidth: 0.7, padding: 9, fontSize: 11 }}>Open</Text>
-    }
-    else if (checkCurrentlyOpen === true) {
-        currentlyOpenDisplay =
-            <View style={{ borderRadius: 14, borderColor: '#ff9900', backgroundColor: '#ff9900', padding: 10 }}>
-                <Text style={{ color: 'white', fontWeight: 'bold', fontSize: 11 }}>Open</Text>
-            </View>
-    }
-
-    let checkVerifiedDisplay = <Text></Text>
-    if (checkVerified === false) {
-        checkVerifiedDisplay = <Text style={{ borderRadius: 14, borderColor: 'gray', color: 'gray', fontWeight: 'bold', borderWidth: 0.7, padding: 9, fontSize: 11 }}>Verified Only</Text>
-    }
-    else if (checkVerified === true) {
-        checkVerifiedDisplay =
-            <View style={{ borderRadius: 14, borderColor: '#ff9900', backgroundColor: '#ff9900', padding: 10 }}>
-                <Text style={{ color: 'white', fontWeight: 'bold', fontSize: 11 }}>Verified Only</Text>
-            </View>
-=======
     if (checkWithinFiveMiles === false){
         withinFiveMilesDisplay = <Text style={{borderRadius: 14, borderColor: 'gray', color: 'gray', fontWeight: 'bold' ,borderWidth: 0.7, padding: 9, fontSize: getFontSize(11)}}>Within 5 mi.</Text>
     }
@@ -119,7 +76,6 @@ const Searching = ({ getNearby, route: { params: { query, location } }, navigati
         <View style={{borderRadius: 14, borderColor: '#ff9900', backgroundColor: '#ff9900',  padding: 10}}>
             <Text style={{color: 'white', fontWeight: 'bold', fontSize: getFontSize(11)}}>Verified Only</Text>
         </View>
->>>>>>> 07f4fc52e19973b9a656c0aa780db4b37998c5a8
     }
 
     //Search loading stuff
@@ -150,20 +106,6 @@ const Searching = ({ getNearby, route: { params: { query, location } }, navigati
                 returnKeyType="search"
                 onSubmitEditing={(e) => newQuery(e.nativeEvent.text)}
             />
-<<<<<<< HEAD
-            <View style={{ flex: 1.1, paddingBottom: 8 }}>
-                <View flexDirection='row' style={{ height: 40, paddingLeft: 10 }} showsHorizontalScrollIndicator={false}>
-                    <TouchableOpacity onPress={() => { setWithinFiveMiles(!checkWithinFiveMiles) }} style={{ paddingHorizontal: 3 }}>
-                        {withinFiveMilesDisplay}
-                    </TouchableOpacity>
-                    <TouchableOpacity onPress={() => { setLowPopulation(!checkLowPopulation) }} style={{ paddingHorizontal: 3 }}>
-                        {lowPopulationDisplay}
-                    </TouchableOpacity>
-                    <TouchableOpacity onPress={() => { setCurrentlyOpen(!checkCurrentlyOpen) }} style={{ paddingHorizontal: 3 }}>
-                        {currentlyOpenDisplay}
-                    </TouchableOpacity>
-                    <TouchableOpacity onPress={() => { setVerified(!checkVerified) }} style={{ paddingHorizontal: 3 }}>
-=======
             <View style={{flex: 1.1, paddingBottom: 8}}>
                 <View flexDirection='row' style={{ height: 40, justifyContent: 'space-between', paddingHorizontal: 10}} showsHorizontalScrollIndicator={false}>
                     <TouchableOpacity onPress={() => {setWithinFiveMiles(!checkWithinFiveMiles)}} style={{paddingHorizontal: 3, flex: 1}}>
@@ -176,7 +118,6 @@ const Searching = ({ getNearby, route: { params: { query, location } }, navigati
                         {currentlyOpenDisplay}
                     </TouchableOpacity>
                     <TouchableOpacity onPress={() => {setVerified(!checkVerified)}} style={{paddingHorizontal: 3, flex: 1}}>
->>>>>>> 07f4fc52e19973b9a656c0aa780db4b37998c5a8
                         {checkVerifiedDisplay}
                     </TouchableOpacity>
                     <View style={{ width: 30 }}></View>

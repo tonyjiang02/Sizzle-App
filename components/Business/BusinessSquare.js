@@ -23,7 +23,7 @@ const BusinessSquare = ({ business, navigation, db, openBusinessPage, type }) =>
     let image = <Image style={{height: '100%', width: '100%'}}></Image>;
     let openPictureStyle = styles.openPictureStyle;
     let isVerified = false;
-    if (isVerified===false){
+    if (isVerified===true){
         verifiedDisplay = <MaterialIcons name='verified-user' color='lightgreen' size={getIconSize(18)} style={{paddingLeft: 5}}></MaterialIcons>;
     }
     if (isVerified===false){

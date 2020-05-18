@@ -16,6 +16,10 @@ const Header = ({ getRegisteredBusinesses, getAll, navigation, businesses, loadi
         navigation.navigate('Checkin', {navigation: navigation});
     }
 
+    const openExampleBusinessPage = () => {
+        navigation.navigate('ExampleBusinessPage', {navigation: navigation});
+    }
+
     return (
         <View style={{height: 90, backgroundColor: '#ff9900', flexDirection: 'row', alignItems: 'flex-end', paddingBottom: 3, paddingHorizontal: 10, justifyContent: 'space-around'}}>
             <TouchableOpacity onPress={onAccountPress} style={{paddingBottom: 5}}>
@@ -24,7 +28,7 @@ const Header = ({ getRegisteredBusinesses, getAll, navigation, businesses, loadi
                     <Text style={{alignSelf: 'center', paddingRight: 2, paddingLeft: 3, color: 'white', fontFamily: 'Avenir-Light', fontSize: 16}}>Account</Text>
                 </View>
             </TouchableOpacity>
-            <TouchableOpacity onPress={onLandingPress}>
+            <TouchableOpacity onPress={openExampleBusinessPage}>
                 <Image source={require( '../../assets/logos/Sizzle_White.png' )} style={{height: 25, width: 100, paddingBottom: 43}} ></Image>
             </TouchableOpacity>
             <TouchableOpacity onPress={onCheckinPress} style={{ paddingBottom: 5 }}>
@@ -32,7 +36,7 @@ const Header = ({ getRegisteredBusinesses, getAll, navigation, businesses, loadi
             shadowColor: "#000",
             shadowOffset: {
                 width: 0,
-                height: 0,
+                height: 2,
             },
             shadowOpacity: 0.2,
             shadowRadius: 2.22,
