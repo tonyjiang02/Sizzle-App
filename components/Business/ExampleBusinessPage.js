@@ -28,33 +28,19 @@ import { Ionicons, MaterialCommunityIcons, AntDesign, FontAwesome5, MaterialIcon
 import LiveUpdate from '../Business/LiveUpdate';
 import ReservationScroll from './ReservationScroll';
 import { Linking } from 'expo';
-import { straightLineDistance, kmToMi } from '../../utils/businessUtils';
-import MapView, { Marker } from 'react-native-maps';
+import MapView from 'react-native-maps';
 import openMap from 'react-native-open-maps';
 import { getFontSize, getIconSize } from '../../utils/fontsizes';
-import * as Location from 'expo-location';
 
-const BusinessPage = ({ route: { params: { business, db } }, checkIn, auth }) => {
-    //destructuring
-    console.log(db);
-    let { vicinity, geometry } = business;
-    let { id, name, owner, googleId, publicId, isVerified, images, coverImageUrl, website, phone, address, openStatus, hours, description, population, reservations, announcements } = db;
-    let location = geometry.location;
+const ExampleBusinessPage = () => {
+
+    let openStatus = true;
+    let livePopulation = 36;
+    let isFavorite = true;
+    let isVerified = true;
     //modals
     const [liveUpdatesModalVisible, setLiveUpdatesVisible] = useState(false);
     const [reservationsModalVisible, setReservationsVisible] = useState(false);
-    const [livePopulation, setLivePopulation] = useState(population);
-    //backend
-    const onPressCheckIn = async () => {
-        const newPopulation = await checkIn(business.place_id);
-        setLivePopulation(newPopulation);
-    };
-    const refresh = () => {
-        getBusiness(business.place_id, db._id);
-    };
-    useEffect(() => {
-        getDistance();
-    });
 
     //business verification
     let verified = <View></View>;
@@ -62,40 +48,24 @@ const BusinessPage = ({ route: { params: { business, db } }, checkIn, auth }) =>
         verified = <MaterialIcons name='verified-user' color='lightgreen' size={getIconSize(20)}></MaterialIcons>;
     }
 
-    //business hours
-    const hoursToString = (day) => {
-        let open = `${day.open.hour}:${day.open.minutes === '0' ? '00' : day.open.minutes}${day.open.am ? 'am' : 'pm'}`;
-        open += "-";
-        let close = `${day.close.hour}:${day.close.minutes === '0' ? '00' : day.close.minutes}${day.close.am ? 'am' : 'pm'}`;
-        return open + close;
-    };
     //make page specifically for unverified
-    const monBusinessHours = hoursToString(hours.monday);
-    const tueBusinessHours = hoursToString(hours.tuesday);
-    const wedBusinessHours = hoursToString(hours.wednesday);
-    const thuBusinessHours = hoursToString(hours.thursday);
-    const friBusinessHours = hoursToString(hours.friday);
-    const satBusinessHours = hoursToString(hours.saturday);
-    const sunBusinessHours = hoursToString(hours.sunday);
-    //distance 
-    let [lineDistance, setLineDistance] = useState(null);
-    const getDistance = async () => {
-        const currentLocation = await Location.getLastKnownPositionAsync();
-        console.log(currentLocation.coords);
-        var mi = kmToMi(straightLineDistance(currentLocation.coords, { latitude: parseFloat(location.lat), longitude: parseFloat(location.lng) }));
-        var rounded = Math.round(mi * 100) / 100;
-        setLineDistance(rounded);
-    };
+    const monBusinessHours = '8:00am-8:00pm';
+    const tueBusinessHours = '8:00am-8:00pm';
+    const wedBusinessHours = '8:00am-8:00pm';
+    const thuBusinessHours = '8:00am-8:00pm';
+    const friBusinessHours = '8:00am-8:00pm';
+    const satBusinessHours = '9:00am-5:00pm';
+    const sunBusinessHours = '9:00am-5:00pm';
 
     //phone number
-    let phoneNumber = '+1 (408) 917-9685';
+    let phoneNumber = '+1 (202) 555-0157';
     let phoneNumberURL = 'tel:' + phoneNumber;
 
     //website
-    let websiteURL = 'https://' + website;
+    let websiteURL = 'www.thegreat.market';
     const createWebAlert = () =>
         Alert.alert(
-            'Do you want to open the website for ' + business.name + '?',
+            'Do you want to open the website?',
             '',
             [
                 {
@@ -119,7 +89,7 @@ const BusinessPage = ({ route: { params: { business, db } }, checkIn, auth }) =>
                     onPress: () => console.log("Cancel Pressed"),
                     style: "cancel"
                 },
-                { text: "OK", onPress: () => openMap({ end: name + " " + address, start: "Current Location", travelType: 'drive' }) }
+                { text: "OK", onPress: () => openMap({ end: address, start: "Current Location", travelType: 'drive' }) }
             ],
             { cancelable: false }
         );
@@ -156,11 +126,6 @@ const BusinessPage = ({ route: { params: { business, db } }, checkIn, auth }) =>
         }}>Closed</Text>;
     }
 
-    //This changes the favorite color; once you have the actual favorite parameter change the color based on the true/false of favorite
-    function inFavorites() {
-        return (auth.user.favorites.includes(id));
-    };
-    const isFavorite = inFavorites();
     let favoriteDisplay = <Ionicons name="md-heart-empty" color='white' size={getIconSize(21)} />;
     if (isFavorite === true) {
         favoriteDisplay = <Ionicons name="md-heart" color='red' size={getIconSize(21)} />;
@@ -168,12 +133,11 @@ const BusinessPage = ({ route: { params: { business, db } }, checkIn, auth }) =>
     else if (isFavorite === false) {
         favoriteDisplay = <Ionicons name="md-heart-empty" color='white' size={getIconSize(21)} />;
     }
+
     //Live updates display
-    console.log(announcements);
-    announcements = announcements.reverse();
-    const updates = announcements.map((a, i) => (
-        <LiveUpdate title={a.title} content={a.content} key={i}></LiveUpdate>
-    ));
+
+    const updates = <LiveUpdate title={'Out of Stock'} content={'Eggplants, Organic Cherries, Grade AAA Eggs'} key={1}></LiveUpdate>
+
     return (
         <View style={styles.landing}>
             <Modal
@@ -250,7 +214,7 @@ const BusinessPage = ({ route: { params: { business, db } }, checkIn, auth }) =>
                     shadowRadius: 9.51,
                     elevation: 15,
                 }}>
-                    <ImageBackground source={coverImageUrl ? { uri: coverImageUrl } : { uri: 'https://picsum.photos/400/300' }} style={{ width: '100%', height: 250 }}>
+                    <ImageBackground source={require('../../assets/exampleBPImage.jpg')} style={{ width: '100%', height: 250 }}>
                         <LinearGradient
                             colors={['transparent', 'rgba(0,0,0,0.8)']}
                             style={{
@@ -263,13 +227,13 @@ const BusinessPage = ({ route: { params: { business, db } }, checkIn, auth }) =>
                             }}
                         />
                         <View style={{ position: 'absolute', bottom: 40, alignItems: 'baseline' }}>
-                            <Text style={{ color: 'white', fontSize: getFontSize(30), fontWeight: 'bold', paddingLeft: 20 }}>{business.name}</Text>
+                            <Text style={{ color: 'white', fontSize: getFontSize(30), fontWeight: 'bold', paddingLeft: 20 }}>The Great Market</Text>
                             <View style={{ paddingLeft: 20, paddingTop: 10, flexDirection: 'row', alignItems: 'center' }}>
                                 <Text style={{ borderRadius: 5, borderColor: 'white', color: 'white', borderWidth: 1, padding: 3, fontSize: getFontSize(16) }}>
-                                    {lineDistance}
+                                    1.0mi
                                 </Text>
                                 <View style={{ flexDirection: 'row', alignItems: 'center', paddingLeft: 20 }}>
-                                    <Ionicons name='md-person' color='white' size={getIconSize(19)} />
+                                    <Ionicons name='md-person' color='white' size={getIconSize(19)}/>
                                     {popDisplay}
                                 </View>
                                 <View style={{ paddingLeft: 20, flexDirection: 'row', alignItems: 'center' }}>
@@ -280,7 +244,7 @@ const BusinessPage = ({ route: { params: { business, db } }, checkIn, auth }) =>
                                 </View>
                             </View>
                         </View>
-                        <TouchableOpacity style={{ position: 'absolute', right: 15, bottom: 5 }}>
+                        <TouchableOpacity style={{ position: 'absolute', right: 15, bottom: 5}}>
                             {favoriteDisplay}
                         </TouchableOpacity>
                     </ImageBackground>
@@ -293,12 +257,12 @@ const BusinessPage = ({ route: { params: { business, db } }, checkIn, auth }) =>
                             <MaterialCommunityIcons name='directions' color='royalblue' size={getIconSize(21)} />
                             <Text style={{ color: 'black', fontFamily: "Avenir-Light" }}>Directions</Text>
                         </TouchableOpacity>
-                        <TouchableOpacity onPress={onPressCheckIn} style={{ alignItems: 'center', flex: 1 }}>
+                        <TouchableOpacity style={{ alignItems: 'center', flex: 1 }}>
                             <MaterialCommunityIcons name='map-marker-check' color='#ff9900' size={getIconSize(22)} />
                             <Text style={{ color: '#ff9900', fontFamily: 'Avenir-Light', fontWeight: 'bold' }}>Check In</Text>
                         </TouchableOpacity>
                         <TouchableOpacity onPress={() => { Linking.openURL(phoneNumberURL); }} style={{ alignItems: 'center', flex: 1 }}>
-                            <MaterialIcons name='phone' color='royalblue' size={getIconSize(20)} style={{ paddingBottom: 5 }} />
+                            <MaterialIcons name='phone' color='royalblue' size={getIconSize(20)} style={{paddingBottom: 5}} />
                             <Text style={{ color: 'black', fontFamily: 'Avenir-Light' }}>Call</Text>
                         </TouchableOpacity>
                     </View>
@@ -324,7 +288,7 @@ const BusinessPage = ({ route: { params: { business, db } }, checkIn, auth }) =>
                                 <AntDesign name='rightcircle' color='#ff9900' size={getIconSize(18)} style={{ paddingTop: 12 }}></AntDesign>
                             </View>
                             <View style={{ flex: 5 }}>
-                                <LiveUpdate title={announcements[0].title ? announcements[0].title : ""} content={announcements[0].content ? announcements[0].content : ""}></LiveUpdate>
+                                {updates}
                             </View>
                         </TouchableOpacity>
                     </View>
@@ -362,25 +326,16 @@ const BusinessPage = ({ route: { params: { business, db } }, checkIn, auth }) =>
                     <View style={styles.infoOuterBlock}>
                         <TouchableOpacity onPress={createWebAlert} style={styles.infoInnerBlock}>
                             <MaterialIcons name='web' color='royalblue' size={getIconSize(18)} />
-                            <Text style={{ paddingLeft: 10, fontFamily: 'Avenir-Light', fontSize: getFontSize(17), fontWeight: 'bold' }}>{website}</Text>
+                            <Text style={{ paddingLeft: 10, fontFamily: 'Avenir-Light', fontSize: getFontSize(17), fontWeight: 'bold' }}>{websiteURL}</Text>
                         </TouchableOpacity>
                     </View>
 
                     <View style={styles.mapOuterStyle}>
-                        <MapView style={styles.mapStyle} showsUserLocation={true} initialRegion={{
-                            latitude: location.lat,
-                            longitude: location.lng,
-                            latitudeDelta: 0.002,
-                            longitudeDelta: 0.001,
-                        }}>
-                            <Marker
-                                coordinate={{ latitude: parseFloat(location.lat), longitude: parseFloat(location.lng) }}
-                                title={name}
-                            />
+                        <MapView style={styles.mapStyle}>
                         </MapView>
                         <View style={{ flexDirection: 'row' }}>
                             <View style={{ flexDirection: 'column', flex: 1, paddingLeft: 15, paddingVertical: 20 }}>
-                                <Text style={{ fontFamily: 'Avenir-Light', fontSize: getFontSize(17), fontWeight: 'bold' }}>Distance: {lineDistance}mi </Text>
+                                <Text style={{ fontFamily: 'Avenir-Light', fontSize: getFontSize(17), fontWeight: 'bold' }}>Distance: 1.0mi </Text>
                             </View>
                             <View style={{ flex: 1.2, justifyContent: 'center', alignItems: 'center' }}>
                                 <TouchableOpacity onPress={openMapToBusiness}>
@@ -426,8 +381,5 @@ const BusinessPage = ({ route: { params: { business, db } }, checkIn, auth }) =>
         </View>
     );
 };
-const mapStateToProps = state => ({
-    population: state.business.dbBusiness.population,
-    auth: state.auth
-});
-export default connect(mapStateToProps, { checkIn })(BusinessPage);
+
+export default ExampleBusinessPage;
