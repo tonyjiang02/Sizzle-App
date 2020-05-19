@@ -5,6 +5,7 @@ export const ERROR = 'ERROR';
 export const LOAD_BUSINESSES = 'LOAD_BUSINESSES';
 export const LOAD_BUSINESS = 'LOAD_BUSINESS';
 export const LOGOUT_USER = 'LOGOUT_USER';
+export const UPDATE_USER = 'UPDATE_USER';
 export const CLEAR_BUSINESSES = 'CLEAR_BUSINESSES';
 export const LOAD_SEARCH = 'LOAD_SEARCH';
 export const LEAVE_SEARCH = 'LEAVE_SEARCH';

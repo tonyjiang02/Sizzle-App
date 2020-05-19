@@ -18,6 +18,7 @@ import Checkin from './components/Checkin';
 import SearchLoading from './components/layout/SearchLoading';
 import ExampleBusinessPage from './components/Business/ExampleBusinessPage';
 import UnverifiedBusinessPage from './components/Business/UnverifiedBusinessPage';
+import Signup from './components/Signup';
 
 
 const Stack = createStackNavigator();
@@ -50,7 +51,10 @@ const Index = ({ auth }) => {
     const authController = () => {
         if (isAuth === 1) {
             return (
-                <Stack.Screen name="Login" component={Login} />
+                <Fragment>
+                    <Stack.Screen name="Login" component={Login} />
+                    <Stack.Screen name="Signup" component={Signup} />
+                </Fragment>
             );
         }
         if (isAuth === 2) {

@@ -32,14 +32,17 @@ import { straightLineDistance, kmToMi } from '../../utils/businessUtils';
 import MapView, { Marker } from 'react-native-maps';
 import openMap from 'react-native-open-maps';
 import { getFontSize, getIconSize } from '../../utils/fontsizes';
+import { updateUser } from '../../actions/user';
 import * as Location from 'expo-location';
 
-const BusinessPage = ({ route: { params: { business, db } }, checkIn, auth }) => {
+const BusinessPage = ({ route: { params: { business, db } }, checkIn, auth, updateUser }) => {
     //destructuring
     console.log(db);
     let { vicinity, geometry } = business;
-    let { id, name, owner, googleId, publicId, isVerified, images, coverImageUrl, website, phone, address, openStatus, hours, description, population, reservations, announcements } = db;
+    let { _id, name, owner, googleId, publicId, isVerified, images, coverImageUrl, website, phone, address, openStatus, hours, description, population, reservations, announcements } = db;
     let location = geometry.location;
+    let user = auth.user;
+    let updated = false;
     //modals
     const [liveUpdatesModalVisible, setLiveUpdatesVisible] = useState(false);
     const [reservationsModalVisible, setReservationsVisible] = useState(false);
@@ -54,8 +57,11 @@ const BusinessPage = ({ route: { params: { business, db } }, checkIn, auth }) =>
     };
     useEffect(() => {
         getDistance();
+        return function cleanup() {
+            console.log("cleaning up on exit");
+            updateUser(user);
+        };
     });
-
     //business verification
     let verified = <View></View>;
     if (isVerified === true) {
@@ -158,9 +164,21 @@ const BusinessPage = ({ route: { params: { business, db } }, checkIn, auth }) =>
 
     //This changes the favorite color; once you have the actual favorite parameter change the color based on the true/false of favorite
     function inFavorites() {
-        return (auth.user.favorites.includes(id));
+        return auth.user.favorites.includes(_id);
     };
-    const isFavorite = inFavorites();
+    const toggleFavorite = () => {
+        console.log("favorites length: " + user.favorites.length);
+        console.log("favorites: " + user.favorites);
+        if (!isFavorite) {
+            user.favorites.push(_id);
+        } else {
+            user.favorites.splice(user.favorites.indexOf(_id));
+        }
+        updated = true;
+        setFavorite(!isFavorite);
+
+    };
+    const [isFavorite, setFavorite] = useState(inFavorites());
     let favoriteDisplay = <Ionicons name="md-heart-empty" color='white' size={getIconSize(21)} />;
     if (isFavorite === true) {
         favoriteDisplay = <Ionicons name="md-heart" color='red' size={getIconSize(21)} />;
@@ -280,7 +298,7 @@ const BusinessPage = ({ route: { params: { business, db } }, checkIn, auth }) =>
                                 </View>
                             </View>
                         </View>
-                        <TouchableOpacity style={{ position: 'absolute', right: 15, bottom: 5 }}>
+                        <TouchableOpacity style={{ position: 'absolute', right: 15, bottom: 5 }} onPress={() => toggleFavorite()}>
                             {favoriteDisplay}
                         </TouchableOpacity>
                     </ImageBackground>
@@ -408,7 +426,7 @@ const BusinessPage = ({ route: { params: { business, db } }, checkIn, auth }) =>
                         </View>
                     </View>
 
-                    <View style={{borderBottomWidth: 0.5, borderBottomColor: 'gainsboro'}}></View>
+                    <View style={{ borderBottomWidth: 0.5, borderBottomColor: 'gainsboro' }}></View>
                     <View style={{ paddingVertical: 15, flexDirection: 'row', justifyContent: 'flex-start', flex: 5 }}>
                         <View style={{ flexDirection: 'row', alignItems: 'center', flex: 3 }}>
                             <Ionicons name='md-information-circle' color='royalblue' size={getIconSize(18.6)} />
@@ -430,4 +448,4 @@ const mapStateToProps = state => ({
     population: state.business.dbBusiness.population,
     auth: state.auth
 });
-export default connect(mapStateToProps, { checkIn })(BusinessPage);
+export default connect(mapStateToProps, { checkIn, updateUser })(BusinessPage);

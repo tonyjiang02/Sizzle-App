@@ -38,6 +38,26 @@ export const logout = () => async dispatch => {
 };
 export const signup = (email, password) => async dispatch => {
     console.log("SIGNUP ACTION");
+    try {
+        const res = await fetch(`${BASE_URL}/api/users`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+                email: email,
+                password: password
+            })
+        });
+        const data = await res.json();
+        console.log(data);
+        dispatch({
+            type: LOGIN_SUCCESS,
+            payload: data
+        });
+    } catch (err) {
+        console.log(err);
+    }
 };
 //Loads basic user data into redux state 
 export const loadUser = () => async dispatch => {
