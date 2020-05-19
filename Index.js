@@ -41,6 +41,7 @@ const Index = ({ auth }) => {
         };
         if (auth.isAuthenticated) {
             setAuth(2);
+            store.dispatch(loadUser());
             console.log("Is Authenticated First Time");
         } else {
             console.log("Checking local storage");

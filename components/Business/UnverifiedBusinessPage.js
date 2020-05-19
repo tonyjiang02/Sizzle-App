@@ -40,7 +40,7 @@ const UnverifiedBusinessPage = ({ route: { params: { business, db } }, checkIn, 
     let location = geometry.location;
     let isVerified = false;
     //todo
-    let favorites = auth.user.favorites;
+    let favorites = User.user.favorites;
     //modals
     const [liveUpdatesModalVisible, setLiveUpdatesVisible] = useState(false);
     const [reservationsModalVisible, setReservationsVisible] = useState(false);
@@ -147,7 +147,7 @@ const UnverifiedBusinessPage = ({ route: { params: { business, db } }, checkIn, 
 
     //This changes the favorite color; once you have the actual favorite parameter change the color based on the true/false of favorite
     function inFavorites() {
-        return (auth.user.favorites.includes(id));
+        return (User.user.favorites.includes(id));
     };
     const isFavorite = inFavorites();
     let favoriteDisplay = <Ionicons name="md-heart-empty" color='white' size={35} />;

@@ -35,13 +35,13 @@ import { getFontSize, getIconSize } from '../../utils/fontsizes';
 import { updateUser } from '../../actions/user';
 import * as Location from 'expo-location';
 
-const BusinessPage = ({ route: { params: { business, db } }, checkIn, auth, updateUser }) => {
+const BusinessPage = ({ route: { params: { business, db } }, checkIn, auth, updateUser, User }) => {
     //destructuring
     console.log(db);
     let { vicinity, geometry } = business;
     let { _id, name, owner, googleId, publicId, isVerified, images, coverImageUrl, website, phone, address, openStatus, hours, description, population, reservations, announcements } = db;
     let location = geometry.location;
-    let user = auth.user;
+    let user = User.user;
     let updated = false;
     //modals
     const [liveUpdatesModalVisible, setLiveUpdatesVisible] = useState(false);
@@ -164,7 +164,7 @@ const BusinessPage = ({ route: { params: { business, db } }, checkIn, auth, upda
 
     //This changes the favorite color; once you have the actual favorite parameter change the color based on the true/false of favorite
     function inFavorites() {
-        return auth.user.favorites.includes(_id);
+        return User.user.favorites.includes(_id);
     };
     const toggleFavorite = () => {
         console.log("favorites length: " + user.favorites.length);
@@ -446,6 +446,7 @@ const BusinessPage = ({ route: { params: { business, db } }, checkIn, auth, upda
 };
 const mapStateToProps = state => ({
     population: state.business.dbBusiness.population,
-    auth: state.auth
+    auth: state.auth,
+    User: state.user
 });
 export default connect(mapStateToProps, { checkIn, updateUser })(BusinessPage);

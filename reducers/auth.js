@@ -19,14 +19,6 @@ export default function (state = initialState, action) {
                 loading: false,
                 token: payload.token
             };
-
-        case LOAD_USER:
-            return {
-                ...state,
-                isAuthenticated: true,
-                loading: false,
-                user: payload
-            };
         case LOGOUT_USER:
             return {
                 ...state,
