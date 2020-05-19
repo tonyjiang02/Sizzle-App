@@ -28,7 +28,7 @@ const Header = ({ getRegisteredBusinesses, getAll, navigation, businesses, loadi
                     <Text style={{alignSelf: 'center', paddingRight: 2, paddingLeft: 3, color: 'white', fontFamily: 'Avenir-Light', fontSize: 16}}>Account</Text>
                 </View>
             </TouchableOpacity>
-            <TouchableOpacity onPress={openExampleBusinessPage}>
+            <TouchableOpacity onPress={onLandingPress}>
                 <Image source={require( '../../assets/logos/Sizzle_White.png' )} style={{height: 25, width: 100, paddingBottom: 43}} ></Image>
             </TouchableOpacity>
             <TouchableOpacity onPress={onCheckinPress} style={{ paddingBottom: 5 }}>

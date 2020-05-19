@@ -15,11 +15,11 @@ export const SearchLoading = ({}) => {
             Animated.sequence([
               Animated.timing(fadeAnim, {
                 toValue: 1,
-                duration: 1500
+                duration: 800
               }), 
               Animated.timing(fadeAnim, {
                 toValue: 0,
-                duration: 1500
+                duration: 800
                 })
             ]),
           ).start()
