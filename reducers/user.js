@@ -1,4 +1,4 @@
-import { LOAD_USER } from '../actions/types';
+import { LOAD_USER, LOGOUT_USER } from '../actions/types';
 const initialState = {
     user: null
 };
