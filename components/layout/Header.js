@@ -15,7 +15,6 @@ const Header = ({ getRegisteredBusinesses, getAll, navigation, businesses, loadi
     const onCheckinPress = () => {
         navigation.navigate('Checkin', {navigation: navigation});
     }
-
     const openExampleBusinessPage = () => {
         navigation.navigate('ExampleBusinessPage', {navigation: navigation});
     }

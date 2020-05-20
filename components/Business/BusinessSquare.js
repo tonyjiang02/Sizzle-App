@@ -1,5 +1,5 @@
 import React, { useEffect } from 'react';
-import { View, Image, Text, TouchableOpacity, Dimensions } from 'react-native';
+import { View, Image, Text, TouchableOpacity, Dimensions, Alert } from 'react-native';
 import { picture } from '../Styles';
 import { connect } from 'react-redux';
 import { SearchBar } from 'react-native-elements';
@@ -32,7 +32,7 @@ const BusinessSquare = ({ business, navigation, db, openBusinessPage, type }) =>
         verifiedDisplay = <MaterialIcons name='verified-user' color='lightgreen' size={getIconSize(18)} style={{paddingLeft: 5}}></MaterialIcons>;
     }
     if (isVerified === false) {
-        image = <Image source={{ uri: 'https://picsum.photos/600/400' }} style={openPictureStyle}></Image>
+        image = <Image source={require('../../assets/logos/image_unavailable.png')} style={openPictureStyle}></Image>
     }
 
     if (population < 10) {

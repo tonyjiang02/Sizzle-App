@@ -3,6 +3,7 @@ import { View, ScrollView, Text } from 'react-native';
 import BusinessSquare from './BusinessSquare';
 import CategoryHeader from './CategoryHeader';
 import { styles } from '../Styles';
+import Outlines from '../../assets/Outlines';
 
 const BusinessSideScroll = ({ businesses, category, navigation }) => {
     //businesses : {googleData, ourData}

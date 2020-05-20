@@ -21,11 +21,17 @@ import { ScrollView, TouchableOpacity } from 'react-native-gesture-handler';
 import { Octicons, Ionicons, MaterialCommunityIcons, AntDesign, FontAwesome5, MaterialIcons, FontAwesome } from '@expo/vector-icons';
 import { logout } from '../actions/auth';
 export const Account = ({ navigation, logout }) => {
+    const openCheckInHistory = () => {
+        navigation.navigate('BusinessHistoryList', {navigation: navigation});
+    }
+    const openFavorites = () => {
+        navigation.navigate('Favorites', {navigation: navigation});
+    }
     return (
         <View style={{ backgroundColor: '#f2f2f2' }}>
             <Header navigation={navigation}></Header>
             <View style={{ paddingHorizontal: 15, paddingTop: 30 }}>
-                <TouchableOpacity style={{ padding: 10 }}>
+                <TouchableOpacity onPress={openCheckInHistory} style={{ padding: 10 }}>
                     <View style={{
                         flexDirection: 'row', paddingHorizontal: 20, paddingVertical: 10, backgroundColor: 'white',
                         shadowColor: "#000", shadowOffset: { width: 0, height: 1 }, shadowOpacity: 0.22, shadowRadius: 2.22,
@@ -35,7 +41,7 @@ export const Account = ({ navigation, logout }) => {
                         <Text style={{ color: '#323131', fontSize: 24, fontFamily: 'AvenirNext-Bold' }}>Check-in History</Text>
                     </View>
                 </TouchableOpacity>
-                <TouchableOpacity style={{ padding: 10 }}>
+                <TouchableOpacity onPress={openFavorites} style={{ padding: 10 }}>
                     <View style={{
                         flexDirection: 'row', paddingHorizontal: 20, paddingVertical: 10, backgroundColor: 'white',
                         shadowColor: "#000", shadowOffset: { width: 0, height: 1 }, shadowOpacity: 0.22, shadowRadius: 2.22,

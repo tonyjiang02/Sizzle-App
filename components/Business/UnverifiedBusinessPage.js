@@ -39,6 +39,7 @@ const UnverifiedBusinessPage = ({ route: { params: { business, db } }, checkIn, 
     let { name, vicinity, geometry } = business;
     let location = geometry.location;
     let isVerified = false;
+
     //todo
     let favorites = User.user.favorites;
     //modals

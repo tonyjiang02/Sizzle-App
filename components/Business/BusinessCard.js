@@ -53,7 +53,7 @@ const BusinessCard = ({ business, navigation, db, openBusinessPage }) => {
 
     //open status
     let openDisplay = <Text></Text>;
-    let openPicture = <Image source={coverImageUrl ? { uri: coverImageUrl } : { uri: 'https://picsum.photos/200/200' }} style={{ height: 115, width: 115 }}></Image>;
+    let openPicture = <Image source={coverImageUrl ? { uri: coverImageUrl } : require('../../assets/logos/image_unavailable.png')} style={{ height: 115, width: 115 }}></Image>;
 
     // if (openStatus === true) {
     //     openDisplay = <Text style={{
