@@ -87,7 +87,7 @@ export const Landing = ({ getRegisteredBusinesses, getAll, navigation, businesse
                     backdropColor={"white"}
                     backdropOpacity={0.8}
                     animationIn={'slideInUp'}
-                    animationOut={'slideInDown'}
+                    animationOut={'slideOutDown'}
                     animationInTiming={500}
                     swipeDirection={['down']}
                     onSwipeComplete={(e) => { if (e.swipingDirection === 'down') setIntroVisible(false); }}
