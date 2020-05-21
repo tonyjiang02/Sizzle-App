@@ -64,19 +64,20 @@ export const Account = ({ navigation, logout }) => {
                                     <Text style={{ color: '#323131', fontSize: getFontSize(18), fontFamily: 'AvenirNext-Bold' }}>What does checking in do?</Text>
                                     <View style={{height: 5}}></View>
                                     <Text style={{ color: '#323131', fontSize: getFontSize(14), fontFamily: 'Avenir' }}>Checking in allows your community to get a more accurate live 
-                                    population count, which can then help them with their decision of visiting a location. Sizzle also keeps your check-in history, which you can
-                                    review and in the near future provide a warning for potential COVID-19 or other illness exposure through Voluntary Contact Tracing.</Text>
+                                    population count, which can then help them with their decision of visiting a location. Sizzle also keeps your check-in history, which you can currently 
+                                    personally review. In the near future, checking in at every location you visit will also allow full functionality (and provide the most accurate results) 
+                                    for the Voluntary Contact Tracing Program, which can then notify you of possible COVID-19 or illness exposure. Read "What is Voluntary Contact Tracing?" for 
+                                    more details. </Text>
                                 </View>
                                 <View style={{padding: 10}}>
-                                    <Text style={{ color: '#323131', fontSize: getFontSize(18), fontFamily: 'AvenirNext-Bold' }}>What is voluntary contact tracing?</Text>
+                                    <Text style={{ color: '#323131', fontSize: getFontSize(18), fontFamily: 'AvenirNext-Bold' }}>What is Voluntary Contact Tracing?</Text>
                                     <View style={{height: 5}}></View>
-                                    <Text style={{ color: '#323131', fontSize: getFontSize(14), fontFamily: 'Avenir' }}>The Sizzle Team is currently working on a voluntary contact tracing
-                                    program, in which users can self-report illnesses or positive COVID-19 testings through our app. This will then notify all other users who have checked
+                                    <Text style={{ color: '#323131', fontSize: getFontSize(14), fontFamily: 'Avenir' }}>The Sizzle Team is currently working on a Voluntary Contact Tracing
+                                    system, in which users can self-report symptoms or positive COVID-19 testings through our app. This will then notify all other users who have checked
                                     in at the same location at the same time with a warning of potential COVID-19 exposure and an estimated percentage of contraction. Please be advised that
                                     Sizzle is not working as a health organization; we are providing you with information that we hope you can find useful. For medical issues and inquiries, 
                                     please contact your local medical provider.</Text>
                                 </View>
-                                <View style={{height: 10}}></View>
                                 <View style={{padding: 10}}>
                                     <Text style={{ color: '#323131', fontSize: getFontSize(18), fontFamily: 'AvenirNext-Bold', textAlign: 'center' }}>For any further questions, 
                                     please email support@szzl.app</Text>
@@ -129,7 +130,7 @@ export const Account = ({ navigation, logout }) => {
                             shadowColor: "#000", shadowOffset: { width: 0, height: 1 }, shadowOpacity: 0.22, shadowRadius: 2.22,
                             elevation: 3, alignItems: 'center'
                         }}>
-                            <Ionicons name="md-heart" color='red' size={35} style={{ paddingLeft: 8, paddingRight: 10, paddingLeft: 2 }} />
+                            <Ionicons name="md-heart" color='red' size={35} style={{ paddingLeft: 5, paddingRight: 10, paddingLeft: 2 }} />
                             <Text style={{ color: '#323131', fontSize: 24, fontFamily: 'AvenirNext-Bold' }}>Favorites</Text>
                         </View>
                     </TouchableOpacity>
@@ -142,7 +143,7 @@ export const Account = ({ navigation, logout }) => {
                             shadowColor: "#000", shadowOffset: { width: 0, height: 1 }, shadowOpacity: 0.22, shadowRadius: 2.22,
                             elevation: 3, alignItems: 'center'
                         }}>
-                            <FontAwesome name='legal' color='black' size={30} style={{ paddingLeft: 10, paddingRight: 10 }} />
+                            <FontAwesome name='legal' color='black' size={30} style={{ paddingLeft: 5, paddingRight: 10 }} />
                             <Text style={{ color: '#323131', fontSize: 24, fontFamily: 'AvenirNext-Bold' }}>Privacy Policy</Text>
                         </View>
                     </TouchableOpacity>
@@ -152,7 +153,7 @@ export const Account = ({ navigation, logout }) => {
                             shadowColor: "#000", shadowOffset: { width: 0, height: 1 }, shadowOpacity: 0.22, shadowRadius: 2.22,
                             elevation: 3, alignItems: 'center'
                         }}>
-                            <FontAwesome name='question-circle' color='black' size={35} style={{ paddingLeft: 8, paddingRight: 10 }} />
+                            <FontAwesome name='question-circle' color='black' size={35} style={{ paddingLeft: 5, paddingRight: 10 }} />
                             <Text style={{ color: '#323131', fontSize: 24, fontFamily: 'AvenirNext-Bold' }}>FAQ</Text>
                         </View>
                     </TouchableOpacity>
@@ -162,7 +163,7 @@ export const Account = ({ navigation, logout }) => {
                             shadowColor: "#000", shadowOffset: { width: 0, height: 1 }, shadowOpacity: 0.22, shadowRadius: 2.22,
                             elevation: 3, alignItems: 'center'
                         }}>
-                            <MaterialCommunityIcons name='email' color='black' size={35} style={{ paddingLeft: 8, paddingRight: 11 }} />
+                            <MaterialCommunityIcons name='email' color='black' size={35} style={{ paddingLeft: 5, paddingRight: 11 }} />
                             <Text style={{ color: '#323131', fontSize: 24, fontFamily: 'AvenirNext-Bold' }}>Contact</Text>
                         </View>
                     </TouchableOpacity>

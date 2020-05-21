@@ -95,40 +95,72 @@ export const Landing = ({ getRegisteredBusinesses, getAll, navigation, businesse
                     <View style={styles.introModalView}>
                         <TouchableOpacity onPress={() => { setIntroVisible(false) }}>
                             <View style={{ height: 10, paddingTop: 25 }}></View>
-                            <AntDesign name='downcircle' color='#ff9900' size={25} style={{ alignSelf: 'center', paddingBottom: 30 }}></AntDesign>
+                            <AntDesign name='downcircle' color='#ff9900' size={25} style={{ alignSelf: 'center' }}></AntDesign>
                         </TouchableOpacity>
                         <View style={{ height: Dimensions.get('window').height*0.5}}>
-                            <View style={{ flexDirection: 'row', flex: 1 }}>
-                                <MaterialCommunityIcons name='map-marker-check' color='#ff9900' size={60} style={{ flex: 1 }} />
-                                <View style={{ flexDirection: 'column', flex: 4, paddingLeft: 10 }}>
-                                    <Text style={{ fontSize: getFontSize(24), fontFamily: 'AvenirNext-Bold', color: '#ff9900' }}>Check-in</Text>
-                                    <View style={{ paddingRight: 20 }}>
-                                        <Text style={{ fontFamily: 'Avenir-Light', fontSize: getFontSize(18)}}>Track your travel history and help update our live population counters</Text>
+                            <ScrollView showsVerticalScrollIndicator={false}>
+                                <TouchableWithoutFeedback>
+                                    <View>
+                                        <View style={{ flexDirection: 'row', paddingVertical: 20 }}>
+                                            <MaterialCommunityIcons name='map-marker-check' color='#ff9900' size={60} style={{ flex: 1 }} />
+                                            <View style={{ flexDirection: 'column', flex: 4, paddingLeft: 10 }}>
+                                                <Text style={{ fontSize: getFontSize(24), fontFamily: 'AvenirNext-Bold', color: '#ff9900' }}>Check-in</Text>
+                                                <View style={{ paddingRight: 20 }}>
+                                                    <Text style={{ fontFamily: 'Avenir-Light', fontSize: getFontSize(18)}}>Track your travel history and help update our live population counters</Text>
+                                                </View>
+                                            </View>
+                                        </View>
+
+                                        <View style={{paddingHorizontal: 15}}>
+                                            <View style={{borderBottomColor: 'gainsboro', borderBottomWidth: 0.7}}></View>
+                                        </View>
+                                        
+                                        <View style={{ flexDirection: 'row', paddingVertical: 20 }}>
+                                            <View style={{ flexDirection: 'column', flex: 1 }}>
+                                                <Ionicons name='md-person' color='black' size={50} style={{ alignSelf: 'center' }} />
+                                            </View>
+                                            <View style={{ flexDirection: 'column', flex: 4, paddingLeft: 10 }}>
+                                                <Text style={{ fontSize: getFontSize(24), fontFamily: 'AvenirNext-Bold', color: 'black' }}>Population</Text>
+                                                <View style={{ paddingRight: 20 }}>
+                                                    <Text style={{ fontFamily: 'Avenir-Light', fontSize: getFontSize(18) }}>View the current number of checked in users at any location</Text>
+                                                </View>
+                                            </View>
+                                        </View>
+
+                                        <View style={{paddingHorizontal: 15}}>
+                                            <View style={{borderBottomColor: 'gainsboro', borderBottomWidth: 0.7}}></View>
+                                        </View>
+
+                                        <View style={{ flexDirection: 'row', paddingVertical: 20 }}>
+                                            <View style={{ flexDirection: 'column', flex: 1 }}>
+                                                <MaterialIcons name='verified-user' color='lightgreen' size={50} style={{ alignSelf: 'center', paddingTop: 5 }}></MaterialIcons>
+                                            </View>
+                                            <View style={{ flexDirection: 'column', flex: 4, paddingLeft: 10 }}>
+                                                <Text style={{ fontSize: getFontSize(24), fontFamily: 'AvenirNext-Bold', color: 'lightgreen' }}>Verified</Text>
+                                                <View style={{ paddingRight: 20 }}>
+                                                    <Text style={{ fontFamily: 'Avenir-Light', fontSize: getFontSize(18) }}>Check for live updates and make reservations at verified businesses</Text>
+                                                </View>
+                                            </View>
+                                        </View>
+
+                                        <View style={{paddingHorizontal: 15}}>
+                                            <View style={{borderBottomColor: 'gainsboro', borderBottomWidth: 0.7}}></View>
+                                        </View>
+
+                                        <View style={{ flexDirection: 'row', paddingVertical: 20 }}>
+                                            <View style={{ flexDirection: 'column', flex: 1 }}>
+                                                <MaterialIcons name='people' color='violet' size={50} style={{ alignSelf: 'center', paddingTop: 5 }}></MaterialIcons>
+                                            </View>
+                                            <View style={{ flexDirection: 'column', flex: 4, paddingLeft: 10 }}>
+                                                <Text style={{ fontSize: getFontSize(24), fontFamily: 'AvenirNext-Bold', color: 'violet' }}>Voluntary Contact Tracing</Text>
+                                                <View style={{ paddingRight: 20 }}>
+                                                    <Text style={{ fontFamily: 'Avenir-Light', fontSize: getFontSize(18) }}>Coming early June 2020. Read FAQ for more details.</Text>
+                                                </View>
+                                            </View>
+                                        </View>
                                     </View>
-                                </View>
-                            </View>
-                            <View style={{ flexDirection: 'row', flex: 1 }}>
-                                <View style={{ flexDirection: 'column', flex: 1 }}>
-                                    <Ionicons name='md-person' color='black' size={50} style={{ alignSelf: 'center' }} />
-                                </View>
-                                <View style={{ flexDirection: 'column', flex: 4, paddingLeft: 10 }}>
-                                    <Text style={{ fontSize: getFontSize(24), fontFamily: 'AvenirNext-Bold', color: 'black' }}>Population</Text>
-                                    <View style={{ paddingRight: 20 }}>
-                                        <Text style={{ fontFamily: 'Avenir-Light', fontSize: getFontSize(18) }}>View the current number of checked in users at any location</Text>
-                                    </View>
-                                </View>
-                            </View>
-                            <View style={{ flexDirection: 'row', flex: 1 }}>
-                                <View style={{ flexDirection: 'column', flex: 1 }}>
-                                    <MaterialIcons name='verified-user' color='lightgreen' size={50} style={{ alignSelf: 'center', paddingTop: 5 }}></MaterialIcons>
-                                </View>
-                                <View style={{ flexDirection: 'column', flex: 4, paddingLeft: 10 }}>
-                                    <Text style={{ fontSize: getFontSize(24), fontFamily: 'AvenirNext-Bold', color: 'lightgreen' }}>Verified</Text>
-                                    <View style={{ paddingRight: 20 }}>
-                                        <Text style={{ fontFamily: 'Avenir-Light', fontSize: getFontSize(18) }}>Check for live updates and make reservations at verified businesses</Text>
-                                    </View>
-                                </View>
-                            </View>
+                                </TouchableWithoutFeedback>
+                            </ScrollView>
                         </View>
                     </View>
                 </Modal>
