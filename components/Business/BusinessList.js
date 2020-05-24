@@ -3,10 +3,18 @@ import { connect } from 'react-redux';
 import { View, Text, FlatList, ScrollView } from 'react-native';
 import BusinessCard from './BusinessCard';
 import { styles } from '../Styles';
-export const BusinessList = ({ businesses, navigation, dbBusinesses }) => {
-    const businessList = businesses.map((biz, i) => (
-        <BusinessCard key={biz._id ? biz_.id : biz.id} business={biz} navigation={navigation} db={dbBusinesses[i]}></BusinessCard>
-    ));
+export const BusinessList = ({ business, navigation }) => {
+    let businessList = business.searchBusinesses.map((biz, i) => (
+        <BusinessCard key={biz._id ? biz_.id : biz.id} business={biz} navigation={navigation} db={business.dbSearchBusinesses[i]}></BusinessCard>
+    ));;
+    useEffect(() => {
+        var businesses = business.searchBusinesses;
+        var dbBusinesses = business.dbSearchBusinesses;
+        businessList = businesses.map((biz, i) => (
+            <BusinessCard key={biz._id ? biz_.id : biz.id} business={biz} navigation={navigation} db={dbBusinesses[i]}></BusinessCard>
+        ));
+    }, [business]);
+
     return (
         <View style={{ flex: 20 }}>
             <ScrollView showsVerticalScrollIndicator={false}>
@@ -16,4 +24,7 @@ export const BusinessList = ({ businesses, navigation, dbBusinesses }) => {
         </View>
     );
 };
-export default BusinessList;
+const mapStateToProps = state => ({
+    business: state.business
+});
+export default connect(mapStateToProps, {})(BusinessList);

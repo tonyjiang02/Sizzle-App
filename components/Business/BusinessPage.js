@@ -33,16 +33,18 @@ import MapView, { Marker } from 'react-native-maps';
 import openMap from 'react-native-open-maps';
 import { getFontSize, getIconSize } from '../../utils/fontsizes';
 import { updateUser } from '../../actions/user';
+import { updateBusinessReservations } from '../../actions/business';
 import * as Location from 'expo-location';
 
-const BusinessPage = ({ route: { params: { business, db } }, checkIn, auth, updateUser, User }) => {
+const BusinessPage = ({ route: { params: { business, db } }, checkIn, auth, updateUser, User, updateBusinessReservations, dbBusiness }) => {
     //destructuring
-    console.log(db);
     let { vicinity, geometry } = business;
-    let { _id, name, owner, googleId, publicId, isVerified, images, coverImageUrl, website, phone, address, openStatus, hours, description, population, reservations, announcements } = db;
+    const [data, setData] = useState(dbBusiness);
+    let { _id, name, owner, googleId, publicId, isVerified, images, coverImageUrl, website, phone, address, openStatus, hours, description, population, reservations, announcements, reservationLimit } = data;
     let location = geometry.location;
     let user = User.user;
     let updated = false;
+    let businessUpdated = false;
     //modals
     const [liveUpdatesModalVisible, setLiveUpdatesVisible] = useState(false);
     const [reservationsModalVisible, setReservationsVisible] = useState(false);
@@ -56,10 +58,20 @@ const BusinessPage = ({ route: { params: { business, db } }, checkIn, auth, upda
         getBusiness(business.place_id, db._id);
     };
     useEffect(() => {
+        console.log("rerender");
+        setData(dbBusiness);
+    }, [dbBusiness]);
+    useEffect(() => {
         getDistance();
         return function cleanup() {
-            console.log("cleaning up on exit");
-            updateUser(user);
+            if (updated) {
+                console.log("updating user");
+                updateUser(user);
+            }
+            if (businessUpdated) {
+                console.log("updating Business");
+                updateBusinessReservations(db._id, reservations);
+            }
         };
     });
     //business verification
@@ -87,18 +99,17 @@ const BusinessPage = ({ route: { params: { business, db } }, checkIn, auth, upda
     let [lineDistance, setLineDistance] = useState(null);
     const getDistance = async () => {
         const currentLocation = await Location.getLastKnownPositionAsync();
-        console.log(currentLocation.coords);
         var mi = kmToMi(straightLineDistance(currentLocation.coords, { latitude: parseFloat(location.lat), longitude: parseFloat(location.lng) }));
         var rounded = Math.round(mi * 100) / 100;
         setLineDistance(rounded);
     };
 
     //phone number
-    let phoneNumber = '+1 (408) 917-9685';
+    let phoneNumber = phone;
     let phoneNumberURL = 'tel:' + phoneNumber;
 
     //website
-    let websiteURL = 'https://' + website;
+    let websiteURL = website;
     const createWebAlert = () =>
         Alert.alert(
             'Do you want to open the website for ' + business.name + '?',
@@ -106,14 +117,22 @@ const BusinessPage = ({ route: { params: { business, db } }, checkIn, auth, upda
             [
                 {
                     text: "Cancel",
-                    onPress: () => console.log("Cancel Pressed"),
                     style: "cancel"
                 },
                 { text: "OK", onPress: () => Linking.openURL(websiteURL) }
             ],
             { cancelable: false }
         );
-
+    //reservations
+    let weekMap = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
+    let currentDate = new Date();
+    const [currentDay, setDay] = useState(weekMap[currentDate.getDay()]);
+    const [currentReservations, setReservations] = useState({ ...reservations });
+    const reserveSpot = (i, day) => {
+        reservations[day][i].users.push(user._id);
+        businessUpdated = true;
+        setReservations({ ...reservations });
+    };
     //map
     const openMapToBusiness = () => {
         Alert.alert(
@@ -122,7 +141,6 @@ const BusinessPage = ({ route: { params: { business, db } }, checkIn, auth, upda
             [
                 {
                     text: "Cancel",
-                    onPress: () => console.log("Cancel Pressed"),
                     style: "cancel"
                 },
                 { text: "OK", onPress: () => openMap({ end: name + " " + address, start: "Current Location", travelType: 'drive' }) }
@@ -167,8 +185,6 @@ const BusinessPage = ({ route: { params: { business, db } }, checkIn, auth, upda
         return User.user.favorites.includes(_id);
     };
     const toggleFavorite = () => {
-        console.log("favorites length: " + user.favorites.length);
-        console.log("favorites: " + user.favorites);
         if (!isFavorite) {
             user.favorites.push(_id);
         } else {
@@ -187,7 +203,6 @@ const BusinessPage = ({ route: { params: { business, db } }, checkIn, auth, upda
         favoriteDisplay = <Ionicons name="md-heart-empty" color='white' size={getIconSize(21)} />;
     }
     //Live updates display
-    console.log(announcements);
     announcements = announcements.reverse();
     const updates = announcements.map((a, i) => (
         <LiveUpdate title={a.title} content={a.content} key={i}></LiveUpdate>
@@ -243,13 +258,7 @@ const BusinessPage = ({ route: { params: { business, db } }, checkIn, auth, upda
                     <ScrollView showsVerticalScrollIndicator={false}>
                         <TouchableWithoutFeedback>
                             <View>
-                                <ReservationScroll></ReservationScroll>
-                                <ReservationScroll></ReservationScroll>
-                                <ReservationScroll></ReservationScroll>
-                                <ReservationScroll></ReservationScroll>
-                                <ReservationScroll></ReservationScroll>
-                                <ReservationScroll></ReservationScroll>
-                                <ReservationScroll></ReservationScroll>
+                                <ReservationScroll day={currentDay.toLowerCase()} reserve={reserveSpot} reservations={currentReservations[currentDay.toLowerCase()]}></ReservationScroll>
                             </View>
                         </TouchableWithoutFeedback>
                     </ScrollView>
@@ -342,7 +351,7 @@ const BusinessPage = ({ route: { params: { business, db } }, checkIn, auth, upda
                                 <AntDesign name='rightcircle' color='#ff9900' size={getIconSize(18)} style={{ paddingTop: 12 }}></AntDesign>
                             </View>
                             <View style={{ flex: 5 }}>
-                                <LiveUpdate title={announcements[0].title ? announcements[0].title : ""} content={announcements[0].content ? announcements[0].content : ""}></LiveUpdate>
+                                {(announcements[0]) && <LiveUpdate title={announcements[0].title ? announcements[0].title : ""} content={announcements[0].content ? announcements[0].content : ""}></LiveUpdate>}
                             </View>
                         </TouchableOpacity>
                     </View>
@@ -357,7 +366,7 @@ const BusinessPage = ({ route: { params: { business, db } }, checkIn, auth, upda
                             </TouchableOpacity>
                             <View style={{ flex: 4 }}>
                                 <View>
-                                    <ReservationScroll style={{ alignItems: 'flex-start' }}></ReservationScroll>
+                                    <ReservationScroll day={currentDay.toLowerCase()} reserve={reserveSpot} reservations={currentReservations[currentDay.toLowerCase()]} style={{ alignItems: 'flex-start' }}></ReservationScroll>
                                 </View>
                             </View>
                         </View>
@@ -433,9 +442,7 @@ const BusinessPage = ({ route: { params: { business, db } }, checkIn, auth, upda
                             <Text style={{ paddingLeft: 5, paddingRight: 15, color: 'royalblue', fontFamily: 'Avenir-Light' }}>About </Text>
                         </View>
                         <View style={{ flexDirection: 'column', alignItems: 'flex-start', flex: 8 }}>
-                            <Text style={{ fontFamily: 'Avenir-Light', fontSize: getFontSize(17), paddingVertical: 3 }}>At The Great Market, we are dedicated
-                            in providing you with fresh and organic produce everyday so you can enjoy every meal with family and friends. We also strive to bring you great customer
-                            service and the best prices to make your shopping experience as delightful as possible. We hope you come to our market sometime; we promise you won't regret it!</Text>
+                            <Text style={{ fontFamily: 'Avenir-Light', fontSize: getFontSize(17), paddingVertical: 3 }}>{description}</Text>
                         </View>
                     </View>
                 </View>
@@ -445,8 +452,8 @@ const BusinessPage = ({ route: { params: { business, db } }, checkIn, auth, upda
     );
 };
 const mapStateToProps = state => ({
-    population: state.business.dbBusiness.population,
+    dbBusiness: state.business.dbBusiness,
     auth: state.auth,
     User: state.user
 });
-export default connect(mapStateToProps, { checkIn, updateUser })(BusinessPage);
+export default connect(mapStateToProps, { checkIn, updateUser, updateBusinessReservations })(BusinessPage);

@@ -1,5 +1,5 @@
-import { LOAD_BUSINESSES, LOAD_BUSINESS, CLEAR_BUSINESSES, CLEAR_SEARCH, CLEAR_BUSINESS, ERROR, LOAD_SEARCH, LOAD_LANDING, UPDATE_POPULATION } from './types';
-import { BASE_URL, PLACES_API_KEY } from '../config';
+import { LOAD_BUSINESSES, LOAD_BUSINESS, CLEAR_BUSINESSES, CLEAR_SEARCH, CLEAR_BUSINESS, ERROR, LOAD_SEARCH, LOAD_LANDING, UPDATE_POPULATION, UPDATE_BUSINESS } from './types';
+import { BASE_URL, PLACES_API_KEY, ADD_API_KEY } from '../config';
 import toQueryString from '../utils/QueryString';
 export const getBusinesses = (params) => async dispatch => {
     return null;
@@ -135,11 +135,46 @@ export const checkIn = (id) => async (dispatch, getState) => {
         });
         const json = await res.json();
         dispatch({
-            type: UPDATE_POPULATION,
+            type: UPDATE_BUSINESS,
             payload: json
         });
         return json.population;
     } catch (error) {
 
+    }
+};
+export const updateBusinessReservations = (id, reservations) => async dispatch => {
+    console.log("Updating business reservations");
+    try {
+        const res = await fetch(`${BASE_URL}/api/business/updateReservations`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+                id: id,
+                reservations: reservations
+            })
+        });
+        const json = await res.json();
+        dispatch({
+            type: UPDATE_BUSINESS,
+            payload: json
+        });
+    } catch (err) {
+        console.log(err);
+    }
+};
+export const getAdditionalData = async (googleId) => {
+    try {
+        let p = { key: ADD_API_KEY, place_id: googleId };
+        let url = `https://maps.googleapis.com/maps/api/place/details/json?${toQueryString(p)}&fields=formatted_phone_number,opening_hours,website`;
+        console.log(url);
+        const res = await fetch(url);
+        const json = await res.json();
+        console.log(json);
+        return json;
+    } catch (err) {
+        console.log(err);
     }
 };

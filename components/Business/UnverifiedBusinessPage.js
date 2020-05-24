@@ -31,20 +31,19 @@ import { Linking } from 'expo';
 import { straightLineDistance, kmToMi } from '../../utils/businessUtils';
 import MapView, { Marker } from 'react-native-maps';
 import openMap from 'react-native-open-maps';
+import { getFontSize, getIconSize } from '../../utils/fontsizes';
+import { updateUser } from '../../actions/user';
+import { updateBusinessReservations, getAdditionalData } from '../../actions/business';
 import * as Location from 'expo-location';
 
-const UnverifiedBusinessPage = ({ route: { params: { business, db } }, checkIn, auth }) => {
-    //destructuring and additional vars
-    let { id, googleId, population, coverImageUrl } = db;
-    let { name, vicinity, geometry } = business;
+const BusinessPage = ({ route: { params: { business, db } }, checkIn, updateUser, User, updateBusinessReservations, dbBusiness }) => {
+    //destructuring
+    let { name, vicinity, geometry, place_id } = business;
+    let { _id, googleId, isVerified, population } = dbBusiness;
     let location = geometry.location;
-    let isVerified = false;
-
-    //todo
-    let favorites = User.user.favorites;
+    let user = User.user;
+    let updated = false;
     //modals
-    const [liveUpdatesModalVisible, setLiveUpdatesVisible] = useState(false);
-    const [reservationsModalVisible, setReservationsVisible] = useState(false);
     const [livePopulation, setLivePopulation] = useState(population);
     //backend
     const onPressCheckIn = async () => {
@@ -56,32 +55,45 @@ const UnverifiedBusinessPage = ({ route: { params: { business, db } }, checkIn, 
     };
     useEffect(() => {
         getDistance();
+        getMoreData();
+        return function cleanup() {
+            if (updated) {
+                console.log("updating user");
+                updateUser(user);
+            }
+        };
+    }, [null]);
+    //business verification
+    let verified = <View></View>;
+    if (isVerified === true) {
+        verified = <MaterialIcons name='verified-user' color='lightgreen' size={getIconSize(20)}></MaterialIcons>;
+    }
+    let [addData, setAddData] = useState({
+        websiteURL: 'Not available',
+        hours: 'Not available',
+        phoneNumber: 'Not available'
     });
-    //distance
+    const getMoreData = async () => {
+        const res = await getAdditionalData(place_id);
+        console.log(res);
+        setAddData({
+            websiteURL: res.website,
+            hours: res.weekday_text,
+            phoneNumber: res.formatted_phone_number
+        });
+    };
     let [lineDistance, setLineDistance] = useState(null);
     const getDistance = async () => {
         const currentLocation = await Location.getLastKnownPositionAsync();
-        console.log(currentLocation.coords);
         var mi = kmToMi(straightLineDistance(currentLocation.coords, { latitude: parseFloat(location.lat), longitude: parseFloat(location.lng) }));
         var rounded = Math.round(mi * 100) / 100;
         setLineDistance(rounded);
     };
-    //get phone data and website data
-    const getAdditionalData = () => {
-
-    };
-    //business verification
-    let verified = <View></View>;
-    if (isVerified === true) {
-        verified = <MaterialIcons name='verified-user' color='lightgreen' size={28}></MaterialIcons>;
-    }
 
     //phone number
-    let phoneNumber = 'Not Found';
-    let phoneNumberURL = 'tel:' + phoneNumber;
+    let phoneNumberURL = 'tel:' + addData.phoneNumber;
 
     //website
-    let websiteURL = 'Not available';
     const createWebAlert = () =>
         Alert.alert(
             'Do you want to open the website for ' + business.name + '?',
@@ -89,14 +101,12 @@ const UnverifiedBusinessPage = ({ route: { params: { business, db } }, checkIn, 
             [
                 {
                     text: "Cancel",
-                    onPress: () => console.log("Cancel Pressed"),
                     style: "cancel"
                 },
-                { text: "OK", onPress: () => Linking.openURL(websiteURL) }
+                { text: "OK", onPress: () => Linking.openURL(addData.websiteURL) }
             ],
             { cancelable: false }
         );
-
     //map
     const openMapToBusiness = () => {
         Alert.alert(
@@ -105,10 +115,9 @@ const UnverifiedBusinessPage = ({ route: { params: { business, db } }, checkIn, 
             [
                 {
                     text: "Cancel",
-                    onPress: () => console.log("Cancel Pressed"),
                     style: "cancel"
                 },
-                { text: "OK", onPress: () => openMap({ end: name + " " + vicinity, start: "Current Location", travelType: 'drive' }) }
+                { text: "OK", onPress: () => openMap({ end: name + " " + address, start: "Current Location", travelType: 'drive' }) }
             ],
             { cancelable: false }
         );
@@ -118,45 +127,39 @@ const UnverifiedBusinessPage = ({ route: { params: { business, db } }, checkIn, 
     //population display
     let popDisplay = <Text></Text>;
     if (livePopulation < 10) {
-        popDisplay = <Text style={{ paddingLeft: 3, alignSelf: 'center', color: 'green', fontSize: 20, fontWeight: 'bold' }}>{livePopulation}</Text>;
+        popDisplay = <Text style={{ paddingLeft: 3, alignSelf: 'center', color: 'green', fontSize: getFontSize(22), fontWeight: 'bold' }}>{livePopulation}</Text>;
     }
     else if (livePopulation >= 10 && livePopulation < 50) {
-        popDisplay = <Text style={{ paddingLeft: 3, alignSelf: 'center', color: 'orange', fontSize: 20, fontWeight: 'bold' }}>{livePopulation}</Text>;
+        popDisplay = <Text style={{ paddingLeft: 3, alignSelf: 'center', color: 'orange', fontSize: getFontSize(22), fontWeight: 'bold' }}>{livePopulation}</Text>;
     }
     else if (livePopulation >= 50) {
-        popDisplay = <Text style={{ paddingLeft: 3, alignSelf: 'center', color: 'red', fontSize: 20, fontWeight: 'bold' }}>{livePopulation}</Text>;
+        popDisplay = <Text style={{ paddingLeft: 3, alignSelf: 'center', color: 'red', fontSize: getFontSize(22), fontWeight: 'bold' }}>{livePopulation}</Text>;
     }
     else {
-        popDisplay = <Text style={{ paddingLeft: 3, alignSelf: 'center', color: 'gray', fontSize: 20, fontWeight: 'bold' }}>{livePopulation}</Text>;
-    }
-
-    //open during current time display
-    let openDisplay = <Text></Text>;
-    let openStatus = true;
-    if (openStatus === true) {
-        openDisplay = <Text style={{
-            paddingHorizontal: 10, alignSelf: 'center', color: 'white',
-            borderColor: 'green', borderWidth: 1, padding: 2, fontSize: 16, backgroundColor: 'green'
-        }}>Open</Text>;
-    }
-    else {
-        openDisplay = <Text style={{
-            paddingHorizontal: 10, alignSelf: 'center', color: 'white',
-            borderColor: 'red', borderWidth: 1, padding: 2, fontSize: 16, backgroundColor: 'red'
-        }}>Closed</Text>;
+        popDisplay = <Text style={{ paddingLeft: 3, alignSelf: 'center', color: 'gray', fontSize: getFontSize(22), fontWeight: 'bold' }}>{livePopulation}</Text>;
     }
 
     //This changes the favorite color; once you have the actual favorite parameter change the color based on the true/false of favorite
     function inFavorites() {
-        return (User.user.favorites.includes(id));
+        return User.user.favorites.includes(_id);
     };
-    const isFavorite = inFavorites();
-    let favoriteDisplay = <Ionicons name="md-heart-empty" color='white' size={35} />;
+    const toggleFavorite = () => {
+        if (!isFavorite) {
+            user.favorites.push(_id);
+        } else {
+            user.favorites.splice(user.favorites.indexOf(_id));
+        }
+        updated = true;
+        setFavorite(!isFavorite);
+
+    };
+    const [isFavorite, setFavorite] = useState(inFavorites());
+    let favoriteDisplay = <Ionicons name="md-heart-empty" color='white' size={getIconSize(21)} />;
     if (isFavorite === true) {
-        favoriteDisplay = <Ionicons name="md-heart" color='red' size={35} />;
+        favoriteDisplay = <Ionicons name="md-heart" color='red' size={getIconSize(21)} />;
     }
     else if (isFavorite === false) {
-        favoriteDisplay = <Ionicons name="md-heart-empty" color='white' size={35} />;
+        favoriteDisplay = <Ionicons name="md-heart-empty" color='white' size={getIconSize(21)} />;
     }
     return (
         <View style={styles.landing}>
@@ -172,7 +175,7 @@ const UnverifiedBusinessPage = ({ route: { params: { business, db } }, checkIn, 
                     shadowRadius: 9.51,
                     elevation: 15,
                 }}>
-                    <ImageBackground source={coverImageUrl ? { uri: coverImageUrl } : { uri: 'https://picsum.photos/400/300' }} style={{ width: '100%', height: 250 }}>
+                    <ImageBackground source={{ uri: 'https://picsum.photos/400/300' }} style={{ width: '100%', height: 250 }}>
                         <LinearGradient
                             colors={['transparent', 'rgba(0,0,0,0.8)']}
                             style={{
@@ -185,26 +188,23 @@ const UnverifiedBusinessPage = ({ route: { params: { business, db } }, checkIn, 
                             }}
                         />
                         <View style={{ position: 'absolute', bottom: 40, alignItems: 'baseline' }}>
-                            <Text style={{ color: 'white', fontSize: 30, fontWeight: 'bold', paddingLeft: 20 }}>{name}</Text>
+                            <Text style={{ color: 'white', fontSize: getFontSize(30), fontWeight: 'bold', paddingLeft: 20 }}>{business.name}</Text>
                             <View style={{ paddingLeft: 20, paddingTop: 10, flexDirection: 'row', alignItems: 'center' }}>
-                                <Text style={{ borderRadius: 5, borderColor: 'white', color: 'white', borderWidth: 1, padding: 3, fontSize: 16 }}>
-                                    1.0mi
+                                <Text style={{ borderRadius: 5, borderColor: 'white', color: 'white', borderWidth: 1, padding: 3, fontSize: getFontSize(16) }}>
+                                    {lineDistance}
                                 </Text>
                                 <View style={{ flexDirection: 'row', alignItems: 'center', paddingLeft: 20 }}>
-                                    <Ionicons name='md-person' color='white' size={22} />
+                                    <Ionicons name='md-person' color='white' size={getIconSize(19)} />
                                     {popDisplay}
-                                </View>
-                                <View style={{ paddingLeft: 20, flexDirection: 'row', alignItems: 'center' }}>
-                                    {openDisplay}
                                 </View>
                                 <View style={{ paddingLeft: 20, flexDirection: 'row', alignItems: 'center' }}>
                                     {verified}
                                 </View>
-                                <TouchableOpacity style={{ position: 'absolute', left: 330, top: 33 }}>
-                                    {favoriteDisplay}
-                                </TouchableOpacity>
                             </View>
                         </View>
+                        <TouchableOpacity style={{ position: 'absolute', right: 15, bottom: 5 }} onPress={() => toggleFavorite()}>
+                            {favoriteDisplay}
+                        </TouchableOpacity>
                     </ImageBackground>
 
                     <View style={{
@@ -212,59 +212,46 @@ const UnverifiedBusinessPage = ({ route: { params: { business, db } }, checkIn, 
                         paddingVertical: 6,
                     }}>
                         <TouchableOpacity onPress={openMapToBusiness} style={{ alignItems: 'center', flex: 1 }}>
-                            <MaterialCommunityIcons name='directions' color='royalblue' size={35} />
+                            <MaterialCommunityIcons name='directions' color='royalblue' size={getIconSize(21)} />
                             <Text style={{ color: 'black', fontFamily: "Avenir-Light" }}>Directions</Text>
                         </TouchableOpacity>
                         <TouchableOpacity onPress={onPressCheckIn} style={{ alignItems: 'center', flex: 1 }}>
-                            <MaterialCommunityIcons name='map-marker-check' color='#ff9900' size={40} />
+                            <MaterialCommunityIcons name='map-marker-check' color='#ff9900' size={getIconSize(22)} />
                             <Text style={{ color: '#ff9900', fontFamily: 'Avenir-Light', fontWeight: 'bold' }}>Check In</Text>
                         </TouchableOpacity>
-                        <TouchableOpacity onPress={onPressCheckIn} style={{ alignItems: 'center', flex: 1 }}>
-                            <Ionicons name='md-notifications' color='indianred' size={35} />
-                            <Text style={{ color: 'black', fontFamily: 'Avenir-Light' }}>Notify Me</Text>
+                        <TouchableOpacity onPress={() => { Linking.openURL(phoneNumberURL); }} style={{ alignItems: 'center', flex: 1 }}>
+                            <MaterialIcons name='phone' color='royalblue' size={getIconSize(20)} style={{ paddingBottom: 5 }} />
+                            <Text style={{ color: 'black', fontFamily: 'Avenir-Light' }}>Call</Text>
                         </TouchableOpacity>
                     </View>
-
-                    <View style={{ paddingHorizontal: 15, height: 110, backgroundColor: '#FDDFDF', borderLeftWidth: 5, borderLeftColor: 'red' }}>
-                        <View style={{ flexDirection: 'row', paddingTop: 5 }}>
-                            <Ionicons name='md-warning' color='red' size={35} style={{ paddingRight: 10, paddingLeft: 10 }} />
-                            <Text style={{ color: 'red', fontSize: 24, fontFamily: 'Avenir-Heavy', paddingVertical: 5, paddingRight: 10 }}>COVID-19</Text>
+                    {/* <TouchableOpacity>
+                        <View style={{ paddingHorizontal: 15, height: 140, backgroundColor: '#FDDFDF', borderLeftWidth: 5, borderLeftColor: 'red' }}>
+                            <View style={{ flexDirection: 'row', paddingTop: 5 }}>
+                                <Ionicons name='md-warning' color='red' size={getIconSize(21)} style={{ paddingRight: 10, paddingLeft: 10 }} />
+                                <Text style={{ color: 'red', fontSize: getFontSize(24), fontFamily: 'Avenir-Heavy', paddingVertical: 5, paddingRight: 10 }}>COVID-19</Text>
+                                <AntDesign name='rightcircle' color='red' size={getIconSize(18)} style={{ paddingTop: 11 }}></AntDesign>
+                            </View>
+                            <Text style={{ fontFamily: 'AvenirNext-Bold', fontSize: getFontSize(17), paddingVertical: 3 }}>
+                                This business may have certain guidelines for its customers. Press on this card for more details.
+                            </Text>
                         </View>
-                        <Text style={{ paddingLeft: 15, fontFamily: 'DamascusLight', fontSize: 15 }}>This location offers:</Text>
-                        <View style={{ flexDirection: 'row', justifyContent: 'center', paddingTop: 3 }}>
-                            <View style={{ alignItems: 'center', flex: 1 }}>
-                                <FontAwesome5 name='truck' color='black' size={15} />
-                                <Text style={{ fontSize: 10, fontFamily: 'DamascusLight' }}>Delivery</Text>
-                            </View>
-                            <View style={{ alignItems: 'center', flex: 1 }}>
-                                <FontAwesome5 name='shopping-bag' color='black' size={15} />
-                                <Text style={{ fontSize: 10, fontFamily: 'DamascusLight' }}>Takeout</Text>
-                            </View>
-                            <View style={{ alignItems: 'center', flex: 1 }}>
-                                <MaterialIcons name='local-grocery-store' color='black' size={18}></MaterialIcons>
-                                <Text style={{ fontSize: 10, fontFamily: 'DamascusLight' }}>In-Store</Text>
-                            </View>
-                        </View>
-                    </View>
+                    </TouchableOpacity> */}
                 </View>
-
-                <View style={{ borderBottomWidth: 0.8, borderBottomColor: 'azure' }}></View>
-
                 <View style={{ paddingHorizontal: 25, backgroundColor: 'azure' }}>
                     <View style={{ flex: 1, flexDirection: 'row', justifyContent: 'flex-start', alignItems: 'baseline' }}>
-                        <Text style={{ color: 'royalblue', fontSize: 24, fontFamily: 'Avenir-Heavy', paddingTop: 5, paddingRight: 10, paddingBottom: 10 }}>Information</Text>
+                        <Text style={{ color: 'royalblue', fontSize: getFontSize(24), fontFamily: 'Avenir-Heavy', paddingTop: 5, paddingRight: 10, paddingBottom: 10 }}>Information</Text>
                     </View>
 
                     <View style={styles.infoOuterBlock}>
                         <TouchableOpacity onPress={() => { Linking.openURL(phoneNumberURL); }} style={styles.infoInnerBlock}>
-                            <MaterialIcons name='phone' color='royalblue' size={24} />
-                            <Text style={{ paddingLeft: 10, fontFamily: 'Avenir-Light', fontSize: 17, fontWeight: 'bold' }}>{phoneNumber}</Text>
+                            <MaterialIcons name='phone' color='royalblue' size={getIconSize(18)} />
+                            <Text style={{ paddingLeft: 10, fontFamily: 'Avenir-Light', fontSize: getFontSize(17), fontWeight: 'bold' }}>{addData.phoneNumber}</Text>
                         </TouchableOpacity>
                     </View>
                     <View style={styles.infoOuterBlock}>
                         <TouchableOpacity onPress={createWebAlert} style={styles.infoInnerBlock}>
-                            <MaterialIcons name='web' color='royalblue' size={24} />
-                            <Text style={{ paddingLeft: 10, fontFamily: 'Avenir-Light', fontSize: 17, fontWeight: 'bold' }}>{websiteURL}</Text>
+                            <MaterialIcons name='web' color='royalblue' size={getIconSize(18)} />
+                            <Text style={{ paddingLeft: 10, fontFamily: 'Avenir-Light', fontSize: getFontSize(17), fontWeight: 'bold' }}>{addData.websiteURL}</Text>
                         </TouchableOpacity>
                     </View>
 
@@ -281,37 +268,35 @@ const UnverifiedBusinessPage = ({ route: { params: { business, db } }, checkIn, 
                             />
                         </MapView>
                         <View style={{ flexDirection: 'row' }}>
-                            <View style={{ flexDirection: 'column', flex: 1, paddingLeft: 15, paddingVertical: 15 }}>
-                                <Text style={{ fontFamily: 'Avenir-Light', fontSize: 17, fontWeight: 'bold' }}>Distance: {lineDistance} miles </Text>
-                                {/* <Text style={{ fontFamily: 'Avenir-Light', fontSize: 17, fontWeight: 'bold' }}>ETA: 9 min</Text> */}
+                            <View style={{ flexDirection: 'column', flex: 1, paddingLeft: 15, paddingVertical: 20 }}>
+                                <Text style={{ fontFamily: 'Avenir-Light', fontSize: getFontSize(17), fontWeight: 'bold' }}>Distance: {lineDistance}mi </Text>
                             </View>
                             <View style={{ flex: 1.2, justifyContent: 'center', alignItems: 'center' }}>
                                 <TouchableOpacity onPress={openMapToBusiness}>
                                     <View style={{ borderWidth: 1, borderRadius: 5, borderColor: '#ff9900', backgroundColor: '#ff9900', paddingVertical: 12, paddingHorizontal: 8 }}>
-                                        <Text style={{ fontFamily: 'Avenir-Light', fontSize: 17, fontWeight: 'bold', color: 'white' }}>Take Me There</Text>
+                                        <Text style={{ fontFamily: 'Avenir-Light', fontSize: getFontSize(17), fontWeight: 'bold', color: 'white' }}>Take Me There</Text>
                                     </View>
                                 </TouchableOpacity>
                             </View>
                         </View>
                     </View>
-
                     <View style={{ paddingVertical: 15, flexDirection: 'row', justifyContent: 'flex-start', flex: 5 }}>
                         <View style={{ flexDirection: 'row', alignItems: 'center', flex: 3 }}>
-                            <AntDesign name='clockcircle' color='royalblue' size={24} />
-                            <Text style={{ paddingLeft: 5, paddingRight: 15, color: 'royalblue', fontFamily: 'Avenir-Light' }}>Hours: </Text>
+                            <AntDesign name='clockcircle' color='royalblue' size={getIconSize(18)} />
+                            <Text style={{ paddingLeft: 5, paddingRight: 15, color: 'royalblue', fontFamily: 'Avenir-Light' }}>Hours </Text>
                         </View>
                         <View style={{ flexDirection: 'column', alignItems: 'flex-start', flex: 8 }}>
-
+                            <Text style={{ fontFamily: 'Avenir-Light', fontWeight: 'bold', fontSize: getFontSize(17), paddingVertical: 3 }}>{addData.hours}</Text>
                         </View>
                     </View>
                 </View>
-                <View style={{ height: 100 }}></View>
             </ScrollView>
         </View>
     );
 };
 const mapStateToProps = state => ({
-    population: state.business.dbBusiness.population,
-    auth: state.auth
+    dbBusiness: state.business.dbBusiness,
+    auth: state.auth,
+    User: state.user
 });
-export default connect(mapStateToProps, { checkIn })(UnverifiedBusinessPage);
+export default connect(mapStateToProps, { checkIn, updateUser, updateBusinessReservations })(BusinessPage);
