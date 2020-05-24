@@ -39,7 +39,6 @@ const Login = ({ login, auth1, business, navigation }) => {
                                 onChangeText={(text) => setFields({ email: text, password: password })}
                                 defaultValue={email}
                                 autoCorrect={false}
-
                             />
                             <TextInput
                                 autoCapitalize='none'
@@ -54,17 +53,21 @@ const Login = ({ login, auth1, business, navigation }) => {
                             />
                             <TouchableOpacity onPress={auth} style={{
                                 height: 50, backgroundColor: '#ff9900', width: 300, borderRadius: 5, marginBottom: 20, shadowColor: "#000",
-                                shadowOffset: { width: 0, height: 2 }, shadowOpacity: 0.25, shadowRadius: 3.84, elevation: 5, justifyContent: 'center'
+                                shadowOffset: { width: 0, height: 2 }, shadowOpacity: 0.25, shadowRadius: 3.84, elevation: 5, justifyContent: 'center', alignSelf: 'center'
                             }}>
                                 <Text style={{ color: 'white', alignSelf: 'center', fontFamily: 'AvenirNext-Bold', fontSize: 16 }}>Log In</Text>
                             </TouchableOpacity>
-                            <View style={{ height: 215, borderBottomColor: 'gainsboro', borderBottomWidth: 0.7 }}></View>
+                            <View style={{ height: 115, borderBottomColor: 'gainsboro', borderBottomWidth: 0.7 }}></View>
                             <View style={{ height: 20 }}></View>
                             <View style={{ flexDirection: 'row', justifyContent: 'center' }}>
                                 <Text style={{ fontFamily: 'Avenir-Light', fontSize: 20, color: 'white' }}>New user? </Text>
                                 <TouchableOpacity onPress={() => navigateSignup()}>
                                     <Text style={{ fontFamily: 'Avenir-Light', fontSize: 18, color: 'orangered', fontWeight: 'bold' }}>Sign Up</Text>
                                 </TouchableOpacity>
+                            </View>
+                            <View style={{height: 10}}></View>
+                            <View style={{ flexDirection: 'row', justifyContent: 'center' }}>
+                                <Text style={{ fontFamily: 'Avenir-Light', fontSize: 18, color: 'white' }}>For businesses, please visit www.szzl.app</Text>
                             </View>
                         </View>
                     </View>

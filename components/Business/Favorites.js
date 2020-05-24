@@ -8,7 +8,7 @@ import Header from '../layout/Header';
 import { Octicons, Ionicons, MaterialCommunityIcons, AntDesign, FontAwesome5, MaterialIcons, FontAwesome } from '@expo/vector-icons';
 import Outlines from '../../assets/Outlines';
 
-export const Favorites = ({navigation}) => {
+export const Favorites = ({navigation, User}) => {
         /*const businessList = businesses.map((biz, i) => (
         <BusinessCard key={biz._id ? biz_.id : biz.id} business={biz} navigation={navigation} db={dbBusinesses[i]}></BusinessCard>
     ));*/

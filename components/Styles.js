@@ -184,7 +184,7 @@ const input = StyleSheet.create({
         borderRadius: 5, 
         marginBottom: 15,
         color: 'black',
-        alignSelf: 'flex-start',
+        alignSelf: 'center',
         shadowColor: "#000",
         shadowOffset: {
             width: 0,

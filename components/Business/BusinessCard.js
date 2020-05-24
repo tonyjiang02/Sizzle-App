@@ -77,7 +77,7 @@ const BusinessCard = ({ business, navigation, db, openBusinessPage }) => {
                 <View style={{ flex: 17 }}>
                     <View style={{ flex: 5, paddingBottom: 8 }}>
                         <Text style={{ fontSize: getFontSize(20), paddingTop: 10, flexWrap: 'wrap' }}>{business.name.length > 33 ? textTruncateBySpaceTwo(33, business.name) : business.name}</Text>
-                        <Text style={{ fontSize: getFontSize(12), paddingBottom: 5 }}>{textTruncateBySpace(28, vicinity)}</Text>
+                        <Text style={{ fontSize: getFontSize(12), paddingBottom: 5 }}>{textTruncateBySpaceTwo(33, vicinity)}</Text>
                     </View>
                     <View style={{ flex: 3, flexDirection: 'row', justifyContent: 'space-around', alignItems: 'flex-end', paddingBottom: 10 }}>
                         {verified}
