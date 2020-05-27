@@ -17,6 +17,7 @@ import * as Location from 'expo-location';
 import { Ionicons, MaterialCommunityIcons, AntDesign, FontAwesome5, MaterialIcons, EvilIcons } from '@expo/vector-icons';
 import BusinessCard from './BusinessCard';
 import { Dimensions } from 'react-native';
+import Outlines from '../../assets/Outlines';
 import { getFontSize, getIconSize } from '../../utils/fontsizes';
 
 export const Landing = ({ getRegisteredBusinesses, getAll, newSearch, navigation, businesses, loadingAll, dbBusinesses, firstTime, User }) => { 
