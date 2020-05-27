@@ -1,4 +1,4 @@
-import { LOAD_BUSINESSES, LOAD_BUSINESS, CLEAR_BUSINESSES, LOAD_SEARCH, LEAVE_SEARCH, LOAD_LANDING, UPDATE_POPULATION, UPDATE_BUSINESS } from "../actions/types";
+import { LOAD_BUSINESSES, LOAD_BUSINESS, CLEAR_BUSINESSES, LOAD_SEARCH, NEW_SEARCH, LEAVE_SEARCH, LOAD_LANDING, NEW_LOCATION, UPDATE_POPULATION, UPDATE_BUSINESS } from "../actions/types";
 
 
 /*
@@ -45,6 +45,12 @@ export default function (state = initialState, action) {
                 query: null,
                 searchBusinesses: []
             };
+        case NEW_SEARCH:
+            return {
+                ...state,
+                loadingSearch: true,
+                searchBusinesses: []
+            }
         case LOAD_LANDING:
             return {
                 ...state,
@@ -52,6 +58,13 @@ export default function (state = initialState, action) {
                 dbBusinesses: payload.local,
                 loadingAll: false
             };
+        case NEW_LOCATION:
+            return {
+                ...state,
+                businesses: [],
+                dbBusinesses: [],
+                loadingAll: true
+            }
         case UPDATE_BUSINESS:
             const indexSearch = state.dbSearchBusinesses.findIndex(b => b._id === payload._id);
             const indexLanding = state.dbBusinesses.findIndex(b => b._id === payload._id);

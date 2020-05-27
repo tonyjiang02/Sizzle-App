@@ -1,5 +1,6 @@
 export const LOAD_USER = 'GET_USER';
 export const LOGIN_SUCCESS = 'LOGIN_SUCCESS';
+export const SIGNUP_SUCCESS = 'SIGNUP_SUCCESS';
 export const LOGIN_FAIL = 'LOGIN_FAIL';
 export const ERROR = 'ERROR';
 export const LOAD_BUSINESSES = 'LOAD_BUSINESSES';
@@ -8,8 +9,10 @@ export const LOGOUT_USER = 'LOGOUT_USER';
 export const UPDATE_USER = 'UPDATE_USER';
 export const CLEAR_BUSINESSES = 'CLEAR_BUSINESSES';
 export const LOAD_SEARCH = 'LOAD_SEARCH';
+export const NEW_SEARCH = "NEW_SEARCH";
 export const LEAVE_SEARCH = 'LEAVE_SEARCH';
 export const LOAD_LANDING = 'LOAD_LANDING';
+export const NEW_LOCATION = 'NEW_LOCATION';
 export const CLEAR_SEARCH = 'CLEAR_SEARCH';
 export const CLEAR_BUSINESS = 'CLEAR_BUSINESS';
 export const UPDATE_POPULATION = 'UPDATE_POPULATION';

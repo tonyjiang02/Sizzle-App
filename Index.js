@@ -25,7 +25,7 @@ import Favorites from './components/Business/Favorites';
 
 
 const Stack = createStackNavigator();
-const Index = ({ auth }) => {
+const Index = ({ auth, User }) => {
     const [isAuth, setAuth] = useState(0);
     useEffect(() => {
         console.log("Auth State Changed");
@@ -92,7 +92,8 @@ const Index = ({ auth }) => {
 };
 
 const mapStateToProps = state => ({
-    auth: state.auth
+    auth: state.auth,
+    User: state.user
 });
 
 export default connect(mapStateToProps, { loadUser })(Index);

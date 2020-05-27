@@ -1,4 +1,4 @@
-import { LOGIN_SUCCESS, LOGIN_FAIL, ERROR, LOAD_USER, LOGOUT_USER } from './types';
+import { SIGNUP_SUCCESS, LOGIN_SUCCESS, LOGIN_FAIL, ERROR, LOAD_USER, LOGOUT_USER } from './types';
 import { BASE_URL } from '../config';
 import { AsyncStorage } from 'react-native';
 //saves user token into local storage (only handles localstorage of token)
@@ -52,7 +52,7 @@ export const signup = (email, password) => async dispatch => {
         const data = await res.json();
         console.log(data);
         dispatch({
-            type: LOGIN_SUCCESS,
+            type: SIGNUP_SUCCESS,
             payload: data
         });
     } catch (err) {
@@ -72,6 +72,7 @@ export const loadUser = () => async dispatch => {
             });
             const json = await res.json();
             console.log(json);
+            console.log('dispatching');
             dispatch({
                 type: LOAD_USER,
                 payload: json

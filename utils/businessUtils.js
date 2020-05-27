@@ -14,3 +14,31 @@ export const straightLineDistance = (latlng1, latlng2) => {
 export const kmToMi = (km) => {
     return km / (1.60934);
 }
+
+export const getCoords = async (name) => {
+    try {
+        let url = `https://nominatim.openstreetmap.org/search?q=${name}+USA&format=geojson`;
+        console.log(url);
+        const res = await fetch(url);
+        const json = await res.json();
+        const location = {longitude: json.features[0].geometry.coordinates[0], latitude: json.features[0].geometry.coordinates[1]}
+        console.log(location);
+        return location;
+    } catch (err) {
+        console.log(err);
+    }
+}
+
+export const reverseCoords = async (lat, lon) => {
+    try {
+        let url = `https://nominatim.openstreetmap.org/reverse?format=jsonv2&lat=${lat}&lon=${lon}`;
+        console.log(url);
+        const res = await fetch(url);
+        const json = await res.json();
+        const address = json.display_name;
+        return address;
+    }
+    catch (err) {
+        console.log(err);
+    }
+}

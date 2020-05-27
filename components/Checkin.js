@@ -40,9 +40,9 @@ export const Checkin = ({navigation}) => {
     const noPermissionDisplay = <Text style={{alignSelf: 'center', color: 'white', paddingTop: 30}}>Sizzle currently has no access to your camera. Please go to "Settings" and change your camera permissions.</Text>;
     
     camera = hasPermission ?  <Camera style={{height: (Dimensions.get('window').width-130), width: (Dimensions.get('window').width-120)}} type={type}
-    barCodeScannerSettings={{barCodeTypes: [BarCodeScanner.Constants.BarCodeType.qr]}} onBarCodeScanned={scanned ? undefined : handleBarCodeScanned}>
-<View style={{flex: 1, backgroundColor: 'transparent'}}></View>
-</Camera> : noPermissionDisplay
+                                barCodeScannerSettings={{barCodeTypes: [BarCodeScanner.Constants.BarCodeType.qr]}} onBarCodeScanned={scanned ? undefined : handleBarCodeScanned}>
+                                <View style={{flex: 1, backgroundColor: 'transparent'}}></View>
+                            </Camera> : noPermissionDisplay
 
     return (
         <View style={{backgroundColor: '#ff9900', height: Dimensions.get('window').height, width: Dimensions.get('window').width}}>

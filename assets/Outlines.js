@@ -31,9 +31,14 @@ const Outlines = ({ type }) => {
     }
     if (type==='BusinessSquare'){
         return (
-            <View style={{height: 190, width: 235, backgroundColor: 'gainsboro'}}>
-                <Text>Insert Business BusinessSquare</Text>
+            <View style={{paddingRight: 15, paddingBottom: 10,}}>
+                <View style={{height: 175, width: 235, backgroundColor: 'gainsboro'}}></View>
             </View>
+        )
+    }
+    if (type==='CategoryHeader'){
+        return (
+            <View style={{height: 35, width: 170, backgroundColor: 'gainsboro'}}></View>
         )
     }
     return (

@@ -5,3 +5,4 @@ export default function toQueryString(obj) {
     }
     return keyValuePairs.join('&');
 }
+

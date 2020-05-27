@@ -2,10 +2,10 @@
 
 import React, { useEffect, useState } from 'react';
 import { connect } from 'react-redux';
-import { View, ScrollView, Text, Image, Animated } from 'react-native';
+import { View, ScrollView, Text, Image, Animated, Dimensions } from 'react-native';
 import Modal from 'react-native-modal';
 import { Button, } from 'react-native-elements';
-import { findPlace, getNearby } from '../../actions/business';
+import { findPlace, getNearby, newSearch } from '../../actions/business';
 import { styles } from '../Styles';
 import BusinessList from './BusinessList';
 import SearchLoading from '../layout/SearchLoading';
@@ -15,7 +15,7 @@ import { TouchableOpacity } from 'react-native-gesture-handler';
 import { Ionicons, MaterialCommunityIcons, AntDesign, FontAwesome5, MaterialIcons } from '@expo/vector-icons';
 import { getFontSize, getIconSize } from '../../utils/fontsizes';
 
-const Searching = ({ getNearby, route: { params: { query, location } }, navigation, business }) => {
+const Searching = ({ getNearby, newSearch, route: { params: { query, location } }, navigation, business }) => {
     const [distance, setDistance] = useState(3);
     const [search, updateSearch] = useState(query);
     const [sortModalVisible, setSortVisible] = useState(false);
@@ -29,7 +29,8 @@ const Searching = ({ getNearby, route: { params: { query, location } }, navigati
     };
 
     const newQuery = function (input) {
-        navigation.navigate('Searching', { query: input, location: location });
+        newSearch();
+        getNearby({ keyword: input }, location);
     };
 
     //filter buttons
@@ -84,28 +85,43 @@ const Searching = ({ getNearby, route: { params: { query, location } }, navigati
     }
     else if (business.loadingSearch === false) {
         results = <View style={{ flex: 1 }}>
+            <BusinessList navigation={navigation}></BusinessList>
+        </View>;
+    }
+
+    useEffect(() => {
+        //TODO Only add search results to state pressing the search bar again
+        if (query) {
+            getNearby({ keyword: query }, location);
+        } else {
+            getNearby();
+        }
+    }, []);
+    return (
+        <View style={styles.landing}>
             <Header navigation={navigation}></Header>
             <SearchBar
                 onChangeText={(text) => updateSearch(text)}
                 value={search}
                 platform="ios"
                 containerStyle={{
+                    width: Dimensions.get('window').width-5,
+                    paddingBottom: 5,
                     backgroundColor: 'transparent',
-                    padding: 5,
                     shadowColor: "#000",
                     shadowOffset: {
                         width: 0,
-                        height: 1,
+                        height: 0.5,
                     },
                     shadowOpacity: 0.22,
-                    shadowRadius: 2.22,
-                    elevation: 3
+                    shadowRadius: 1.22,
+                    elevation: 3,
                 }}
-                inputContainerStyle={{ backgroundColor: 'white', borderRadius: 5, height: 50 }}
+                inputContainerStyle={{ backgroundColor: 'white', borderRadius: 5, height: 40 }}
                 returnKeyType="search"
                 onSubmitEditing={(e) => newQuery(e.nativeEvent.text)}
             />
-            <View style={{ flex: 1.1, paddingBottom: 8 }}>
+            <View style={{ paddingVertical: 5 }}>
                 <View flexDirection='row' style={{ height: 40, justifyContent: 'space-between', paddingHorizontal: 10 }} showsHorizontalScrollIndicator={false}>
                     <TouchableOpacity onPress={() => { setWithinFiveMiles(!checkWithinFiveMiles); }} style={{ paddingHorizontal: 3, flex: 1 }}>
                         {withinFiveMilesDisplay}
@@ -123,20 +139,6 @@ const Searching = ({ getNearby, route: { params: { query, location } }, navigati
                 </View>
             </View>
             <View style={{ borderTopWidth: 0.7, borderTopColor: 'gainsboro' }}></View>
-            <BusinessList navigation={navigation}></BusinessList>
-        </View>;
-    }
-
-    useEffect(() => {
-        //TODO Only add search results to state pressing the search bar again
-        if (query) {
-            getNearby({ keyword: query }, location.coords);
-        } else {
-            getNearby();
-        }
-    }, []);
-    return (
-        <View style={styles.landing}>
             {results}
         </View>
     );
@@ -144,4 +146,4 @@ const Searching = ({ getNearby, route: { params: { query, location } }, navigati
 const mapStateToProps = state => ({
     business: state.business
 });
-export default connect(mapStateToProps, { getNearby })(Searching);
+export default connect(mapStateToProps, { getNearby, newSearch })(Searching);

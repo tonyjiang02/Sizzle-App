@@ -1,4 +1,4 @@
-import { LOAD_BUSINESSES, LOAD_BUSINESS, CLEAR_BUSINESSES, CLEAR_SEARCH, CLEAR_BUSINESS, ERROR, LOAD_SEARCH, LOAD_LANDING, UPDATE_POPULATION, UPDATE_BUSINESS } from './types';
+import { LOAD_BUSINESSES, LOAD_BUSINESS, CLEAR_BUSINESSES, CLEAR_SEARCH, CLEAR_BUSINESS, ERROR, LOAD_SEARCH, NEW_SEARCH, NEW_LOCATION, LOAD_LANDING, UPDATE_POPULATION, UPDATE_BUSINESS } from './types';
 import { BASE_URL, PLACES_API_KEY, ADD_API_KEY } from '../config';
 import toQueryString from '../utils/QueryString';
 export const getBusinesses = (params) => async dispatch => {
@@ -59,17 +59,23 @@ export const getBusiness = (googleId, id) => async dispatch => {
         });
     }
 };
+export const newSearch = () => dispatch => {
+    console.log('beginning new search dispatch');
+    dispatch({
+        type: NEW_SEARCH
+    })
+}
 export const getNearby = (params, coords) => async dispatch => {
     try {
         let p = { ...params, key: PLACES_API_KEY, rankby: "distance" };
         let location = `location=${coords.latitude},${coords.longitude}`;
+        console.log('fetching search results');
         let url = `https://maps.googleapis.com/maps/api/place/nearbysearch/json?&${location}&${toQueryString(p)}&fields=formatted_address,name,place_id,opening_hours,types`;
         const res = await fetch(url, {
             method: 'GET'
         });
         const json = await res.json();
         const ids = json.results.map(x => x.place_id);
-        console.log(ids);
         const local = await fetch(`${BASE_URL}/api/business/ids`, {
             method: 'POST',
             headers: {
@@ -86,6 +92,7 @@ export const getNearby = (params, coords) => async dispatch => {
         } else {
             q = params.keyword;
         }
+        console.log('dispatching new search results');
         dispatch({
             type: LOAD_SEARCH,
             payload: { results: json.results, query: q, local: json1 }
@@ -94,11 +101,31 @@ export const getNearby = (params, coords) => async dispatch => {
         console.log(err);
     }
 };
+export const getNomatimNearby = (name, coords) => async dispatch => {
+    try {
+        console.log('getting nomatim nearby')
+        let url = `photon.komoot.de/api/?q=${name}&lat=${coords.latitude}&lon=${coords.longitude}&limit=20`;
+        console.log(url);
+        const res = await fetch(url);
+        const json = await res.json();
+        console.log(json);
+    } catch (err) {
+        console.log(err);
+    }
+}
+
+export const newLocation = () => dispatch => {
+    console.log('new location method called');
+    dispatch({
+        type: NEW_LOCATION
+    })
+}
 export const getAll = (params, coords) => async dispatch => {
     try {
         let p = { ...params, key: PLACES_API_KEY, type: "point_of_interest" };
         let location = `location=${coords.latitude},${coords.longitude}`;
         let url = `https://maps.googleapis.com/maps/api/place/nearbysearch/json?&${location}&${toQueryString(p)}&fields=formatted_address,name,place_id,opening_hours,types`;
+        console.log('fetching');
         const res = await fetch(url);
         const json = await res.json();
         const ids = json.results.map(x => x.place_id);
@@ -112,6 +139,7 @@ export const getAll = (params, coords) => async dispatch => {
             })
         });
         const json1 = await local.json();
+        console.log('dispatch getAll')
         dispatch({
             type: LOAD_LANDING,
             payload: { results: json.results, local: json1 }

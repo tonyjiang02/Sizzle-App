@@ -33,26 +33,6 @@ export const SearchLoading = ({}) => {
 
     return (
         <Animated.View onLayout={fadeIn} style={{opacity: fadeAnim}}>
-            <Outlines type='Header'></Outlines>
-            <View style={{height: 12}}></View>
-            <View style={{alignItems: 'center'}}>
-                <Outlines type="Search"></Outlines>
-                <View style={{height: 55, flexDirection: 'row'}}>
-                    <View style={{alignSelf: 'center', paddingHorizontal:5}}>
-                        <View style={{borderWidth: 0.7, borderRadius: 14, borderColor: 'gainsboro', paddingVertical: 15, paddingHorizontal: 40, backgroundColor: 'gainsboro'}}></View>
-                    </View>
-                    <View style={{alignSelf: 'center', paddingHorizontal:5}}>
-                        <View style={{borderWidth: 0.7, borderRadius: 14, borderColor: 'gainsboro', paddingVertical: 15, paddingHorizontal: 40, backgroundColor: 'gainsboro'}}></View>
-                    </View>
-                    <View style={{alignSelf: 'center', paddingHorizontal:5}}>
-                        <View style={{borderWidth: 0.7, borderRadius: 14, borderColor: 'gainsboro', paddingVertical: 15, paddingHorizontal: 40, backgroundColor: 'gainsboro'}}></View>
-                    </View>
-                    <View style={{alignSelf: 'center', paddingHorizontal:5}}>
-                        <View style={{borderWidth: 0.7, borderRadius: 14, borderColor: 'gainsboro', paddingVertical: 15, paddingHorizontal: 40, backgroundColor: 'gainsboro'}}></View>
-                    </View>
-                </View>
-                <View style={{borderBottomColor: 'gainsboro', borderBottomWidth: 0.4}}></View>
-            </View>
             <View style={{height: 5}}></View>
             <Outlines type='BusinessCard'></Outlines>
             <Outlines type='BusinessCard'></Outlines>

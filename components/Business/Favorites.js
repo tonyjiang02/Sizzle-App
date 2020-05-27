@@ -7,6 +7,7 @@ import { styles } from '../Styles';
 import Header from '../layout/Header';
 import { Octicons, Ionicons, MaterialCommunityIcons, AntDesign, FontAwesome5, MaterialIcons, FontAwesome } from '@expo/vector-icons';
 import Outlines from '../../assets/Outlines';
+import BusinessList from './BusinessList';
 
 export const Favorites = ({navigation, User}) => {
         /*const businessList = businesses.map((biz, i) => (
@@ -19,19 +20,11 @@ export const Favorites = ({navigation, User}) => {
                 <Ionicons name="md-heart" color='red' size={35} style={{ paddingLeft: 8, paddingRight: 10, paddingLeft: 2 }} />
                 <Text style={{ color: '#323131', fontSize: 24, fontFamily: 'AvenirNext-Bold' }}>Favorites</Text>
             </View>
-            <ScrollView showsVerticalScrollIndicator={false} style-={{backgroundColor: 'white'}}>
-                <View style={{height: 5}}></View>
-                <Outlines type="BusinessCard"></Outlines>
-                <Outlines type="BusinessCard"></Outlines>
-                <Outlines type="BusinessCard"></Outlines>
-                <Outlines type="BusinessCard"></Outlines>
-                <Outlines type="BusinessCard"></Outlines>
-                <Outlines type="BusinessCard"></Outlines>
-                <Outlines type="BusinessCard"></Outlines>
-                <Outlines type="BusinessCard"></Outlines>
-                <Outlines type="BusinessCard"></Outlines>
-            </ScrollView>
+            <BusinessList businesses={User.user.Favorites}></BusinessList>
         </View>
     );
 };
-export default Favorites;
+const mapStateToProps = state => ({
+    User: state.user
+});
+export default connect(mapStateToProps, {})(Favorites);

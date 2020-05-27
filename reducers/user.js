@@ -1,6 +1,7 @@
 import { LOAD_USER, LOGOUT_USER } from '../actions/types';
 const initialState = {
-    user: null
+    user: null,
+    loadingUser: true,
 };
 
 export default function (state = initialState, action) {
@@ -8,11 +9,13 @@ export default function (state = initialState, action) {
     switch (type) {
         case LOAD_USER:
             return {
-                user: payload
+                user: payload,
+                loadingUser: false
             };
         case LOGOUT_USER:
             return {
-                user: null
+                user: null,
+                loadingUser: true
             };
         default:
             return state;
