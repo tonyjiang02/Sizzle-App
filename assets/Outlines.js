@@ -19,7 +19,7 @@ const Outlines = ({ type }) => {
     }
     if (type==='Search'){
         return (
-            <View style={{height: 50, width: Dimensions.get('window').width-20, backgroundColor: 'gainsboro', borderRadius: 5}}>
+            <View style={{height: 45, width: Dimensions.get('window').width-15, backgroundColor: 'gainsboro', borderRadius: 5}}>
             </View>
         )
     }

@@ -181,7 +181,7 @@ export const Landing = ({ getRegisteredBusinesses, getAll, newSearch, navigation
                     </View>
                 </View>
             </Modal>
-            {User.loadingUser ? <View><Outlines type="Header"></Outlines><Outlines type="Search"></Outlines></View> : 
+            {User.loadingUser ? <View><Outlines type="Header"></Outlines><View style={{height: 12}}></View><View style={{alignSelf: 'center'}}><Outlines type="Search"></Outlines></View><View style={{height: 12}}></View></View> : 
             <View>
                 <Header navigation={navigation}></Header>
                 <View style={{alignItems: 'center', backgroundColor: '#ff9900'}}>
