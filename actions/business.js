@@ -124,6 +124,7 @@ export const getAll = (params, coords) => async dispatch => {
     try {
         let p = { ...params, key: PLACES_API_KEY, type: "point_of_interest" };
         let location = `location=${coords.latitude},${coords.longitude}`;
+        console.log("getAll coords" + coords.latitude + " " + coords.longitude)
         let url = `https://maps.googleapis.com/maps/api/place/nearbysearch/json?&${location}&${toQueryString(p)}&fields=formatted_address,name,place_id,opening_hours,types`;
         console.log('fetching');
         const res = await fetch(url);
@@ -139,7 +140,7 @@ export const getAll = (params, coords) => async dispatch => {
             })
         });
         const json1 = await local.json();
-        console.log('dispatch getAll')
+        console.log(json)
         dispatch({
             type: LOAD_LANDING,
             payload: { results: json.results, local: json1 }

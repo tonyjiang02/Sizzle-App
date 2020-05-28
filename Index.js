@@ -22,7 +22,7 @@ import Signup from './components/Signup';
 import CheckedIn from './components/Checkedin';
 import BusinessHistoryList from './components/Business/BusinessHistoryList';
 import Favorites from './components/Business/Favorites';
-
+import UserReservations from './components/Business/UserReservations';
 
 const Stack = createStackNavigator();
 const Index = ({ auth, User }) => {
@@ -75,6 +75,7 @@ const Index = ({ auth, User }) => {
                     <Stack.Screen name="CheckedIn" component={CheckedIn}/>
                     <Stack.Screen name="BusinessHistoryList" component={BusinessHistoryList}/>
                     <Stack.Screen name="Favorites" component={Favorites}/>
+                    <Stack.Screen name="UserReservations" component={UserReservations}/>
                 </Fragment>
             );
         }

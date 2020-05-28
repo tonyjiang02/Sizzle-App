@@ -1,6 +1,6 @@
 
 import React, { useState, useEffect } from 'react';
-import { View, TextInput, SafeAreaView, Text, Dimensions, TouchableWithoutFeedback } from 'react-native';
+import { View, TextInput, SafeAreaView, Text, Dimensions, TouchableWithoutFeedback, Alert } from 'react-native';
 import { SearchBar } from 'react-native-elements';
 import Modal from 'react-native-modal';
 import PropTypes from 'prop-types';
@@ -12,11 +12,12 @@ import { ScrollView, TouchableOpacity } from 'react-native-gesture-handler';
 import { Octicons, Ionicons, MaterialCommunityIcons, AntDesign, FontAwesome5, MaterialIcons, FontAwesome, EvilIcons, Entypo } from '@expo/vector-icons';
 import { Linking } from 'expo';
 import { logout } from '../actions/auth';
+import { updateUser} from '../actions/user';
 import { newLocation } from '../actions/business';
 import * as Location from 'expo-location';
 import {getCoords, reverseCoords } from '../utils/businessUtils';
 import { getFontSize, getIconSize } from '../utils/fontsizes';
-export const Account = ({ navigation, logout, User, newLocation }) => {
+export const Account = ({ navigation, logout, User, newLocation, updateUser }) => {
     const [FAQModalVisible, setFAQVisible] = useState(false);
     const [contactModalVisible, setContactVisible] = useState(false);
     const [locationInfoModalVisible, setLocationInfoVisible] = useState(false);
@@ -30,6 +31,10 @@ export const Account = ({ navigation, logout, User, newLocation }) => {
         navigation.navigate('Favorites', {navigation: navigation});
     }
 
+    const openUserReservations = () => {
+        navigation.navigate('UserReservations', {navigation: navigation});
+    }
+
     const emailDisplay = () => {
         if (User.loadingUser === false){
             return User.user.email;
@@ -39,7 +44,12 @@ export const Account = ({ navigation, logout, User, newLocation }) => {
     const updateLocationDisplay = async () => {
         if (User.loadingUser === false){
             console.log('refreshing loc');
-            updateLocDisplay(await reverseCoords(User.user.location.latitude, User.user.location.longitude));
+            if (User.user.location.latitude != 0 && User.user.location.latitude != 0){
+                updateLocDisplay(await reverseCoords(User.user.location.latitude, User.user.location.longitude));
+            }
+            else{
+                updateLocDisplay("Unknown/Unavailable");
+            }
         }
     }
 
@@ -48,6 +58,7 @@ export const Account = ({ navigation, logout, User, newLocation }) => {
         console.log('coords' + coords);
         User.user.location.latitude = coords.latitude;
         User.user.location.longitude = coords.longitude;
+        updateUser();
         newLocation();
         updateLocationDisplay();
     };
@@ -63,6 +74,7 @@ export const Account = ({ navigation, logout, User, newLocation }) => {
             let location = await Location.getLastKnownPositionAsync();
             User.user.location.latitude = location.coords.latitude;
             User.user.location.longitude = location.coords.longitude;
+            updateUser();
             newLocation();
         }
         else {
@@ -285,7 +297,7 @@ export const Account = ({ navigation, logout, User, newLocation }) => {
                             <Text style={{ color: '#323131', fontSize: 24, fontFamily: 'AvenirNext-Bold' }}>Favorites</Text>
                         </View>
                     </TouchableOpacity>
-                    <TouchableOpacity onPress={openCheckInHistory} style={{ padding: 10 }}>
+                    <TouchableOpacity onPress={openUserReservations} style={{ padding: 10 }}>
                         <View style={{
                             flexDirection: 'row', paddingHorizontal: 20, paddingVertical: 10, backgroundColor: 'white',
                             shadowColor: "#000", shadowOffset: { width: 0, height: 1 }, shadowOpacity: 0.22, shadowRadius: 2.22,
@@ -354,4 +366,4 @@ const mapStateToProps = state => ({
 });
 
 
-export default connect(mapStateToProps, { logout, newLocation })(Account);
+export default connect(mapStateToProps, { logout, newLocation, updateUser })(Account);

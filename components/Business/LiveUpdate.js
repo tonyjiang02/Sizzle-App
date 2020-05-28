@@ -9,12 +9,12 @@ import { Ionicons, MaterialCommunityIcons, AntDesign, FontAwesome5, MaterialIcon
 import { connect } from 'react-redux';
 import { getFontSize, getIconSize } from '../../utils/fontsizes';
 
-const LiveUpdate = ({ title, content }) => {
+const LiveUpdate = ({ title, content, time }) => {
     useEffect(() => {
         console.log(`Live Update Title: ${title} Content: ${content}`);
     }, [])
     let testTitle = title;
-    let testTime = 60;
+    let testTime = time;
     let testTimeDisplay = '';
     let testDesc = content;
 
@@ -62,17 +62,17 @@ const LiveUpdate = ({ title, content }) => {
         }
     }
     return (
-        <View style={styles.defaultView}>
-            <View style={{height: 5}}></View>
-            <View style={{ flex: 2, flexDirection: 'row', alignItems: 'baseline' }}>
+        <View>
+            <View style={{height: 10}}></View>
+            <View style={{ flexDirection: 'row', alignItems: 'baseline' }}>
                 <View style={{flex: 4}}>
                     <Text style={{ fontFamily: 'AvenirNext-Bold', fontSize: getFontSize(20), color: 'darkslategrey', paddingRight: 10 }}>{testTitle}</Text>
                 </View>
-                <View style={{flex: 1}}>
+                <View style={{flex: 1.1}}>
                     <Text style={{ fontFamily: 'AvenirNext-Italic', fontSize: getFontSize(14), color: 'darkslategrey' }}>{testTimeDisplay}</Text>
                 </View>
             </View>
-            <View style={{ flex: 5, paddingBottom: 10 }}>
+            <View style={{ paddingBottom: 10 }}>
                 <Text style={{ fontFamily: 'DamascusLight', fontSize: getFontSize(16), color: 'black' }}>{testDesc}</Text>
             </View>
             <View style={{borderTopWidth: 0.5, borderTopColor: 'gainsboro'}}></View>

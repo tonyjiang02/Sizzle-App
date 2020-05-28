@@ -136,7 +136,15 @@ const ExampleBusinessPage = () => {
 
     //Live updates display
 
-    const updates = <LiveUpdate title={'Out of Stock'} content={'Eggplants, Organic Cherries, Grade AAA Eggs'} key={1}></LiveUpdate>
+    const updates = <View>
+            <LiveUpdate title={'Out of Stock'} content={'Eggplants, Organic Cherries, Grade AAA Eggs'} time={30} key={1}></LiveUpdate>
+            <LiveUpdate title={'Closed on Monday'} content={'Memorial Day'} time={200} key={1}></LiveUpdate>
+            <LiveUpdate title={'Deals'} content={'All dairy products are half off.'} time={200} key={1}></LiveUpdate>
+            <LiveUpdate title={'Out of Stock'} content={'Paper towels'} time={1000} key={1}></LiveUpdate>
+            <LiveUpdate title={'FLASH SALE'} content={'Storewide 20% off today (some exclusions apply).'} time={8000} key={1}></LiveUpdate>
+            <LiveUpdate title={'Out of Stock'} content={'Eggplants, Organic Cherries, Grade AAA Eggs'} time={14000} key={1}></LiveUpdate>
+            <LiveUpdate title={'Out of Stock'} content={'Eggplants, Organic Cherries, Grade AAA Eggs'} key={1}></LiveUpdate>
+        </View>
 
     return (
         <View style={styles.landing}>
@@ -162,40 +170,6 @@ const ExampleBusinessPage = () => {
                         <TouchableWithoutFeedback>
                             <View>
                                 {updates}
-                            </View>
-                        </TouchableWithoutFeedback>
-                    </ScrollView>
-                </View>
-            </Modal>
-
-            <Modal
-                propagateSwipe={true}
-                isVisible={reservationsModalVisible}
-                coverScreen={false}
-                backdropColor={"white"}
-                backdropOpacity={0.8}
-                animationIn={'slideInLeft'}
-                animationOut={'slideOutLeft'}
-                animationInTiming={500}
-                swipeDirection={['left']}
-                onSwipeComplete={(e) => { if (e.swipingDirection === 'left') setReservationsVisible(false); }}
-            >
-                <View style={styles.reservationsModalView}>
-                    <TouchableOpacity onPress={() => { setReservationsVisible(false); }}>
-                        <View style={{ height: 10 }}></View>
-                        <AntDesign name='leftcircle' color='green' size={getIconSize(19)} style={{ alignSelf: 'center' }}></AntDesign>
-                        <Text style={{ color: 'green', fontSize: getFontSize(24), fontFamily: 'Avenir-Heavy', paddingBottom: 10 }}>Reservations</Text>
-                    </TouchableOpacity>
-                    <ScrollView showsVerticalScrollIndicator={false}>
-                        <TouchableWithoutFeedback>
-                            <View>
-                                <ReservationScroll></ReservationScroll>
-                                <ReservationScroll></ReservationScroll>
-                                <ReservationScroll></ReservationScroll>
-                                <ReservationScroll></ReservationScroll>
-                                <ReservationScroll></ReservationScroll>
-                                <ReservationScroll></ReservationScroll>
-                                <ReservationScroll></ReservationScroll>
                             </View>
                         </TouchableWithoutFeedback>
                     </ScrollView>
@@ -303,7 +277,7 @@ const ExampleBusinessPage = () => {
                             </TouchableOpacity>
                             <View style={{ flex: 4 }}>
                                 <View>
-                                    <ReservationScroll style={{ alignItems: 'flex-start' }}></ReservationScroll>
+                                    <ReservationScroll reservationLimit={50}></ReservationScroll>
                                 </View>
                             </View>
                         </View>

@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { View, TextInput, SafeAreaView, Text, TouchableWithoutFeedback, Animated } from 'react-native';
+import { View, TextInput, SafeAreaView, Text, TouchableWithoutFeedback, Animated, Alert } from 'react-native';
 import Modal from 'react-native-modal';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
@@ -49,7 +49,13 @@ export const Landing = ({ getRegisteredBusinesses, getAll, newSearch, navigation
             else {
                 console.log("Location permissions not granted.");
                 setLocPermission(false);
-                getAll({ radius: 2000 }, User.user.location);
+                if (User.user.location.latitude === 0 && User.user.location.longitude === 0){
+                    Alert.alert("Please set your location through the Account page or share your location with Sizzle to see nearby locations. ")
+                }
+                else{
+                    console.log('getting all with manual location');
+                    getAll({radius: 2000}, User.user.location);
+                }
             }
         }
         if (!User.loadingUser){
