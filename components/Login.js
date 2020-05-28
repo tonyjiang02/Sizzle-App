@@ -20,7 +20,7 @@ const Login = ({ login, auth1, business, navigation }) => {
     };
     return (
         <LinearGradient
-            colors={['#ff9900', '#FFDF7D', '#AED6FB', '#A38EFA']}
+            colors={['#ff9900', '#ff5f6d']}
             style={{ flex: 1 }}
         >
             <KeyboardAvoidingView style={{ flex: 1, alignItems: 'center', paddingTop: 50 }}>
@@ -59,10 +59,10 @@ const Login = ({ login, auth1, business, navigation }) => {
                             </TouchableOpacity>
                             <View style={{ height: 115, borderBottomColor: 'gainsboro', borderBottomWidth: 0.7 }}></View>
                             <View style={{ height: 20 }}></View>
-                            <View style={{ flexDirection: 'row', justifyContent: 'center' }}>
+                            <View style={{ flexDirection: 'row', justifyContent: 'center', alignItems: 'center' }}>
                                 <Text style={{ fontFamily: 'Avenir-Light', fontSize: 20, color: 'white' }}>New user? </Text>
                                 <TouchableOpacity onPress={() => navigateSignup()}>
-                                    <Text style={{ fontFamily: 'Avenir-Light', fontSize: 18, color: 'orangered', fontWeight: 'bold' }}>Sign Up</Text>
+                                    <Text style={{ fontFamily: 'Avenir-Light', fontSize: 18, color: 'white', fontWeight: 'bold' }}>Sign Up</Text>
                                 </TouchableOpacity>
                             </View>
                             <View style={{height: 10}}></View>

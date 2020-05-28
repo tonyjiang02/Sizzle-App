@@ -23,7 +23,7 @@ const Signup = ({ navigation, signup }) => {
     const { email, password, password2 } = fields;
     return (
         <LinearGradient
-            colors={['#ff9900', '#FFDF7D', '#AED6FB', '#A38EFA']}
+            colors={['#ff9900', '#ff5f6d']}
             style={{ flex: 1 }}
         >
             <KeyboardAvoidingView style={{ flex: 1, alignItems: 'center', paddingTop: 50 }}>
@@ -73,10 +73,10 @@ const Signup = ({ navigation, signup }) => {
                             </TouchableOpacity>
                             <View style={{ height: 50, borderBottomColor: 'gainsboro', borderBottomWidth: 0.7 }}></View>
                             <View style={{ height: 20 }}></View>
-                            <View style={{ flexDirection: 'row', justifyContent: 'center' }}>
+                            <View style={{ flexDirection: 'row', justifyContent: 'center', alignItems: 'center' }}>
                                 <Text style={{ fontFamily: 'Avenir-Light', fontSize: 20, color: 'white' }}>Returning user? </Text>
                                 <TouchableOpacity onPress={() => navigateLogin()}>
-                                    <Text style={{ fontFamily: 'Avenir-Light', fontSize: 18, color: 'orangered', fontWeight: 'bold' }}>Log In</Text>
+                                    <Text style={{ fontFamily: 'Avenir-Light', fontSize: 18, color: 'white', fontWeight: 'bold' }}>Log In</Text>
                                 </TouchableOpacity>
                             </View>
                             <View style={{height: 10}}></View>
