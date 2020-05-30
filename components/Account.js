@@ -12,12 +12,12 @@ import { ScrollView, TouchableOpacity } from 'react-native-gesture-handler';
 import { Octicons, Ionicons, MaterialCommunityIcons, AntDesign, FontAwesome5, MaterialIcons, FontAwesome, EvilIcons, Entypo } from '@expo/vector-icons';
 import { Linking } from 'expo';
 import { logout } from '../actions/auth';
-import { updateUser} from '../actions/user';
-import { newLocation } from '../actions/business';
+import { updateUser, updateUserRedux } from '../actions/user';
+import { newLocation, origLocation } from '../actions/business';
 import * as Location from 'expo-location';
 import {getCoords, reverseCoords } from '../utils/businessUtils';
 import { getFontSize, getIconSize } from '../utils/fontsizes';
-export const Account = ({ navigation, logout, User, newLocation, updateUser }) => {
+export const Account = ({ navigation, logout, User, newLocation, updateUser, origLocation, updateUserRedux }) => {
     const [FAQModalVisible, setFAQVisible] = useState(false);
     const [contactModalVisible, setContactVisible] = useState(false);
     const [locationInfoModalVisible, setLocationInfoVisible] = useState(false);
@@ -45,7 +45,18 @@ export const Account = ({ navigation, logout, User, newLocation, updateUser }) =
         if (User.loadingUser === false){
             console.log('refreshing loc');
             if (User.user.location.latitude != 0 && User.user.location.latitude != 0){
-                updateLocDisplay(await reverseCoords(User.user.location.latitude, User.user.location.longitude));
+                let reverse = await reverseCoords(User.user.location.latitude, User.user.location.longitude);
+                let city = "";
+                let county = "";
+                let state="";
+                if (typeof reverse.address.city !== 'undefined'){
+                    city = reverse.address.city + ", "
+                }
+                if (typeof reverse.address.county !== 'undefined'){
+                    county = reverse.address.county + ", "
+                }
+                let display = city + county + reverse.address.state;
+                updateLocDisplay(display);
             }
             else{
                 updateLocDisplay("Unknown/Unavailable");
@@ -58,7 +69,7 @@ export const Account = ({ navigation, logout, User, newLocation, updateUser }) =
         console.log('coords' + coords);
         User.user.location.latitude = coords.latitude;
         User.user.location.longitude = coords.longitude;
-        updateUser();
+        updateUserRedux();
         newLocation();
         updateLocationDisplay();
     };
@@ -74,8 +85,8 @@ export const Account = ({ navigation, logout, User, newLocation, updateUser }) =
             let location = await Location.getLastKnownPositionAsync();
             User.user.location.latitude = location.coords.latitude;
             User.user.location.longitude = location.coords.longitude;
-            updateUser();
-            newLocation();
+            updateUserRedux();
+            origLocation();
         }
         else {
             Alert.alert('Location Permissions not granted. To see nearby businesses from your current location, please either allow location permissions or enter your current location in the "Set Location" search bar.');
@@ -366,4 +377,4 @@ const mapStateToProps = state => ({
 });
 
 
-export default connect(mapStateToProps, { logout, newLocation, updateUser })(Account);
+export default connect(mapStateToProps, { logout, newLocation, updateUser, origLocation, updateUserRedux })(Account);

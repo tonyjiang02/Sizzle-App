@@ -28,6 +28,26 @@ const Searching = ({ getNearby, newSearch, route: { params: { query, location } 
         return 1.6 * miles;
     };
 
+    //Search loading stuff
+    let results = <SearchLoading />;
+    if (business.loadingSearch === true) {
+        results = <SearchLoading></SearchLoading>;
+    }
+    else if (business.loadingSearch === false) {
+        results = <View style={{ flex: 1 }}>
+            <BusinessList type='search' navigation={navigation}></BusinessList>
+        </View>;
+    }
+
+    useEffect(() => {
+        //TODO Only add search results to state pressing the search bar again
+        if (query) {
+            getNearby({ keyword: query }, location);
+        } else {
+            getNearby();
+        }
+    }, []);
+
     const newQuery = function (input) {
         newSearch();
         getNearby({ keyword: input }, location);
@@ -78,25 +98,6 @@ const Searching = ({ getNearby, newSearch, route: { params: { query, location } 
             </View>;
     }
 
-    //Search loading stuff
-    let results = <SearchLoading />;
-    if (business.loadingSearch === true) {
-        results = <SearchLoading></SearchLoading>;
-    }
-    else if (business.loadingSearch === false) {
-        results = <View style={{ flex: 1 }}>
-            <BusinessList navigation={navigation}></BusinessList>
-        </View>;
-    }
-
-    useEffect(() => {
-        //TODO Only add search results to state pressing the search bar again
-        if (query) {
-            getNearby({ keyword: query }, location);
-        } else {
-            getNearby();
-        }
-    }, []);
     return (
         <View style={styles.landing}>
             <Header navigation={navigation}></Header>

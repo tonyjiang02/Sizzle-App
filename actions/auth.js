@@ -18,6 +18,7 @@ export const login = (email, password) => async (dispatch, getState) => {
             })
         });
         const data = await res.json();
+        console.log(data);
         dispatch({
             type: LOGIN_SUCCESS,
             payload: data

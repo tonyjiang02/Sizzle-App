@@ -1,4 +1,4 @@
-import { LOAD_BUSINESSES, LOAD_BUSINESS, CLEAR_BUSINESSES, CLEAR_SEARCH, CLEAR_BUSINESS, ERROR, LOAD_SEARCH, NEW_SEARCH, NEW_LOCATION, LOAD_LANDING, UPDATE_POPULATION, UPDATE_BUSINESS } from './types';
+import { LOAD_BUSINESSES, LOAD_BUSINESS, CLEAR_BUSINESSES, CLEAR_SEARCH, CLEAR_BUSINESS, ERROR, LOAD_SEARCH, LOAD_NEAREST, LOAD_FILTER, NEW_FILTER, NEW_SEARCH, NEW_LOCATION, LOAD_LANDING, UPDATE_POPULATION, UPDATE_BUSINESS, OLD_LOCATION, ORIG_LOCATION, ALLOW_LOC } from './types';
 import { BASE_URL, PLACES_API_KEY, ADD_API_KEY } from '../config';
 import toQueryString from '../utils/QueryString';
 export const getBusinesses = (params) => async dispatch => {
@@ -60,16 +60,31 @@ export const getBusiness = (googleId, id) => async dispatch => {
     }
 };
 export const newSearch = () => dispatch => {
-    console.log('beginning new search dispatch');
+    console.log('new search dispatch');
     dispatch({
         type: NEW_SEARCH
     })
 }
+
+export const newFilter = () => dispatch => {
+    console.log('new filter dispatch');
+    dispatch({
+        type: NEW_FILTER
+    })
+}
+
+export const loadFilter = () => dispatch => {
+    console.log('load filter dispatch');
+    dispatch({
+        type: LOAD_FILTER
+    })
+}
+
 export const getNearby = (params, coords) => async dispatch => {
     try {
         let p = { ...params, key: PLACES_API_KEY, rankby: "distance" };
         let location = `location=${coords.latitude},${coords.longitude}`;
-        console.log('fetching search results');
+        console.log('fetching search results from: ' + location);
         let url = `https://maps.googleapis.com/maps/api/place/nearbysearch/json?&${location}&${toQueryString(p)}&fields=formatted_address,name,place_id,opening_hours,types`;
         const res = await fetch(url, {
             method: 'GET'
@@ -120,13 +135,28 @@ export const newLocation = () => dispatch => {
         type: NEW_LOCATION
     })
 }
+
+export const oldLocation = () => dispatch => {
+    console.log('old location method called');
+    dispatch({
+        type: OLD_LOCATION
+    })
+}
+
+export const origLocation = () => dispatch => {
+    console.log('old location method called');
+    dispatch({
+        type: ORIG_LOCATION
+    })
+}
+
 export const getAll = (params, coords) => async dispatch => {
     try {
+        console.log('getAll called');
         let p = { ...params, key: PLACES_API_KEY, type: "point_of_interest" };
         let location = `location=${coords.latitude},${coords.longitude}`;
-        console.log("getAll coords" + coords.latitude + " " + coords.longitude)
+        console.log("getAll coords: " + coords.latitude + " " + coords.longitude)
         let url = `https://maps.googleapis.com/maps/api/place/nearbysearch/json?&${location}&${toQueryString(p)}&fields=formatted_address,name,place_id,opening_hours,types`;
-        console.log('fetching');
         const res = await fetch(url);
         const json = await res.json();
         const ids = json.results.map(x => x.place_id);
@@ -140,9 +170,35 @@ export const getAll = (params, coords) => async dispatch => {
             })
         });
         const json1 = await local.json();
-        console.log(json)
         dispatch({
             type: LOAD_LANDING,
+            payload: { results: json.results, local: json1 }
+        });
+    } catch (err) {
+        console.log(err);
+    }
+};
+export const getNearest = (params, coords) => async dispatch => {
+    try {
+        console.log('getNearest called');
+        let p = { ...params, key: PLACES_API_KEY, type: "point_of_interest" };
+        let location = `location=${coords.latitude},${coords.longitude}`;
+        let url = `https://maps.googleapis.com/maps/api/place/nearbysearch/json?&${location}&${toQueryString(p)}&fields=formatted_address,name,place_id,opening_hours,types`;
+        const res = await fetch(url);
+        const json = await res.json();
+        const ids = json.results.map(x => x.place_id);
+        const local = await fetch(`${BASE_URL}/api/business/ids`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+                ids: ids
+            })
+        });
+        const json1 = await local.json();
+        dispatch({
+            type: LOAD_NEAREST,
             payload: { results: json.results, local: json1 }
         });
     } catch (err) {
