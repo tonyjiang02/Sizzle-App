@@ -1,12 +1,13 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { View, TextInput, SafeAreaView, Text, TouchableWithoutFeedback, Animated, Alert } from 'react-native';
+import { View, TextInput, SafeAreaView, Text, TouchableWithoutFeedback, Animated, Alert, RefreshControl } from 'react-native';
 import Modal from 'react-native-modal';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { styles, input } from '../Styles';
 import { SearchBar } from 'react-native-elements';
 import { getStatusBarHeight } from 'react-native-status-bar-height';
-import { getRegisteredBusinesses, getNearby, getAll, getGeoLocation, resetLocation, newSearch, getNomatimNearby } from '../../actions/business';
+import { getRegisteredBusinesses, getNearby, getAll, getGeoLocation, resetLocation, newSearch, getNomatimNearby, oldLocation, origLocation } from '../../actions/business';
+import { updateUserRedux, locPermissionChange } from '../../actions/user';
 import Loading from '../layout/Loading';
 import LandingLoading from '../layout/LandingLoading';
 import BusinessList from './BusinessList';
@@ -20,7 +21,7 @@ import { Dimensions } from 'react-native';
 import Outlines from '../../assets/Outlines';
 import { getFontSize, getIconSize } from '../../utils/fontsizes';
 
-export const Landing = ({ getRegisteredBusinesses, getAll, newSearch, navigation, businesses, loadingAll, dbBusinesses, firstTime, User }) => { 
+export const Landing = ({ getRegisteredBusinesses, getAll, newSearch, navigation, businesses, loadingAll, dbBusinesses, oldLocation, origLocation, firstTime, User, updateUserRedux, locPermissionChange }) => { 
     const [location, setLocation] = useState(null);
     const [locPermission, setLocPermission] = useState(false);
     const [userCoords, setUserCoords] = useState(null);
@@ -29,6 +30,8 @@ export const Landing = ({ getRegisteredBusinesses, getAll, newSearch, navigation
     const [sorted, updateSorted] = useState(null);
     const [sorting, updateSorting] = useState(true);
     const [introModalVisible, setIntroVisible] = useState(firstTime);
+    const [noLocation, setNoLocation] = useState(false);
+    const [refreshing, setRefreshing] = useState(false);
 
     let searchRef = React.createRef();
 
@@ -37,6 +40,7 @@ export const Landing = ({ getRegisteredBusinesses, getAll, newSearch, navigation
             console.log("Asking Location Permissions");
             let response = await Location.requestPermissionsAsync();
             if (response.granted) {
+                locPermissionChange(true);
                 setLocPermission(true);
                 let location = await Location.getLastKnownPositionAsync();
                 let coords = location.coords;
@@ -44,17 +48,20 @@ export const Landing = ({ getRegisteredBusinesses, getAll, newSearch, navigation
                 setLocation(location);
                 User.user.location.latitude = coords.latitude;
                 User.user.location.longitude = coords.longitude;
-                getAll({ radius: 2000 }, location.coords);
+                //updateUserRedux();
+                getAll({radius: 5000}, coords);
             } 
             else {
+                locPermissionChange(false);
                 console.log("Location permissions not granted.");
                 setLocPermission(false);
                 if (User.user.location.latitude === 0 && User.user.location.longitude === 0){
-                    Alert.alert("Please set your location through the Account page or share your location with Sizzle to see nearby locations. ")
+                    setNoLocation(true);
+                    Alert.alert("Please set your location through the Account page or share your location with Sizzle to see nearby locations. ");
                 }
                 else{
                     console.log('getting all with manual location');
-                    getAll({radius: 2000}, User.user.location);
+                    getAll({radius: 5000}, User.user.location);
                 }
             }
         }
@@ -66,17 +73,66 @@ export const Landing = ({ getRegisteredBusinesses, getAll, newSearch, navigation
         if (!loadingAll) {
             sort();
         }
-        if (loadingAll===true && User.loadingUser===false){
-            getAll({ radius: 2000 }, User.user.location);
+    }, [loadingAll]);
+
+    useEffect(() => {
+        if (User.newLocationSet === true && User.loadingUser === false){
+            setNoLocation(false);
+            oldLocation();
+            getAll({radius: 5000}, User.user.location);
         }
-    }, [businesses, loadingAll, dbBusinesses]);
+    }, [User.newLocationSet])
+
+    //refreshing
+    function wait(timeout) {
+        return new Promise(resolve => {
+          setTimeout(resolve, timeout);
+        });
+      }
+    const refresh = async function() {
+        console.log('refresh called');
+        setRefreshing(true);
+        console.log("Asking Location Permissions");
+        let response = await Location.requestPermissionsAsync();
+        if (response.granted) {
+            setLocPermission(true);
+            let location = await Location.getLastKnownPositionAsync();
+            let coords = location.coords;
+            setUserCoords(coords);
+            setLocation(location);
+            User.user.location.latitude = coords.latitude;
+            User.user.location.longitude = coords.longitude;
+            updateUserRedux();
+            origLocation();
+            getAll({radius: 5000}, coords);
+        } 
+        else {
+            console.log("Location permissions not granted.");
+            setLocPermission(false);
+            if (User.user.location.latitude === 0 && User.user.location.longitude === 0){
+                setNoLocation(true);
+                Alert.alert("Please set your location through the Account page or share your location with Sizzle to see nearby locations. ");
+            }
+            else{
+                console.log('getting all with manual location');
+                getAll({radius: 5000}, User.user.location);
+            }
+        }
+        wait(2000).then(() => setRefreshing(false));
+    }
 
     const sort = function () {
         let s = {
-            restaurant: [],
-            cafe: [],
-            park: [],
-            tourist_attraction: [],
+            food: [],
+            grocery: [],
+            supply: [],
+            store: [],
+            services: [],
+            public: [],
+            attraction: [],
+            entertainment: [],
+            recreation: [],
+            travel: [],
             place_of_worship: [],
             health: [],
             other: [],
@@ -84,11 +140,56 @@ export const Landing = ({ getRegisteredBusinesses, getAll, newSearch, navigation
         for (let k = 0; k < businesses.length; k++) {
             let placed = false;
             for (let i = 0; i < businesses[k].types.length; i++) {
-                if (s[businesses[k].types[i]]) {
+                if (placed === false && (businesses[k].types[i] === 'restaurants' || businesses[k].types[i] === 'bakery' || businesses[k].types[i] === 'cafe' || businesses[k].types[i] === 'night_club' || businesses[k].types[i] === 'bar')){
+                    s.food.push({ business: businesses[k], db: dbBusinesses[k]});
                     placed = true;
-                    s[businesses[k].types[i]].push({ business: businesses[k], db: dbBusinesses[k] });
-                } else {
-                    if (!placed) s.other.push({ business: businesses[k], db: dbBusinesses[k] });
+                }
+                else if (placed === false && (businesses[k].types[i] === 'supermarket' || businesses[k].types[i] === 'drugstore' || businesses[k].types[i] === 'convenience_store' || businesses[k].types[i] === 'liquor_store')){
+                    s.grocery.push({business: businesses[k], db: dbBusinesses[k]});
+                    placed = true;
+                }
+                else if (placed === false && (businesses[k].types[i] === 'bicycle_store' || businesses[k].types[i] === 'electronics_store' || businesses[k].types[i] === 'hardware_store' || businesses[k].types[i] === 'furniture_store' || businesses[k].types[i] === 'home_goods_store')){
+                    s.supply.push({business: businesses[k], db: dbBusinesses[k]});
+                    placed = true;
+                }
+                else if (placed === false && (businesses[k].types[i] === 'book_store' || businesses[k].types[i] === 'clothing_store' || businesses[k].types[i] === 'department_store' || businesses[k].types[i] === 'liquor_store' || businesses[k].types[i] === 'store' || businesses[k].types[i] === 'gas_station')){
+                    s.store.push({business: businesses[k], db: dbBusinesses[k]});
+                    placed = true;
+                }
+                else if (placed === false && (businesses[k].types[i] === 'car_dealer' || businesses[k].types[i] === 'car_rental' || businesses[k].types[i] === 'car_repair' || businesses[k].types[i] === 'car_wash' || businesses[k].types[i] === 'hair_care' || businesses[k].types[i] === 'lawyer' || businesses[k].types[i] === 'laundry' || businesses[k].types[i] === 'insurance_agency' || businesses[k].types[i] === 'locksmith' || businesses[k].types[i] === 'movie_rental' || businesses[k].types[i] === 'moving_company' || businesses[k].types[i] === 'painter' || businesses[k].types[i] === 'plumber' || businesses[k].types[i] === 'post_office' || businesses[k].types[i] === 'real_estate_agency' || businesses[k].types[i] === 'roofing_contractor' || businesses[k].types[i] === 'storage' || businesses[k].types[i] === 'travel_agency')){
+                    s.services.push({business: businesses[k], db: dbBusinesses[k]});
+                    placed = true;
+                }
+                else if (placed === false && (businesses[k].types[i] === 'city_hall' || businesses[k].types[i] === 'embassy' || businesses[k].types[i] === 'courthouse' || businesses[k].types[i] === 'fire_station' || businesses[k].types[i] === 'library' || businesses[k].types[i] === 'local_government_office' || businesses[k].types[i] === 'police')){
+                    s.public.push({business: businesses[k], db: dbBusinesses[k]});
+                    placed = true;
+                }
+                else if (placed === false && (businesses[k].types[i] === 'aquarium' || businesses[k].types[i] === 'art_gallery' || businesses[k].types[i] === 'museum' || businesses[k].types[i] === 'zoo' || businesses[k].types[i] === 'tourist_attraction')){
+                    s.attraction.push({business: businesses[k], db: dbBusinesses[k]});
+                    placed = true;
+                }
+                else if (placed === false && (businesses[k].types[i] === 'amusement_park' || businesses[k].types[i] === 'bowling_alley' || businesses[k].types[i] === 'casino')){
+                    s.entertainment.push({business: businesses[k], db: dbBusinesses[k]});
+                    placed = true;
+                }
+                else if (placed === false && (businesses[k].types[i] === 'airport' || businesses[k].types[i] === 'bus_station' || businesses[k].types[i] === 'light_rail_station' || businesses[k].types[i] === 'subway_station' || businesses[k].types[i] === 'taxi_stand' || businesses[k].types[i] === 'transit_station')){
+                    s.travel.push({business: businesses[k], db: dbBusinesses[k]});
+                    placed = true;
+                }
+                else if (placed === false && (businesses[k].types[i] === 'school' || businesses[k].types[i] === 'park' || businesses[k].types[i] === 'stadium' )){
+                    s.recreation.push({business: businesses[k], db: dbBusinesses[k]});
+                    placed = true;
+                }
+                else if (placed === false && (businesses[k].types[i] === 'mosque' || businesses[k].types[i] === 'church' || businesses[k].types[i] === 'hindu_temple' || businesses[k].types[i] === 'synagogue')){
+                    s.place_of_worship.push({business: businesses[k], db: dbBusinesses[k]});
+                    placed = true;
+                }
+                else if (placed === false && (businesses[k].types[i] === 'dentist' || businesses[k].types[i] === 'doctor' || businesses[k].types[i] === 'gym' || businesses[k].types[i] === 'spa' || businesses[k].types[i] === 'veterinary_care' || businesses[k].types[i] === 'hospital')){
+                    s.health.push({business: businesses[k], db: dbBusinesses[k]});
+                    placed = true;
+                }
+                else if (i === businesses[k].types.length-1 && placed===false){
+                    s.other.push({business: businesses[k], db: dbBusinesses[k]});
                     placed = true;
                 }
             }
@@ -98,7 +199,7 @@ export const Landing = ({ getRegisteredBusinesses, getAll, newSearch, navigation
     };
     const query = function (input) {
         newSearch();
-        navigation.navigate('Searching', { query: input, location: userCoords });
+        navigation.navigate('Searching', { query: input, location: User.user.location });
     };
 
     return (
@@ -219,21 +320,31 @@ export const Landing = ({ getRegisteredBusinesses, getAll, newSearch, navigation
             </View>
             }
             <View style={{ borderBottomColor: 'gainsboro', borderBottomWidth: 0.7 }}></View>
-            {loadingAll || sorting ? <LandingLoading /> :
-                <View>
-                    <ScrollView showsVerticalScrollIndicator={false}>
-                        <BusinessSideScroll businesses={sorted.restaurant} category={'Restaurants'} navigation={navigation}></BusinessSideScroll>
-                        <BusinessSideScroll businesses={sorted.cafe} category={'Cafes'} navigation={navigation}></BusinessSideScroll>
-                        <BusinessSideScroll businesses={sorted.park} category={'Parks'} navigation={navigation}></BusinessSideScroll>
-                        <BusinessSideScroll businesses={sorted.tourist_attraction} category={'Attractions'} navigation={navigation}></BusinessSideScroll>
-                        <BusinessSideScroll businesses={sorted.place_of_worship} category={'Places of Worship'} navigation={navigation}></BusinessSideScroll>
-                        <BusinessSideScroll businesses={sorted.health} category={'Health'} navigation={navigation}></BusinessSideScroll>
-                        <BusinessSideScroll businesses={sorted.other} category={'Other'} navigation={navigation}></BusinessSideScroll>
-                        <Text style={{ padding: 85, backgroundColor: '#f2f2f2' }}></Text>
-                        <View style={{height: 50}}></View>
-                    </ScrollView>
-                </View>
-            }
+            {noLocation ? <View style={{height: Dimensions.get('window').height, paddingHorizontal: 10}}><Text style={{fontFamily: 'Avenir-Light', paddingTop: 20}}>No location found. Set your location through 
+            the Account page or allow Sizzle to access your location by changing your device's settings.</Text></View> : <View>
+                {loadingAll || sorting ? <LandingLoading /> :
+                    <View>
+                        <ScrollView showsVerticalScrollIndicator={false}>
+                            <RefreshControl refreshing={refreshing} onRefresh={refresh} />
+                            <BusinessSideScroll key={1} businesses={sorted.food} category={'Restaurants, Cafes, and Bars'} navigation={navigation}></BusinessSideScroll>
+                            <BusinessSideScroll key={2} businesses={sorted.grocery} category={'Groceries'} navigation={navigation}></BusinessSideScroll>
+                            <BusinessSideScroll key={3} businesses={sorted.supply} category={'Supplies'} navigation={navigation}></BusinessSideScroll>
+                            <BusinessSideScroll key={4} businesses={sorted.store} category={'Stores'} navigation={navigation}></BusinessSideScroll>
+                            <BusinessSideScroll key={5} businesses={sorted.services} category={'Services'} navigation={navigation}></BusinessSideScroll>
+                            <BusinessSideScroll key={6} businesses={sorted.public} category={'Public'} navigation={navigation}></BusinessSideScroll>
+                            <BusinessSideScroll key={7} businesses={sorted.attraction} category={'Attractions'} navigation={navigation}></BusinessSideScroll>
+                            <BusinessSideScroll key={8} businesses={sorted.entertainment} category={'Entertainment'} navigation={navigation}></BusinessSideScroll>
+                            <BusinessSideScroll key={9} businesses={sorted.recreation} category={'Recreation'} navigation={navigation}></BusinessSideScroll>
+                            <BusinessSideScroll key={10} businesses={sorted.travel} category={'Travel'} navigation={navigation}></BusinessSideScroll>
+                            <BusinessSideScroll key={11} businesses={sorted.place_of_worship} category={'Places of Worship'} navigation={navigation}></BusinessSideScroll>
+                            <BusinessSideScroll key={12} businesses={sorted.health} category={'Health'} navigation={navigation}></BusinessSideScroll>
+                            <BusinessSideScroll key={13} businesses={sorted.other} category={'Other'} navigation={navigation}></BusinessSideScroll>
+                            <Text style={{ padding: 85, backgroundColor: '#f2f2f2' }}></Text>
+                            <View style={{height: 50}}></View>
+                        </ScrollView>
+                    </View>
+                }
+            </View>}
         </View>
     );
 };
@@ -245,4 +356,4 @@ const mapStateToProps = state => ({
     User: state.user
 });
 
-export default connect(mapStateToProps, { getRegisteredBusinesses, getAll, newSearch, getNomatimNearby })(Landing);
+export default connect(mapStateToProps, { getRegisteredBusinesses, getAll, newSearch, getNomatimNearby, oldLocation, updateUserRedux, origLocation, locPermissionChange })(Landing);
