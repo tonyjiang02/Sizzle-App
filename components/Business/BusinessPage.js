@@ -41,7 +41,7 @@ const BusinessPage = ({ route: { params: { business, db } }, checkIn, auth, upda
     //destructuring
     let { vicinity, geometry } = business;
     const [data, setData] = useState(dbBusiness);
-    let { _id, name, owner, googleId, publicId, isVerified, images, coverImageUrl, website, phone, address, openStatus, hours, description, population, reservations, announcements, reservationLimit } = data;
+    let { _id, name, owner, googleId, publicId, isVerified, images, coverImageUrl, website, phone, address, openStatus, hours, description, population, reservations, announcements, reservationLimit, covid19Information } = data;
     let location = geometry.location;
     let user = User.user;
     let updated = false;
@@ -49,6 +49,7 @@ const BusinessPage = ({ route: { params: { business, db } }, checkIn, auth, upda
     //modals
     const [liveUpdatesModalVisible, setLiveUpdatesVisible] = useState(false);
     const [reservationsModalVisible, setReservationsVisible] = useState(false);
+    const [covidModalVisible, setCovidModalVisible] = useState(false);
     const [livePopulation, setLivePopulation] = useState(population);
     //backend
     const onPressCheckIn = async () => {
@@ -130,9 +131,15 @@ const BusinessPage = ({ route: { params: { business, db } }, checkIn, auth, upda
     const [currentDay, setDay] = useState(weekMap[currentDate.getDay()]);
     const [currentReservations, setReservations] = useState({ ...reservations });
     const reserveSpot = (i, day) => {
-        reservations[day][i].users.push(user._id);
+        user.reservations.push({
+            business: _id,
+            businessName: name,
+            time: reservations[day][i].slot
+        });
         //TODO : add reservation to users array 
+        reservations[day][i].users += 1;
         businessUpdated = true;
+        updated = true;
         setReservations({ ...reservations });
     };
     //map
@@ -238,7 +245,33 @@ const BusinessPage = ({ route: { params: { business, db } }, checkIn, auth, upda
                     </ScrollView>
                 </View>
             </Modal>
-
+            <Modal
+                propagateSwipe={true}
+                isVisible={covidModalVisible}
+                coverScreen={false}
+                backdropColor={"white"}
+                backdropOpacity={0.8}
+                animationIn={'slideInLeft'}
+                animationOut={'slideOutLeft'}
+                animationInTiming={500}
+                swipeDirection={['left']}
+                onSwipeComplete={(e) => { if (e.swipingDirection === 'left') setCovidModalVisible(false); }}
+            >
+                <View style={styles.liveUpdatesModalView}>
+                    <TouchableOpacity onPress={() => { setCovidModalVisible(false); }}>
+                        <View style={{ height: 10 }}></View>
+                        <AntDesign name='leftcircle' color='red' size={getIconSize(19)} style={{ alignSelf: 'center' }}></AntDesign>
+                        <Text style={{ color: 'red', fontSize: getFontSize(24), fontFamily: 'Avenir-Heavy', paddingBottom: 10 }}>Covid-19 Information</Text>
+                    </TouchableOpacity>
+                    <ScrollView showsVerticalScrollIndicator={false}>
+                        <TouchableWithoutFeedback>
+                            <Text>
+                                {covid19Information}
+                            </Text>
+                        </TouchableWithoutFeedback>
+                    </ScrollView>
+                </View>
+            </Modal>
             <Modal
                 propagateSwipe={true}
                 isVisible={reservationsModalVisible}
@@ -331,7 +364,7 @@ const BusinessPage = ({ route: { params: { business, db } }, checkIn, auth, upda
                             <Text style={{ color: 'black', fontFamily: 'Avenir-Light' }}>Call</Text>
                         </TouchableOpacity>
                     </View>
-                    <TouchableOpacity>
+                    {(covid19Information != '') && <TouchableOpacity onPress={() => setCovidModalVisible(true)}>
                         <View style={{ paddingHorizontal: 15, height: 140, backgroundColor: '#FDDFDF', borderLeftWidth: 5, borderLeftColor: 'red' }}>
                             <View style={{ flexDirection: 'row', paddingTop: 5 }}>
                                 <Ionicons name='md-warning' color='red' size={getIconSize(21)} style={{ paddingRight: 10, paddingLeft: 10 }} />
@@ -342,7 +375,8 @@ const BusinessPage = ({ route: { params: { business, db } }, checkIn, auth, upda
                                 This business has certain guidelines for its customers. Press on this card for more details.
                             </Text>
                         </View>
-                    </TouchableOpacity>
+                    </TouchableOpacity>}
+
                 </View>
 
                 <View style={{ paddingTop: 15, paddingBottom: 12, paddingHorizontal: 8 }}>
