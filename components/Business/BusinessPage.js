@@ -27,6 +27,7 @@ import { LinearGradient } from 'expo-linear-gradient';
 import { Ionicons, MaterialCommunityIcons, AntDesign, FontAwesome5, MaterialIcons, Entypo } from '@expo/vector-icons';
 import LiveUpdate from '../Business/LiveUpdate';
 import ReservationScroll from './ReservationScroll';
+import ReservationScrollModal from './ReservationScrollModal';
 import { Linking } from 'expo';
 import { straightLineDistance, kmToMi } from '../../utils/businessUtils';
 import MapView, { Marker } from 'react-native-maps';
@@ -130,6 +131,7 @@ const BusinessPage = ({ route: { params: { business, db } }, checkIn, auth, upda
     const [currentReservations, setReservations] = useState({ ...reservations });
     const reserveSpot = (i, day) => {
         reservations[day][i].users.push(user._id);
+        //TODO : add reservation to users array 
         businessUpdated = true;
         setReservations({ ...reservations });
     };
@@ -258,7 +260,7 @@ const BusinessPage = ({ route: { params: { business, db } }, checkIn, auth, upda
                     <ScrollView showsVerticalScrollIndicator={false}>
                         <TouchableWithoutFeedback>
                             <View>
-                                <ReservationScroll day={currentDay.toLowerCase()} reserve={reserveSpot} reservations={currentReservations[currentDay.toLowerCase()]}></ReservationScroll>
+                                <ReservationScrollModal reservations={reservations} reservationLimit={50} reserve={reserveSpot} startingDate={currentDay}></ReservationScrollModal>
                             </View>
                         </TouchableWithoutFeedback>
                     </ScrollView>
