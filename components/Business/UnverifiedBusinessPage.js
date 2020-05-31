@@ -36,7 +36,7 @@ import { updateUser } from '../../actions/user';
 import { updateBusinessReservations, getAdditionalData } from '../../actions/business';
 import * as Location from 'expo-location';
 
-const BusinessPage = ({ route: { params: { business, db } }, checkIn, updateUser, User, updateBusinessReservations, dbBusiness }) => {
+const UnverifiedBusinessPage = ({ route: { params: { business, db } }, checkIn, updateUser, User, updateBusinessReservations, dbBusiness }) => {
     //destructuring
     let { name, vicinity, geometry, place_id } = business;
     let { _id, googleId, isVerified, population } = dbBusiness;
@@ -141,9 +141,10 @@ const BusinessPage = ({ route: { params: { business, db } }, checkIn, updateUser
 
     //This changes the favorite color; once you have the actual favorite parameter change the color based on the true/false of favorite
     function inFavorites() {
-        return User.user.favorites.includes(_id);
+        return user.favorites.includes(_id);
     };
     const toggleFavorite = () => {
+        console.log(user.favorites);
         if (!isFavorite) {
             user.favorites.push(_id);
         } else {
@@ -299,4 +300,4 @@ const mapStateToProps = state => ({
     auth: state.auth,
     User: state.user
 });
-export default connect(mapStateToProps, { checkIn, updateUser, updateBusinessReservations })(BusinessPage);
+export default connect(mapStateToProps, { checkIn, updateUser, updateBusinessReservations })(UnverifiedBusinessPage);
