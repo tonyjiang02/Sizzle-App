@@ -11,12 +11,6 @@ import { ScrollView } from 'react-native-gesture-handler';
 const ReservationScroll = ({ reservations, reservationLimit, reserve, day }) => {
     //Needs this reservation's date, current time, opening time, closing time, time slot length, #ppl allowed, #ppl currently registered at each time slot
 
-    let curent = new Date(2020, 5, 6, 10, 33);
-    let opening = new Date(2020, 5, 6, 8, 0);
-    let closing = new Date(2020, 5, 6, 18, 0);
-    let timeslot = 30; //in minutes
-    let people = 50;
-    let registered = Math.round(Math.random() * people);
     let list = reservations.map((s, i) => (
         <View index={i} style={{ paddingRight: 10, flexDirection: 'column' }}>
             <View style={{ alignItems: 'center', paddingBottom: 5 }}>
@@ -25,7 +19,7 @@ const ReservationScroll = ({ reservations, reservationLimit, reserve, day }) => 
             </View>
             <TouchableOpacity onPress={() => reserve(i, day)}>
                 <View style={{ borderRadius: 20, borderColor: 'gray', borderWidth: 0.5, backgroundColor: 'gray', paddingHorizontal: 30 }}>
-                    <Text style={{ color: 'white', fontWeight: 'bold', padding: 8, fontSize: 12 }}>
+                    <Text style={{ color: 'white', fontWeight: 'bold', padding: 8, fontSize: 12, textAlign: 'center' }}>
                         Reserve
                     </Text>
                 </View>

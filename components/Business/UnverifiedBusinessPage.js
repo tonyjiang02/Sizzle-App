@@ -32,6 +32,7 @@ import { straightLineDistance, kmToMi } from '../../utils/businessUtils';
 import MapView, { Marker } from 'react-native-maps';
 import openMap from 'react-native-open-maps';
 import { getFontSize, getIconSize } from '../../utils/fontsizes';
+import { textTruncateBySpace, textTruncateBySpaceTwo } from '../../utils/TextTruncate';
 import { updateUser } from '../../actions/user';
 import { updateBusinessReservations, getAdditionalData } from '../../actions/business';
 import * as Location from 'expo-location';
@@ -43,6 +44,20 @@ const UnverifiedBusinessPage = ({ route: { params: { business, db } }, checkIn, 
     let location = geometry.location;
     let user = User.user;
     let updated = false;
+    const [addData, setAddData] = useState({
+        websiteURL: 'Not available',
+        hours: {
+            mon: 'Monday: Not available',
+            tue: 'Tuesday: Not available',
+            wed: 'Wednesday: Not available',
+            thu: 'Thursday: Not available',
+            fri: 'Friday: Not available',
+            sat: 'Saturday: Not available',
+            sun: 'Sunday: Not available',
+        },
+        phoneNumber: 'Not available'
+    });
+
     //modals
     const [livePopulation, setLivePopulation] = useState(population);
     //backend
@@ -55,6 +70,23 @@ const UnverifiedBusinessPage = ({ route: { params: { business, db } }, checkIn, 
     };
     useEffect(() => {
         getDistance();
+        async function getMoreData() {
+            const res = await getAdditionalData(place_id);
+            console.log(res);
+            setAddData({
+                websiteURL: res.result.website,
+                hours: {
+                    mon: res.result.opening_hours.weekday_text[0],
+                    tue: res.result.opening_hours.weekday_text[1],
+                    wed: res.result.opening_hours.weekday_text[2],
+                    thu: res.result.opening_hours.weekday_text[3],
+                    fri: res.result.opening_hours.weekday_text[4],
+                    sat: res.result.opening_hours.weekday_text[5],
+                    sun: res.result.opening_hours.weekday_text[6],
+                },
+                phoneNumber: res.result.formatted_phone_number
+            });
+        };
         getMoreData();
         return function cleanup() {
             if (updated) {
@@ -62,26 +94,15 @@ const UnverifiedBusinessPage = ({ route: { params: { business, db } }, checkIn, 
                 updateUser(user);
             }
         };
-    }, [null]);
+    }, []);
+
+    
     //business verification
     let verified = <View></View>;
     if (isVerified === true) {
         verified = <MaterialIcons name='verified-user' color='lightgreen' size={getIconSize(20)}></MaterialIcons>;
     }
-    let [addData, setAddData] = useState({
-        websiteURL: 'Not available',
-        hours: 'Not available',
-        phoneNumber: 'Not available'
-    });
-    const getMoreData = async () => {
-        const res = await getAdditionalData(place_id);
-        console.log(res);
-        setAddData({
-            websiteURL: res.website,
-            hours: res.weekday_text,
-            phoneNumber: res.formatted_phone_number
-        });
-    };
+
     //distance 
     let [lineDistance, setLineDistance] = useState(null);
     const getDistance = () => {
@@ -117,11 +138,10 @@ const UnverifiedBusinessPage = ({ route: { params: { business, db } }, checkIn, 
                     text: "Cancel",
                     style: "cancel"
                 },
-                { text: "OK", onPress: () => openMap({ end: name + " " + address, start: "Current Location", travelType: 'drive' }) }
+                { text: "OK", onPress: () => openMap({ end: name + " " + vicinity, start: "Current Location", travelType: 'drive' }) }
             ],
             { cancelable: false }
         );
-
     };
 
     //population display
@@ -210,20 +230,9 @@ const UnverifiedBusinessPage = ({ route: { params: { business, db } }, checkIn, 
                     shadowRadius: 9.51,
                     elevation: 15,
                 }}>
-                    <ImageBackground source={{ uri: 'https://picsum.photos/400/300' }} style={{ width: '100%', height: 250 }}>
-                        <LinearGradient
-                            colors={['transparent', 'rgba(0,0,0,0.8)']}
-                            style={{
-                                flex: 3,
-                                position: 'absolute',
-                                left: 0,
-                                right: 0,
-                                bottom: 0,
-                                height: 250,
-                            }}
-                        />
+                    <ImageBackground source={require('../../assets/backgroundhue.png')} style={{ width: '100%', height: 210 }}>
                         <View style={{ position: 'absolute', bottom: 40, alignItems: 'baseline' }}>
-                            <Text style={{ color: 'white', fontSize: getFontSize(30), fontWeight: 'bold', paddingLeft: 20 }}>{business.name}</Text>
+                            <Text style={{ color: 'white', fontSize: getFontSize(30), fontWeight: 'bold', paddingLeft: 20, paddingRight: 10 }}>{business.name.length > 50 ? textTruncateBySpaceTwo(50, business.name) : business.name}</Text>
                             <View style={{ paddingLeft: 20, paddingTop: 10, flexDirection: 'row', alignItems: 'center' }}>
                                 <Text style={{ borderRadius: 5, borderColor: 'white', color: 'white', borderWidth: 1, padding: 3, fontSize: getFontSize(16) }}>
                                     {lineDistance}
@@ -289,7 +298,7 @@ const UnverifiedBusinessPage = ({ route: { params: { business, db } }, checkIn, 
                     <View style={styles.infoOuterBlock}>
                         <TouchableOpacity onPress={createWebAlert} style={styles.infoInnerBlock}>
                             <MaterialIcons name='web' color='royalblue' size={getIconSize(18)} />
-                            <Text style={{ paddingLeft: 10, fontFamily: 'Avenir-Light', fontSize: getFontSize(17), fontWeight: 'bold' }}>{addData.websiteURL}</Text>
+                            <Text style={{ paddingLeft: 10, fontFamily: 'Avenir-Light', fontSize: getFontSize(17), fontWeight: 'bold' }}>{addData.websiteURL.length > 30 ? textTruncateBySpaceTwo(30, addData.websiteURL) : addData.websiteURL}</Text>
                         </TouchableOpacity>
                     </View>
 
@@ -305,6 +314,9 @@ const UnverifiedBusinessPage = ({ route: { params: { business, db } }, checkIn, 
                                 title={name}
                             />
                         </MapView>
+                        <View style={{paddingHorizontal: 15, alignSelf: 'flex-start'}}>
+                            <Text style={{ fontFamily: 'Avenir-Light', fontSize: getFontSize(17), fontWeight: 'bold', paddingTop: 10 }}>Address: {vicinity} </Text>
+                        </View>
                         <View style={{ flexDirection: 'row' }}>
                             <View style={{ flexDirection: 'column', flex: 1, paddingLeft: 15, paddingVertical: 20 }}>
                                 <Text style={{ fontFamily: 'Avenir-Light', fontSize: getFontSize(17), fontWeight: 'bold' }}>Distance: {lineDistance} </Text>
@@ -324,7 +336,13 @@ const UnverifiedBusinessPage = ({ route: { params: { business, db } }, checkIn, 
                             <Text style={{ paddingLeft: 5, paddingRight: 15, color: 'royalblue', fontFamily: 'Avenir-Light' }}>Hours </Text>
                         </View>
                         <View style={{ flexDirection: 'column', alignItems: 'flex-start', flex: 8 }}>
-                            <Text style={{ fontFamily: 'Avenir-Light', fontWeight: 'bold', fontSize: getFontSize(17), paddingVertical: 3 }}>{addData.hours}</Text>
+                            <Text style={{ fontFamily: 'Avenir-Light', fontWeight: 'bold', fontSize: getFontSize(15), paddingVertical: 3 }}>{addData.hours.mon}</Text>
+                            <Text style={{ fontFamily: 'Avenir-Light', fontWeight: 'bold', fontSize: getFontSize(15), paddingVertical: 3 }}>{addData.hours.tue}</Text>
+                            <Text style={{ fontFamily: 'Avenir-Light', fontWeight: 'bold', fontSize: getFontSize(15), paddingVertical: 3 }}>{addData.hours.wed}</Text>
+                            <Text style={{ fontFamily: 'Avenir-Light', fontWeight: 'bold', fontSize: getFontSize(15), paddingVertical: 3 }}>{addData.hours.thu}</Text>
+                            <Text style={{ fontFamily: 'Avenir-Light', fontWeight: 'bold', fontSize: getFontSize(15), paddingVertical: 3 }}>{addData.hours.fri}</Text>
+                            <Text style={{ fontFamily: 'Avenir-Light', fontWeight: 'bold', fontSize: getFontSize(15), paddingVertical: 3 }}>{addData.hours.sat}</Text>
+                            <Text style={{ fontFamily: 'Avenir-Light', fontWeight: 'bold', fontSize: getFontSize(15), paddingVertical: 3 }}>{addData.hours.sun}</Text>
                         </View>
                     </View>
                 </View>

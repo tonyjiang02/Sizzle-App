@@ -14,12 +14,14 @@ const initialState = {
     searchBusinesses: [],
     dbSearchBusinesses: [],
     nearestBusinesses: [],
+    filterBusinesses: [],
+    dbFilterBusinesses: [], 
     dbNearestBusinesses: [],
     query: null,
     loadingAll: true,
     loadingOne: true,
     loadingSearch: true,
-    loadingFilter: true,
+    loadingFilter: false,
     loadingNearest: true,
 };
 
@@ -58,11 +60,15 @@ export default function (state = initialState, action) {
         case NEW_FILTER:
             return {
                 ...state,
+                filterBusinesses: [],
+                dbFilterBusinesses: [],
                 loadingFilter: true        
             }
         case LOAD_FILTER:
             return {
                 ...state,
+                filterBusinesses: payload.results,
+                dbFilterBusinesses: payload.local,
                 loadingFilter: false
             }
         case LOAD_LANDING:

@@ -1,6 +1,6 @@
 //business can report a live update
 
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { View, Image, Text, TouchableOpacity } from 'react-native';
 import { styles } from '../Styles';
 import { textTruncateBySpace } from '../../utils/TextTruncate';
@@ -14,10 +14,31 @@ const ReservationScroll = ({ reservations, reservationLimit, reserve, startingDa
     let startingIndex = weekMap.indexOf(startingDate);
     console.log(startingIndex);
     let weekMapRelative = [];
+    let oncePerDay = false;
+    let oncePerWeek = false;
+    let unlimited = false;
+    
+    const [reserved, setReserved] = useState([]);
+
+    const reservationAllowed = (users, limit, dayCounter, time) => {
+        /*
+        Dont allow if:
+        1. Time has already passed
+        2. Reservation limit reached
+        3. Can't reserve same time twice
+        4. Can't reserve on same day twice (if oncePerDay === true)
+        5. Can't reserve on same week twice (if oncePerWeek === true)
+        */
+       //check user limit
+        if (users >= limit){
+            return false;
+        }
+        console.log(time);
+    }
+    
     for (let i = 0; i < 7; i++) {
         weekMapRelative.push(weekMap[(startingIndex + i) % 7]);
     }
-    console.log(weekMapRelative);
     let list = [];
     for (let i = 0; i < 7; i++) {
         let currentDay = weekMapRelative[i].toLowerCase();
@@ -25,18 +46,21 @@ const ReservationScroll = ({ reservations, reservationLimit, reserve, startingDa
             <View index={j} style={{ paddingRight: 10, flexDirection: 'column' }}>
                 <View style={{ alignItems: 'center', paddingBottom: 5 }}>
                     <Text style={{ fontFamily: 'AvenirNext-Bold' }}>{s.slot}</Text>
-                    {reservationLimit > 0 ? <Text>{s.users.length} / {reservationLimit}</Text> : <Text>{s.users} reserved</Text>}
+                    {reservationLimit > 0 ? <Text>{s.users} / {reservationLimit}</Text> : <Text>{s.users} reserved</Text>}
                 </View>
-                <TouchableOpacity onPress={() => reserve(j, currentDay)}>
-                    <View style={{ borderRadius: 20, borderColor: 'gray', borderWidth: 0.5, backgroundColor: 'gray', paddingHorizontal: 30 }}>
-                        <Text style={{ color: 'white', fontWeight: 'bold', padding: 8, fontSize: 12 }}>
-                            Reserve
-                        </Text>
-                    </View>
-                </TouchableOpacity>
+                <View pointerEvents = {(s.users < reservationLimit) ? 'auto' : 'none'}>
+                    <TouchableOpacity onPress={() => {reserve(j, currentDay); reserved.push()}}>
+                        <View style={{ borderRadius: 20, borderColor: 'transparent', borderWidth: 0.5, backgroundColor: (s.users < reservationLimit) ? '#ff9900' : '#B0AFAF', paddingHorizontal: 30 }}>
+                            <Text style={{ color: 'white', fontWeight: 'bold', padding: 8, fontSize: 12 }}>
+                                Reserve
+                            </Text>
+                        </View>
+                    </TouchableOpacity>
+                </View>
             </View>
         ));
-        list.push(reservationDay);
+        console.log(reservationDay);
+        list.push(reservationDay); 
     }
 
     return (

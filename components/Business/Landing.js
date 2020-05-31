@@ -88,7 +88,7 @@ export const Landing = ({ getRegisteredBusinesses, getAll, newSearch, navigation
         return new Promise(resolve => {
           setTimeout(resolve, timeout);
         });
-      }
+    }
     const refresh = async function() {
         console.log('refresh called');
         setRefreshing(true);

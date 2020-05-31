@@ -99,6 +99,24 @@ const styles = StyleSheet.create({
         shadowRadius: 3.84,
         elevation: 5
     },
+    covid19ModalView: {
+        marginHorizontal: 10,
+        marginTop: 150,
+        marginBottom: 150,
+        backgroundColor: "#FDE6E6",
+        borderRadius: 20,
+        paddingHorizontal: 35,
+        paddingBottom: 35,
+        alignItems: "center",
+        shadowColor: "#000",
+        shadowOffset: {
+            width: 0,
+            height: 2
+        },
+        shadowOpacity: 0.25,
+        shadowRadius: 3.84,
+        elevation: 5
+    },
     sortModalView: {
         marginHorizontal: 10,
         marginTop: 150,
