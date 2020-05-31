@@ -5,8 +5,6 @@ import { login } from '../actions/auth';
 import { styles, input } from './Styles';
 import { LinearGradient } from 'expo-linear-gradient';
 import { Dimensions } from 'react-native';
-import Expo from 'expo';
-import { RESULTS } from 'react-native-permissions';
 const Login = ({ login, auth1, business, navigation }) => {
     const [fields, setFields] = useState({
         email: '',
@@ -17,13 +15,7 @@ const Login = ({ login, auth1, business, navigation }) => {
         login(fields.email, fields.password);
     };
     const loginWithGoogle = async () => {
-        const res = await Expo.Google.logInAsync({
-            iosClientId: "359251985246-ufcmlc38kv2je7b9j3vg3l58gagm8967.apps.googleusercontent.com",
-            scopes: ["email", "profile"]
-        });
-        if (res.type === "success") {
-            loginWithGoogle(res.user.email);
-        }
+
     };
     const navigateSignup = () => {
         navigation.navigate("Signup");

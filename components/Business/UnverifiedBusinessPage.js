@@ -70,17 +70,20 @@ const UnverifiedBusinessPage = ({ route: { params: { business, db } }, checkIn, 
     }
     let [addData, setAddData] = useState({
         websiteURL: 'Not available',
-        hours: 'Not available',
+        hours: ['Not available', 'Not available', 'Not available', 'Not available', 'Not available', 'Not available', 'Not available'],
         phoneNumber: 'Not available'
     });
     const getMoreData = async () => {
         const res = await getAdditionalData(place_id);
         console.log(res);
+        console.log(res.opening_hours.weekday_text);
         setAddData({
+            ...addData,
             websiteURL: res.website,
-            hours: res.weekday_text,
+            hours: res.opening_hours.weekday_text,
             phoneNumber: res.formatted_phone_number
         });
+        console.log(addData.hours);
     };
     //distance 
     let [lineDistance, setLineDistance] = useState(null);
@@ -166,14 +169,14 @@ const UnverifiedBusinessPage = ({ route: { params: { business, db } }, checkIn, 
     //open display
     let openStatus = 0;
     try {
-        if (business.opening_hours.open_now===false){
+        if (business.opening_hours.open_now === false) {
             openStatus = 0;
         }
-        else if (business.opening_hours.open_now===true){
+        else if (business.opening_hours.open_now === true) {
             openStatus = 1;
         }
     }
-    catch(err){
+    catch (err) {
         openStatus = 2;
     }
     let openDisplay = <Text></Text>;
@@ -183,18 +186,18 @@ const UnverifiedBusinessPage = ({ route: { params: { business, db } }, checkIn, 
             borderColor: 'green', borderWidth: 1, padding: 2, backgroundColor: 'green'
         }}>Open</Text>;
     }
-    else if (openStatus === 0){
+    else if (openStatus === 0) {
         openDisplay = <Text style={{
             paddingHorizontal: 5, alignSelf: 'center', color: 'white', fontSize: getFontSize(16),
             borderColor: 'red', borderWidth: 1, padding: 2, backgroundColor: 'red'
         }}>Closed</Text>;
     }
-    else if (openStatus === 2){
+    else if (openStatus === 2) {
         openDisplay = <Text style={{
             paddingHorizontal: 5, alignSelf: 'center', color: 'white', fontSize: getFontSize(16),
             borderColor: 'gray', borderWidth: 1, padding: 2, backgroundColor: 'gray'
         }}>Unknown</Text>;
-        }
+    }
 
     return (
         <View style={styles.landing}>
@@ -324,7 +327,13 @@ const UnverifiedBusinessPage = ({ route: { params: { business, db } }, checkIn, 
                             <Text style={{ paddingLeft: 5, paddingRight: 15, color: 'royalblue', fontFamily: 'Avenir-Light' }}>Hours </Text>
                         </View>
                         <View style={{ flexDirection: 'column', alignItems: 'flex-start', flex: 8 }}>
-                            <Text style={{ fontFamily: 'Avenir-Light', fontWeight: 'bold', fontSize: getFontSize(17), paddingVertical: 3 }}>{addData.hours}</Text>
+                            <Text style={{ fontFamily: 'Avenir-Light', fontWeight: 'bold', fontSize: getFontSize(17), paddingVertical: 3 }}>{addData.hours[0]}</Text>
+                            <Text style={{ fontFamily: 'Avenir-Light', fontWeight: 'bold', fontSize: getFontSize(17), paddingVertical: 3 }}>{addData.hours[1]}</Text>
+                            <Text style={{ fontFamily: 'Avenir-Light', fontWeight: 'bold', fontSize: getFontSize(17), paddingVertical: 3 }}>{addData.hours[2]}</Text>
+                            <Text style={{ fontFamily: 'Avenir-Light', fontWeight: 'bold', fontSize: getFontSize(17), paddingVertical: 3 }}>{addData.hours[3]}</Text>
+                            <Text style={{ fontFamily: 'Avenir-Light', fontWeight: 'bold', fontSize: getFontSize(17), paddingVertical: 3 }}>{addData.hours[4]}</Text>
+                            <Text style={{ fontFamily: 'Avenir-Light', fontWeight: 'bold', fontSize: getFontSize(17), paddingVertical: 3 }}>{addData.hours[5]}</Text>
+                            <Text style={{ fontFamily: 'Avenir-Light', fontWeight: 'bold', fontSize: getFontSize(17), paddingVertical: 3 }}>{addData.hours[6]}</Text>
                         </View>
                     </View>
                 </View>

@@ -20,7 +20,15 @@ export const updateUser = (user) => async (dispatch, getState) => {
     }
 };
 
-export const updateUserRedux  = () => async (dispatch, getState) => {
+export const updateReduxUser = (user) => async dispatch => {
+    updateUser(user);
+    dispatch({
+        type: UPDATE_USER,
+        payload: user
+    });
+};
+
+export const updateUserRedux = () => async (dispatch, getState) => {
     console.log("updating user through redux state");
     const token = getState().auth.token;
     const user = getState().user.user;
@@ -48,5 +56,5 @@ export const locPermissionChange = (bool) => dispatch => {
     dispatch({
         type: ALLOW_LOC,
         payload: bool
-    })
-}
+    });
+};

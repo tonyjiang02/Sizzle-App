@@ -1,4 +1,4 @@
-import { LOAD_USER, LOGOUT_USER, NEW_LOCATION, OLD_LOCATION, ORIG_LOCATION, ALLOW_LOC } from '../actions/types';
+import { LOAD_USER, LOGOUT_USER, NEW_LOCATION, OLD_LOCATION, ORIG_LOCATION, ALLOW_LOC, UPDATE_USER } from '../actions/types';
 const initialState = {
     user: null,
     loadingUser: true,
@@ -16,6 +16,12 @@ export default function (state = initialState, action) {
                 user: payload,
                 loadingUser: false,
             };
+        case UPDATE_USER: {
+            return {
+                ...state,
+                user: payload,
+            };
+        }
         case LOGOUT_USER:
             return {
                 ...state,
@@ -28,25 +34,24 @@ export default function (state = initialState, action) {
                 ...state,
                 newLocationSet: true,
                 locationChanged: true
-            }
+            };
         case OLD_LOCATION:
             return {
                 ...state,
                 newLocationSet: false
-            }
-
+            };
         case ORIG_LOCATION:
             return {
                 ...state,
                 newLocationSet: true,
                 locationChanged: false,
                 locationPermissions: true
-            }
+            };
         case ALLOW_LOC:
             return {
                 ...state,
                 locationPermissions: payload
-            }
+            };
         default:
             return state;
     }

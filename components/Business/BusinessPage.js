@@ -125,15 +125,19 @@ const BusinessPage = ({ route: { params: { business, db } }, checkIn, auth, upda
             { cancelable: false }
         );
     //reservations
-    let weekMap = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
+    let weekMap = ['sunday', 'monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday'];
     let currentDate = new Date();
     const [currentDay, setDay] = useState(weekMap[currentDate.getDay()]);
     const [currentReservations, setReservations] = useState({ ...reservations });
     const reserveSpot = (i, day) => {
+        let date = new Date();
+        let indexDay = weekMap.indexOf(day);
+        date.setDate(date.getDate() + (7 + indexDay - date.getDay()) & 7);
         user.reservations.push({
             business: _id,
             businessName: name,
-            time: reservations[day][i].slot
+            time: date,
+            index: i
         });
         //TODO : add reservation to users array 
         reservations[day][i].users += 1;
@@ -442,7 +446,7 @@ const BusinessPage = ({ route: { params: { business, db } }, checkIn, auth, upda
                         </MapView>
                         <View style={{ flexDirection: 'row' }}>
                             <View style={{ flexDirection: 'column', flex: 1, paddingLeft: 15, paddingVertical: 20 }}>
-                                <Text style={{ fontFamily: 'Avenir-Light', fontSize: getFontSize(17), fontWeight: 'bold' }}>Distance: {lineDistance}mi </Text>
+                                <Text style={{ fontFamily: 'Avenir-Light', fontSize: getFontSize(17), fontWeight: 'bold' }}>Distance: {lineDistance} </Text>
                             </View>
                             <View style={{ flex: 1.2, justifyContent: 'center', alignItems: 'center' }}>
                                 <TouchableOpacity onPress={openMapToBusiness}>

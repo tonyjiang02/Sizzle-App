@@ -43,7 +43,8 @@
     "redux-thunk": "^2.3.0",
     "expo-camera": "~8.2.0",
     "expo-barcode-scanner": "~8.1.0",
-    "expo-blur": "~8.1.0"
+    "expo-blur": "~8.1.0",
+    "expo-google-sign-in": "~8.1.0"
   },
   "devDependencies": {
     "babel-preset-expo": "~8.1.0",

@@ -63,22 +63,22 @@ export const newSearch = () => dispatch => {
     console.log('new search dispatch');
     dispatch({
         type: NEW_SEARCH
-    })
-}
+    });
+};
 
 export const newFilter = () => dispatch => {
     console.log('new filter dispatch');
     dispatch({
         type: NEW_FILTER
-    })
-}
+    });
+};
 
 export const loadFilter = () => dispatch => {
     console.log('load filter dispatch');
     dispatch({
         type: LOAD_FILTER
-    })
-}
+    });
+};
 
 export const getNearby = (params, coords) => async dispatch => {
     try {
@@ -118,7 +118,7 @@ export const getNearby = (params, coords) => async dispatch => {
 };
 export const getNomatimNearby = (name, coords) => async dispatch => {
     try {
-        console.log('getting nomatim nearby')
+        console.log('getting nomatim nearby');
         let url = `photon.komoot.de/api/?q=${name}&lat=${coords.latitude}&lon=${coords.longitude}&limit=20`;
         console.log(url);
         const res = await fetch(url);
@@ -127,35 +127,35 @@ export const getNomatimNearby = (name, coords) => async dispatch => {
     } catch (err) {
         console.log(err);
     }
-}
+};
 
 export const newLocation = () => dispatch => {
     console.log('new location method called');
     dispatch({
         type: NEW_LOCATION
-    })
-}
+    });
+};
 
 export const oldLocation = () => dispatch => {
     console.log('old location method called');
     dispatch({
         type: OLD_LOCATION
-    })
-}
+    });
+};
 
 export const origLocation = () => dispatch => {
     console.log('old location method called');
     dispatch({
         type: ORIG_LOCATION
-    })
-}
+    });
+};
 
 export const getAll = (params, coords) => async dispatch => {
     try {
         console.log('getAll called');
         let p = { ...params, key: PLACES_API_KEY, type: "point_of_interest" };
         let location = `location=${coords.latitude},${coords.longitude}`;
-        console.log("getAll coords: " + coords.latitude + " " + coords.longitude)
+        console.log("getAll coords: " + coords.latitude + " " + coords.longitude);
         let url = `https://maps.googleapis.com/maps/api/place/nearbysearch/json?&${location}&${toQueryString(p)}&fields=formatted_address,name,place_id,opening_hours,types`;
         const res = await fetch(url);
         const json = await res.json();
@@ -254,11 +254,9 @@ export const getAdditionalData = async (googleId) => {
     try {
         let p = { key: ADD_API_KEY, place_id: googleId };
         let url = `https://maps.googleapis.com/maps/api/place/details/json?${toQueryString(p)}&fields=formatted_phone_number,opening_hours,website`;
-        console.log(url);
         const res = await fetch(url);
         const json = await res.json();
-        console.log(json);
-        return json;
+        return json.result;
     } catch (err) {
         console.log(err);
     }
