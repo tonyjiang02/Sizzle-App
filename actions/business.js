@@ -1,6 +1,9 @@
 import { LOAD_BUSINESSES, LOAD_BUSINESS, CLEAR_BUSINESSES, CLEAR_SEARCH, CLEAR_BUSINESS, ERROR, LOAD_SEARCH, LOAD_NEAREST, LOAD_FILTER, NEW_FILTER, NEW_SEARCH, NEW_LOCATION, LOAD_LANDING, UPDATE_POPULATION, UPDATE_BUSINESS, OLD_LOCATION, ORIG_LOCATION, ALLOW_LOC } from './types';
 import { BASE_URL, PLACES_API_KEY, ADD_API_KEY } from '../config';
+import { straightLineDistance, kmToMi } from '../utils/businessUtils';
 import toQueryString from '../utils/QueryString';
+
+
 export const getBusinesses = (params) => async dispatch => {
     return null;
 };
@@ -40,14 +43,17 @@ export const test = () => {
     console.log("test");
 };
 export const getBusiness = (googleId, id) => async dispatch => {
+    console.log('getting business again');
     var res = null;
     try {
-        if (googleId) {
-
-        }
-        else if (id) {
+        if (id) {
             res = await fetch(`${BASE_URL}/api/business/id/${id}`);
         }
+        else if (googleId) {
+
+        }
+        const data = await res.json();
+        console.log(data.announcements);
         dispatch({
             type: LOAD_BUSINESS,
             payload: data
@@ -73,10 +79,81 @@ export const newFilter = () => dispatch => {
     });
 };
 
-export const loadFilter = () => dispatch => {
-    console.log('load filter dispatch');
+export const loadFilter = (within, pop, open, verified, search, dbSearch, currentLoc) => dispatch => {
+    let temp = search.slice(0);
+    let dbTemp = dbSearch.slice(0);
+    if (temp.length != 0) {
+        if (within === true) {
+            let counter = 0;
+            while (counter < temp.length) {
+                if (kmToMi(straightLineDistance(currentLoc, { latitude: parseFloat(temp[counter].geometry.location.lat), longitude: parseFloat(temp[counter].geometry.location.lng) })) > 5) {
+                    temp.splice(counter, 1);
+                    dbTemp.splice(counter, 1);
+                }
+                else {
+                    counter++;
+                }
+            }
+        }
+        if (pop === true) {
+            let counter = 0;
+            while (counter < temp.length) {
+                if (dbTemp[counter].population > 10) {
+                    temp.splice(counter, 1);
+                    dbTemp.splice(counter, 1);
+                }
+                else {
+                    counter++;
+                }
+            }
+        }
+        if (open === true) {
+            let counter = 0;
+            console.log(dbTemp[3]);
+            while (counter < dbTemp.length) {
+                try {
+                    if (dbTemp[counter].isVerified === true) {
+                        if (dBTemp[couner].openStatus != true) {
+                            temp.splice(counter, 1);
+                            dbTemp.splice(counter, 1);
+                        }
+                        else {
+                            counter++;
+                        }
+                    }
+                    else {
+                        if (temp[counter].opening_hours.open_now != true) {
+                            temp.splice(counter, 1);
+                            dbTemp.splice(counter, 1);
+                        }
+                        else {
+                            counter++;
+                        }
+                    }
+                }
+                catch (err) {
+                    temp.splice(counter, 1);
+                    dbTemp.splice(counter, 1);
+                }
+            }
+        }
+        if (verified === true) {
+            let counter = 0;
+            while (counter < temp.length) {
+                if (dbTemp[counter].isVerified != true) {
+                    temp.splice(counter, 1);
+                    dbTemp.splice(counter, 1);
+                }
+                else {
+                    counter++;
+                }
+            }
+        }
+    }
+    console.log('after filter filterbusiness length: ' + temp.length + 'db: ' + dbTemp.length);
     dispatch({
-        type: LOAD_FILTER
+        type: LOAD_FILTER,
+        payload: { results: temp, local: dbTemp }
     });
 };
 
@@ -85,7 +162,7 @@ export const getNearby = (params, coords) => async dispatch => {
         let p = { ...params, key: PLACES_API_KEY, rankby: "distance" };
         let location = `location=${coords.latitude},${coords.longitude}`;
         console.log('fetching search results from: ' + location);
-        let url = `https://maps.googleapis.com/maps/api/place/nearbysearch/json?&${location}&${toQueryString(p)}&fields=formatted_address,name,place_id,opening_hours,types`;
+        let url = `https://maps.googleapis.com/maps/api/place/nearbysearch/json?&${location}&${toQueryString(p)}&type=point_of_interest&fields=formatted_address,name,place_id,opening_hours,types`;
         const res = await fetch(url, {
             method: 'GET'
         });

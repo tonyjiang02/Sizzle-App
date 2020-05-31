@@ -12,7 +12,7 @@ import { getFontSize, getIconSize } from '../../utils/fontsizes';
 import * as Location from 'expo-location';
 
 const BusinessSquare = ({ business, navigation, db, openBusinessPage, type, User }) => {
-    const [lineDistance, setLineDistance ] = useState('unknown');
+    const [lineDistance, setLineDistance ] = useState('N/A');
     let { vicinity, opening_hours } = business;
     let { isVerified, openStatus, coverImageUrl, population } = db;
     useEffect(() => {

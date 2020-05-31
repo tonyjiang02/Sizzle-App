@@ -18,7 +18,7 @@ FUTURE INTEGRATIONS:
 
 import React, { useState, useEffect } from 'react';
 import { connect } from 'react-redux';
-import { View, ScrollView, Image, Text, ImageBackground, TouchableOpacity, TouchableHighlight, TouchableWithoutFeedback, Alert } from 'react-native';
+import { View, ScrollView, Image, Text, ImageBackground, TouchableOpacity, TouchableHighlight, TouchableWithoutFeedback, Alert, RefreshControl } from 'react-native';
 import Modal from 'react-native-modal';
 import { styles } from '../Styles';
 import { Button } from 'react-native-elements';
@@ -37,7 +37,7 @@ import { updateUser } from '../../actions/user';
 import { updateBusinessReservations } from '../../actions/business';
 import * as Location from 'expo-location';
 
-const BusinessPage = ({ route: { params: { business, db } }, checkIn, auth, updateUser, User, updateBusinessReservations, dbBusiness }) => {
+const BusinessPage = ({ route: { params: { business, db } }, checkIn, auth, updateUser, User, getBusiness, updateBusinessReservations, dbBusiness }) => {
     //destructuring
     let { vicinity, geometry } = business;
     const [data, setData] = useState(dbBusiness);
@@ -51,13 +51,25 @@ const BusinessPage = ({ route: { params: { business, db } }, checkIn, auth, upda
     const [reservationsModalVisible, setReservationsVisible] = useState(false);
     const [covidModalVisible, setCovidModalVisible] = useState(false);
     const [livePopulation, setLivePopulation] = useState(population);
+    const [updates, setUpdates] = useState(null);
+    const [refreshing, setRefreshing] = useState(false);
+    const [startRefresh, setStartRefresh] = useState(false);
+
     //backend
     const onPressCheckIn = async () => {
         const newPopulation = await checkIn(business.place_id);
         setLivePopulation(newPopulation);
     };
-    const refresh = () => {
-        getBusiness(business.place_id, db._id);
+    function wait(timeout) {
+        return new Promise(resolve => {
+          setTimeout(resolve, timeout);
+        });
+    }
+    const refresh = async function () {
+        console.log('refreshing');
+        setRefreshing(true);
+        await getBusiness(business.place_id, db._id);
+        wait(2000).then(() => {setRefreshing(false); setStartRefresh(true)});
     };
     useEffect(() => {
         console.log("rerender");
@@ -76,6 +88,21 @@ const BusinessPage = ({ route: { params: { business, db } }, checkIn, auth, upda
             }
         };
     });
+    useEffect(() => {
+        if (startRefresh===true){
+            console.log('starting start refresh');
+            setData(dbBusiness);
+            setStartRefresh(false);
+        }
+    }, [startRefresh])
+
+    useEffect(()=> {
+        announcements = announcements.reverse();
+        setUpdates(announcements.map((a, i) => (
+            <LiveUpdate title={a.title} content={a.content} key={i}></LiveUpdate>
+        )));
+    }, [])
+
     //business verification
     let verified = <View></View>;
     if (isVerified === true) {
@@ -84,9 +111,9 @@ const BusinessPage = ({ route: { params: { business, db } }, checkIn, auth, upda
 
     //business hours
     const hoursToString = (day) => {
-        let open = `${day.open.hour}:${day.open.minutes === '0' ? '00' : day.open.minutes}${day.open.am ? 'am' : 'pm'}`;
-        open += "-";
-        let close = `${day.close.hour}:${day.close.minutes === '0' ? '00' : day.close.minutes}${day.close.am ? 'am' : 'pm'}`;
+        let open = `${day.open.hour}:${day.open.minutes === '0' ? '00' : day.open.minutes}${day.open.am ? ' A.M' : ' P.M'}`;
+        open += " - ";
+        let close = `${day.close.hour}:${day.close.minutes === '0' ? '00' : day.close.minutes}${day.close.am ? ' A.M' : ' P.M'}`;
         return open + close;
     };
     //make page specifically for unverified
@@ -214,11 +241,7 @@ const BusinessPage = ({ route: { params: { business, db } }, checkIn, auth, upda
     else if (isFavorite === false) {
         favoriteDisplay = <Ionicons name="md-heart-empty" color='white' size={getIconSize(21)} />;
     }
-    //Live updates display
-    announcements = announcements.reverse();
-    const updates = announcements.map((a, i) => (
-        <LiveUpdate title={a.title} content={a.content} key={i}></LiveUpdate>
-    ));
+
     return (
         <View style={styles.landing}>
             <Modal
@@ -260,7 +283,7 @@ const BusinessPage = ({ route: { params: { business, db } }, checkIn, auth, upda
                 swipeDirection={['left']}
                 onSwipeComplete={(e) => { if (e.swipingDirection === 'left') setCovidModalVisible(false); }}
             >
-                <View style={styles.liveUpdatesModalView}>
+                <View style={styles.covid19ModalView}>
                     <TouchableOpacity onPress={() => { setCovidModalVisible(false); }}>
                         <View style={{ height: 10 }}></View>
                         <AntDesign name='leftcircle' color='red' size={getIconSize(19)} style={{ alignSelf: 'center' }}></AntDesign>
@@ -268,7 +291,7 @@ const BusinessPage = ({ route: { params: { business, db } }, checkIn, auth, upda
                     </TouchableOpacity>
                     <ScrollView showsVerticalScrollIndicator={false}>
                         <TouchableWithoutFeedback>
-                            <Text>
+                            <Text style={{fontFamily: 'Avenir-Light', fontWeight: 'bold', fontSize: getFontSize(16)}}>
                                 {covid19Information}
                             </Text>
                         </TouchableWithoutFeedback>
@@ -304,6 +327,7 @@ const BusinessPage = ({ route: { params: { business, db } }, checkIn, auth, upda
             </Modal>
 
             <ScrollView showsVerticalScrollIndicator={false}>
+                <RefreshControl refreshing={refreshing} onRefresh={refresh} />
                 <View style={{
                     borderBottomColor: 'transparent', borderTopColor: 'transparent',
                     shadowColor: "#000",
@@ -444,6 +468,9 @@ const BusinessPage = ({ route: { params: { business, db } }, checkIn, auth, upda
                                 title={name}
                             />
                         </MapView>
+                        <View style={{paddingHorizontal: 15, alignSelf: 'flex-start'}}>
+                            <Text style={{ fontFamily: 'Avenir-Light', fontSize: getFontSize(17), fontWeight: 'bold', paddingTop: 10 }}>Address: {vicinity} </Text>
+                        </View>
                         <View style={{ flexDirection: 'row' }}>
                             <View style={{ flexDirection: 'column', flex: 1, paddingLeft: 15, paddingVertical: 20 }}>
                                 <Text style={{ fontFamily: 'Avenir-Light', fontSize: getFontSize(17), fontWeight: 'bold' }}>Distance: {lineDistance} </Text>
@@ -464,13 +491,13 @@ const BusinessPage = ({ route: { params: { business, db } }, checkIn, auth, upda
                             <Text style={{ paddingLeft: 5, paddingRight: 15, color: 'royalblue', fontFamily: 'Avenir-Light' }}>Hours </Text>
                         </View>
                         <View style={{ flexDirection: 'column', alignItems: 'flex-start', flex: 8 }}>
-                            <Text style={{ fontFamily: 'Avenir-Light', fontWeight: 'bold', fontSize: getFontSize(17), paddingVertical: 3 }}>Mon: {monBusinessHours}</Text>
-                            <Text style={{ fontFamily: 'Avenir-Light', fontWeight: 'bold', fontSize: getFontSize(17), paddingVertical: 3 }}>Tue: {tueBusinessHours}</Text>
-                            <Text style={{ fontFamily: 'Avenir-Light', fontWeight: 'bold', fontSize: getFontSize(17), paddingVertical: 3 }}>Wed: {wedBusinessHours}</Text>
-                            <Text style={{ fontFamily: 'Avenir-Light', fontWeight: 'bold', fontSize: getFontSize(17), paddingVertical: 3 }}>Thu: {thuBusinessHours}</Text>
-                            <Text style={{ fontFamily: 'Avenir-Light', fontWeight: 'bold', fontSize: getFontSize(17), paddingVertical: 3 }}>Fri: {friBusinessHours}</Text>
-                            <Text style={{ fontFamily: 'Avenir-Light', fontWeight: 'bold', fontSize: getFontSize(17), paddingVertical: 3 }}>Sat: {satBusinessHours}</Text>
-                            <Text style={{ fontFamily: 'Avenir-Light', fontWeight: 'bold', fontSize: getFontSize(17), paddingVertical: 3 }}>Sun: {sunBusinessHours}</Text>
+                            <Text style={{ fontFamily: 'Avenir-Light', fontWeight: 'bold', fontSize: getFontSize(15), paddingVertical: 3 }}>Monday: {monBusinessHours}</Text>
+                            <Text style={{ fontFamily: 'Avenir-Light', fontWeight: 'bold', fontSize: getFontSize(15), paddingVertical: 3 }}>Tuesday: {tueBusinessHours}</Text>
+                            <Text style={{ fontFamily: 'Avenir-Light', fontWeight: 'bold', fontSize: getFontSize(15), paddingVertical: 3 }}>Wednesday: {wedBusinessHours}</Text>
+                            <Text style={{ fontFamily: 'Avenir-Light', fontWeight: 'bold', fontSize: getFontSize(15), paddingVertical: 3 }}>Thursday: {thuBusinessHours}</Text>
+                            <Text style={{ fontFamily: 'Avenir-Light', fontWeight: 'bold', fontSize: getFontSize(15), paddingVertical: 3 }}>Friday: {friBusinessHours}</Text>
+                            <Text style={{ fontFamily: 'Avenir-Light', fontWeight: 'bold', fontSize: getFontSize(15), paddingVertical: 3 }}>Saturday: {satBusinessHours}</Text>
+                            <Text style={{ fontFamily: 'Avenir-Light', fontWeight: 'bold', fontSize: getFontSize(15), paddingVertical: 3 }}>Sunday: {sunBusinessHours}</Text>
                         </View>
                     </View>
 
@@ -495,4 +522,4 @@ const mapStateToProps = state => ({
     auth: state.auth,
     User: state.user
 });
-export default connect(mapStateToProps, { checkIn, updateUser, updateBusinessReservations })(BusinessPage);
+export default connect(mapStateToProps, { checkIn, updateUser, updateBusinessReservations, getBusiness })(BusinessPage);

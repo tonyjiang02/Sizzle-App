@@ -1,7 +1,7 @@
 //business can report a live update
 
 import React, { useEffect } from 'react';
-import { View, Image, Text, TouchableOpacity } from 'react-native';
+import { View, Image, Text, TouchableOpacity, Dimensions } from 'react-native';
 import { styles } from '../Styles';
 import { textTruncateBySpace } from '../../utils/TextTruncate';
 import { openBusinessPage } from '../../actions/business';
@@ -64,18 +64,19 @@ const LiveUpdate = ({ title, content, time }) => {
     return (
         <View>
             <View style={{height: 10}}></View>
-            <View style={{ flexDirection: 'row', alignItems: 'baseline' }}>
-                <View style={{flex: 4}}>
-                    <Text style={{ fontFamily: 'AvenirNext-Bold', fontSize: getFontSize(20), color: 'darkslategrey', paddingRight: 10 }}>{testTitle}</Text>
+                <View style={{width: Dimensions.get('window').width-90, alignSelf: 'center'}}></View>
+                <View style={{ flexDirection: 'row', alignItems: 'baseline' }}>
+                    <View style={{flex: 4}}>
+                        <Text style={{ fontFamily: 'AvenirNext-Bold', fontSize: getFontSize(20), color: 'darkslategrey', paddingRight: 10 }}>{testTitle}</Text>
+                    </View>
+                    <View style={{flex: 1.1}}>
+                        <Text style={{ fontFamily: 'AvenirNext-Italic', fontSize: getFontSize(14), color: 'darkslategrey' }}>{testTimeDisplay}</Text>
+                    </View>
                 </View>
-                <View style={{flex: 1.1}}>
-                    <Text style={{ fontFamily: 'AvenirNext-Italic', fontSize: getFontSize(14), color: 'darkslategrey' }}>{testTimeDisplay}</Text>
+                <View style={{ paddingBottom: 10 }}>
+                    <Text style={{ fontFamily: 'DamascusLight', fontSize: getFontSize(16), color: 'black' }}>{testDesc}</Text>
                 </View>
-            </View>
-            <View style={{ paddingBottom: 10 }}>
-                <Text style={{ fontFamily: 'DamascusLight', fontSize: getFontSize(16), color: 'black' }}>{testDesc}</Text>
-            </View>
-            <View style={{borderTopWidth: 0.5, borderTopColor: 'gainsboro'}}></View>
+                <View style={{borderTopWidth: 0.5, borderTopColor: 'gainsboro'}}></View>
         </View>
 
     );

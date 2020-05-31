@@ -19,12 +19,20 @@ export const BusinessList = ({ type, business, navigation }) => {
             <BusinessCard key={biz._id ? biz_.id : biz.id} business={biz} navigation={navigation} db={nearestdb[i]}></BusinessCard>
         ));
     }
+    else if (type==='filter'){
+        //console.log('length of filterbusinesses in businesslist' + business.filterBusinesses.length);
+        var filterb = business.filterBusinesses;
+        var filterdb = business.dbFilterBusinesses;
+        businessList = filterb.map((biz, i) => (
+            <BusinessCard key={biz._id ? biz_.id : biz.id} business={biz} navigation={navigation} db={filterdb[i]}></BusinessCard>
+        ));
+    }
 
     return (
         <View style={{ flex: 20 }}>
             <ScrollView showsVerticalScrollIndicator={false}>
                 <View style={{ height: 5 }}></View>
-                {businessList}
+                {(businessList.length != 0) ? businessList : <Text style={{fontSize: 16, textAlign: 'center', paddingTop: 5}}>No Results</Text>}
             </ScrollView>
         </View>
     );

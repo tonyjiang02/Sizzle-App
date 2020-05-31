@@ -25,11 +25,6 @@ export const SearchLoading = ({}) => {
           ).start()
     };
 
-    const fadeOut = () => {
-        // Will change fadeAnim value to 0 in 5 seconds
-        
-    };
-
 
     return (
         <Animated.View onLayout={fadeIn} style={{opacity: fadeAnim}}>
