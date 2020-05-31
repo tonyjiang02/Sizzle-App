@@ -1,4 +1,4 @@
-import { LOAD_BUSINESSES, LOAD_BUSINESS, CLEAR_BUSINESSES, LOAD_SEARCH, NEW_SEARCH, LEAVE_SEARCH, LOAD_LANDING, NEW_LOCATION, UPDATE_POPULATION, UPDATE_BUSINESS } from "../actions/types";
+import { LOAD_BUSINESSES, LOAD_BUSINESS, CLEAR_BUSINESSES, LOAD_SEARCH, NEW_SEARCH, LEAVE_SEARCH, LOAD_LANDING, LOAD_FILTER, NEW_FILTER, NEW_LOCATION, LOAD_NEAREST, UPDATE_POPULATION, UPDATE_BUSINESS, LOG_OUT, ORIG_LOCATION } from "../actions/types";
 
 
 /*
@@ -13,10 +13,14 @@ const initialState = {
     dbBusiness: null,
     searchBusinesses: [],
     dbSearchBusinesses: [],
+    nearestBusinesses: [],
+    dbNearestBusinesses: [],
     query: null,
     loadingAll: true,
     loadingOne: true,
-    loadingSearch: true
+    loadingSearch: true,
+    loadingFilter: true,
+    loadingNearest: true,
 };
 
 export default function (state = initialState, action) {
@@ -51,6 +55,16 @@ export default function (state = initialState, action) {
                 loadingSearch: true,
                 searchBusinesses: []
             }
+        case NEW_FILTER:
+            return {
+                ...state,
+                loadingFilter: true        
+            }
+        case LOAD_FILTER:
+            return {
+                ...state,
+                loadingFilter: false
+            }
         case LOAD_LANDING:
             return {
                 ...state,
@@ -58,7 +72,21 @@ export default function (state = initialState, action) {
                 dbBusinesses: payload.local,
                 loadingAll: false
             };
+        case LOAD_NEAREST:
+            return {
+                ...state,
+                nearestBusinesses: payload.results,
+                dbNearestBusinesses: payload.local,
+                loadingNearest: false,
+            }
         case NEW_LOCATION:
+            return {
+                ...state,
+                businesses: [],
+                dbBusinesses: [],
+                loadingAll: true
+            }
+        case ORIG_LOCATION:
             return {
                 ...state,
                 businesses: [],
@@ -84,6 +112,22 @@ export default function (state = initialState, action) {
                 dbSearchBusinesses: [...searchUpdate],
                 dbBusinesses: [...landingUpdate]
             };
+        case LOG_OUT:
+            return {
+                businesses: [],
+                dbBusinesses: [],
+                business: null,
+                dbBusiness: null,
+                searchBusinesses: [],
+                dbSearchBusinesses: [],
+                nearestBusinesses: [],
+                dbNearestBusinesses: [],
+                query: null,
+                loadingAll: true,
+                loadingOne: true,
+                loadingSearch: true,
+                loadingNearest: true,
+            }
         default:
             return state;
     }

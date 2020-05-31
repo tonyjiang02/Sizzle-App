@@ -35,8 +35,8 @@ export const reverseCoords = async (lat, lon) => {
         console.log(url);
         const res = await fetch(url);
         const json = await res.json();
-        const address = json.display_name;
-        return address;
+        console.log(json);
+        return json;
     }
     catch (err) {
         console.log(err);

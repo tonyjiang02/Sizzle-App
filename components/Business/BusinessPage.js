@@ -99,11 +99,10 @@ const BusinessPage = ({ route: { params: { business, db } }, checkIn, auth, upda
     const sunBusinessHours = hoursToString(hours.sunday);
     //distance 
     let [lineDistance, setLineDistance] = useState(null);
-    const getDistance = async () => {
-        const currentLocation = await Location.getLastKnownPositionAsync();
-        var mi = kmToMi(straightLineDistance(currentLocation.coords, { latitude: parseFloat(location.lat), longitude: parseFloat(location.lng) }));
-        var rounded = Math.round(mi * 100) / 100;
-        setLineDistance(rounded);
+    const getDistance = () => {
+        var mi = kmToMi(straightLineDistance(User.user.location, { latitude: parseFloat(business.geometry.location.lat), longitude: parseFloat(business.geometry.location.lng) }));
+        var rounded = Math.round(mi * 10) / 10;
+        setLineDistance(rounded + 'mi');
     };
 
     //phone number

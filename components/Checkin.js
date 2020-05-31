@@ -1,6 +1,6 @@
 
-import React, { useState, useEffect } from 'react';
-import { View, TextInput, SafeAreaView, Text, Linking } from 'react-native';
+import React, { useState, useEffect, useRef } from 'react';
+import { View, TextInput, SafeAreaView, Text, Linking, Animated } from 'react-native';
 import Modal from 'react-native-modal';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
@@ -13,24 +13,71 @@ import { Camera } from 'expo-camera';
 import { BarCodeScanner } from 'expo-barcode-scanner';
 import { Dimensions } from 'react-native';
 import BusinessCard from './Business/BusinessCard';
+import BusinessList from './Business/BusinessList';
 import Outlines from '../assets/Outlines';
+import * as Location from 'expo-location';
+import {getNearest} from '../actions/business';
+import SearchLoading from './layout/LandingLoading';
 
-export const Checkin = ({navigation}) => {
+export const Checkin = ({navigation, getNearest, loadingNearest, dbNearestBusinesses, nearestBusinesses, User}) => {
     const openCheckedIn = () => {
         navigation.navigate('CheckedIn', {navigation: navigation});
     }
-    const [hasPermission, setHasPermission] = useState(null);
+    const [hasPermission, setHasPermission] = useState(false);
+    const [hasLocationPermission, setHasLocationPermission] = useState(false);
     const [type, setType] = useState(Camera.Constants.Type.back);
     const [scanned, setScanned] = useState(false);
+    const fadeAnim = useRef(new Animated.Value(0)).current;
+
+    const fadeIn = () => {
+        // Will change fadeAnim value to 1 in 5 seconds
+        Animated.loop(
+            Animated.sequence([
+              Animated.timing(fadeAnim, {
+                toValue: 1,
+                duration: 800
+              }), 
+              Animated.timing(fadeAnim, {
+                toValue: 0,
+                duration: 800
+                })
+            ]),
+          ).start()
+    };
+
+    const fadeOut = () => {
+        // Will change fadeAnim value to 0 in 5 seconds
+        
+    };
 
     let camera = <View></View>;
 
     useEffect(() => {
+        console.log('opening checkin page');
         (async () => {
         const { status } = await Camera.requestPermissionsAsync();
         setHasPermission(status === 'granted');
+        let response = await Location.requestPermissionsAsync();
+        if (response.granted){
+            setHasLocationPermission(true);
+            let location = await Location.getLastKnownPositionAsync();
+            if (loadingNearest === true){
+                getNearest({radius: 500}, location.coords);
+            }
+            else{
+                if (User.locationChanged === false){
+                    if ((Math.abs(location.coords.latitude - User.user.location.latitude) > 0.03) || (Math.abs(location.coords.longitude - User.user.location.longitude) > 0.03)){
+                        console.log('lat abs: ' + Math.abs(location.coords.latitude - User.user.location.latitude));
+                        console.log(' lon abs ' + Math.abs(location.coords.longitude - User.user.location.longitude));
+                        User.user.location.latitude = location.coords.latitude;
+                        User.user.location.longitude = location.coords.longitude;
+                        getNearest({radius: 200}, location.coords);
+                    }
+                }
+            }
+        }
         })();
-    }, []);
+    }, [User.loadingUser]);
 
     const handleBarCodeScanned = ({ type, data }) => {
         setScanned(true);
@@ -39,10 +86,12 @@ export const Checkin = ({navigation}) => {
 
     const noPermissionDisplay = <Text style={{alignSelf: 'center', color: 'white', paddingTop: 30}}>Sizzle currently has no access to your camera. Please go to "Settings" and change your camera permissions.</Text>;
     
-    camera = hasPermission ?  <Camera style={{height: (Dimensions.get('window').width-130), width: (Dimensions.get('window').width-120)}} type={type}
+    camera = hasPermission ?  <Camera style={{height: (Dimensions.get('window').width-140), width: (Dimensions.get('window').width-120)}} type={type}
                                 barCodeScannerSettings={{barCodeTypes: [BarCodeScanner.Constants.BarCodeType.qr]}} onBarCodeScanned={scanned ? undefined : handleBarCodeScanned}>
                                 <View style={{flex: 1, backgroundColor: 'transparent'}}></View>
                             </Camera> : noPermissionDisplay
+
+    let temp=true;
 
     return (
         <View style={{backgroundColor: '#ff9900', height: Dimensions.get('window').height, width: Dimensions.get('window').width}}>
@@ -57,25 +106,29 @@ export const Checkin = ({navigation}) => {
                     <View>
                         <Text style={{color: 'white', fontSize: 18, fontFamily: 'Avenir-Light', paddingHorizontal: 10, fontWeight: 'bold'}}>OR</Text>
                     </View>
-                    <Text style={{color: 'white', fontSize: 18, fontFamily: 'Avenir-Light', paddingHorizontal: 10}}>selecting an option below</Text>
+                    <Text style={{color: 'white', fontSize: 18, fontFamily: 'Avenir-Light', paddingHorizontal: 10, paddingTop: 0}}>selecting an option below</Text>
                     <Text style={{color: 'white', fontSize: 12, fontFamily: 'Avenir-Light', paddingHorizontal: 10}}>(selecting only available if location access is granted)</Text>
                 </View>
                 <Text style={{color: 'white', fontSize: 25, paddingBottom: 5, fontFamily: 'AvenirNext-Bold'}}>Scan:</Text>
-                <View style={{alignSelf: 'center', height: (Dimensions.get('window').width-130), width: (Dimensions.get('window').width-120), borderRadius: 25, overflow: 'hidden'}}>
+                <View style={{alignSelf: 'center', height: (Dimensions.get('window').width-140), width: (Dimensions.get('window').width-120), borderRadius: 25, overflow: 'hidden'}}>
                     {camera}
                 </View>
-                <TouchableOpacity onPress={openCheckedIn}><Text style={{color: 'white', fontSize: 25, paddingTop: 15, fontFamily: 'AvenirNext-Bold'}}>Select:</Text></TouchableOpacity>
+                <Text style={{color: 'white', fontSize: 25, paddingTop: 15, fontFamily: 'AvenirNext-Bold'}}>Select:</Text>
+                <Text style={{color: 'white', fontSize: 12, fontFamily: 'Avenir-Light', paddingHorizontal: 10, textAlign: 'center'}}>(scroll for more options; if your location is still not listed, please check-in by searching your business)</Text>
                 <ScrollView style={{width: Dimensions.get('window').width, height: 250}}>
-                    <Outlines type='BusinessCard'></Outlines>
-                    <Outlines type='BusinessCard'></Outlines>
-                    <Outlines type='BusinessCard'></Outlines>
-                    <Outlines type='BusinessCard'></Outlines>
-                    <View style={{backgroundColor: '#ff9900'}}></View>
+                    { hasLocationPermission ? 
+                    <View>{ loadingNearest ? <Animated.View onLayout={fadeIn} style={{opacity: fadeAnim}}><Outlines type='BusinessCard'></Outlines><Outlines type='BusinessCard'></Outlines></Animated.View> : <BusinessList type='nearest' navigation={navigation}></BusinessList> }</View> : 
+                    <View><Text style={{textAlign: 'center', paddingHorizontal: 10, fontFamily: 'Avenir-Light'}}>For you to check-in through selection, Sizzle must have access to your location.</Text></View> }
                 </ScrollView>
             </View>
         </View>
     );
 };
 
-
-export default Checkin;
+const mapStateToProps = state => ({
+    dbNearestBusinesses: state.business.dbNearestBusinesses,
+    nearestBusinesses: state.business.nearestBusinesses,
+    loadingNearest: state.business.loadingNearest,
+    User: state.user
+});
+export default connect(mapStateToProps, {getNearest})(Checkin);

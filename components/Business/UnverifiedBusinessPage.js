@@ -82,12 +82,12 @@ const UnverifiedBusinessPage = ({ route: { params: { business, db } }, checkIn, 
             phoneNumber: res.formatted_phone_number
         });
     };
+    //distance 
     let [lineDistance, setLineDistance] = useState(null);
-    const getDistance = async () => {
-        const currentLocation = await Location.getLastKnownPositionAsync();
-        var mi = kmToMi(straightLineDistance(currentLocation.coords, { latitude: parseFloat(location.lat), longitude: parseFloat(location.lng) }));
-        var rounded = Math.round(mi * 100) / 100;
-        setLineDistance(rounded);
+    const getDistance = () => {
+        var mi = kmToMi(straightLineDistance(User.user.location, { latitude: parseFloat(business.geometry.location.lat), longitude: parseFloat(business.geometry.location.lng) }));
+        var rounded = Math.round(mi * 10) / 10;
+        setLineDistance(rounded + 'mi');
     };
 
     //phone number
@@ -162,6 +162,40 @@ const UnverifiedBusinessPage = ({ route: { params: { business, db } }, checkIn, 
     else if (isFavorite === false) {
         favoriteDisplay = <Ionicons name="md-heart-empty" color='white' size={getIconSize(21)} />;
     }
+
+    //open display
+    let openStatus = 0;
+    try {
+        if (business.opening_hours.open_now===false){
+            openStatus = 0;
+        }
+        else if (business.opening_hours.open_now===true){
+            openStatus = 1;
+        }
+    }
+    catch(err){
+        openStatus = 2;
+    }
+    let openDisplay = <Text></Text>;
+    if (openStatus === 1) {
+        openDisplay = <Text style={{
+            paddingHorizontal: 5, alignSelf: 'center', color: 'white', fontSize: getFontSize(16),
+            borderColor: 'green', borderWidth: 1, padding: 2, backgroundColor: 'green'
+        }}>Open</Text>;
+    }
+    else if (openStatus === 0){
+        openDisplay = <Text style={{
+            paddingHorizontal: 5, alignSelf: 'center', color: 'white', fontSize: getFontSize(16),
+            borderColor: 'red', borderWidth: 1, padding: 2, backgroundColor: 'red'
+        }}>Closed</Text>;
+    }
+    else if (openStatus === 2){
+        openDisplay = <Text style={{
+            paddingHorizontal: 5, alignSelf: 'center', color: 'white', fontSize: getFontSize(16),
+            borderColor: 'gray', borderWidth: 1, padding: 2, backgroundColor: 'gray'
+        }}>Unknown</Text>;
+        }
+
     return (
         <View style={styles.landing}>
             <ScrollView showsVerticalScrollIndicator={false}>
@@ -197,6 +231,9 @@ const UnverifiedBusinessPage = ({ route: { params: { business, db } }, checkIn, 
                                 <View style={{ flexDirection: 'row', alignItems: 'center', paddingLeft: 20 }}>
                                     <Ionicons name='md-person' color='white' size={getIconSize(19)} />
                                     {popDisplay}
+                                </View>
+                                <View style={{ paddingLeft: 20, flexDirection: 'row', alignItems: 'center' }}>
+                                    {openDisplay}
                                 </View>
                                 <View style={{ paddingLeft: 20, flexDirection: 'row', alignItems: 'center' }}>
                                     {verified}
@@ -270,7 +307,7 @@ const UnverifiedBusinessPage = ({ route: { params: { business, db } }, checkIn, 
                         </MapView>
                         <View style={{ flexDirection: 'row' }}>
                             <View style={{ flexDirection: 'column', flex: 1, paddingLeft: 15, paddingVertical: 20 }}>
-                                <Text style={{ fontFamily: 'Avenir-Light', fontSize: getFontSize(17), fontWeight: 'bold' }}>Distance: {lineDistance}mi </Text>
+                                <Text style={{ fontFamily: 'Avenir-Light', fontSize: getFontSize(17), fontWeight: 'bold' }}>Distance: {lineDistance} </Text>
                             </View>
                             <View style={{ flex: 1.2, justifyContent: 'center', alignItems: 'center' }}>
                                 <TouchableOpacity onPress={openMapToBusiness}>
