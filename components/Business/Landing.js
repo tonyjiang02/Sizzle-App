@@ -48,7 +48,7 @@ export const Landing = ({ getRegisteredBusinesses, getAll, newSearch, navigation
                 setLocation(location);
                 user.location.latitude = coords.latitude;
                 user.location.longitude = coords.longitude;
-                updateReduxUser(user);
+
                 //update user action
                 //updateUserRedux();
                 getAll({ radius: 5000 }, coords);
@@ -104,7 +104,6 @@ export const Landing = ({ getRegisteredBusinesses, getAll, newSearch, navigation
             setLocation(location);
             user.location.latitude = coords.latitude;
             user.location.longitude = coords.longitude;
-            updateReduxUser(user);
             //update user action
             updateUserRedux();
             origLocation();
