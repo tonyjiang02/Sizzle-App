@@ -17,6 +17,11 @@ export const login = (email, password) => async (dispatch, getState) => {
                 password: password
             })
         });
+        console.log("recieving data");
+        if (!res.ok) {
+            const err = await res.text();
+            throw Error(err);
+        }
         const data = await res.json();
         console.log(data);
         dispatch({
@@ -24,6 +29,7 @@ export const login = (email, password) => async (dispatch, getState) => {
             payload: data
         });
     } catch (err) {
+        console.log(err);
         dispatch({
             type: ERROR,
             payload: err
