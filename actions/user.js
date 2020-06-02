@@ -15,16 +15,26 @@ export const updateUser = (user) => async (dispatch, getState) => {
                 user: user
             })
         });
+        const json = await res.json();
+        return json;
     } catch (err) {
         console.log(err);
     }
 };
-
-export const updateReduxUser = (user) => async dispatch => {
+//Updates redux and database without syncing
+export const updateUserWithoutReturn = (user) => async dispatch => {
     updateUser(user);
     dispatch({
         type: UPDATE_USER,
         payload: user
+    });
+};
+//Updates the redux with the return from the database
+export const updateUserWithReturn = (user) => async dispatch => {
+    const newUser = await updateUser(user);
+    dispatch({
+        type: UPDATE_USER,
+        payload: newUser
     });
 };
 

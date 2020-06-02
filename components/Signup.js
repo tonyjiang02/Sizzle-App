@@ -4,8 +4,9 @@ import { connect } from 'react-redux';
 import { styles, input } from './Styles';
 import { LinearGradient } from 'expo-linear-gradient';
 import { Dimensions } from 'react-native';
-import { signup } from '../actions/auth';
-const Signup = ({ navigation, signup }) => {
+import { signup, signupGoogle } from '../actions/auth';
+import * as Google from 'expo-google-app-auth';
+const Signup = ({ navigation, signup, signupGoogle }) => {
     const [fields, setFields] = useState({
         email: '',
         password: '',
@@ -15,6 +16,15 @@ const Signup = ({ navigation, signup }) => {
         if (fields.password === fields.password2) {
             console.log("signup pressed");
             signup(fields.email, fields.password);
+        }
+    };
+    const signupWithGoogle = async () => {
+        const { type, accessToken, user, idToken } = await Google.logInAsync({
+            iosClientId: "359251985246-li6db3gevpfh6sde3iukm1hrp85jqb0e.apps.googleusercontent.com",
+            scopes: ['profile', 'email']
+        });
+        if (type === 'success') {
+            signupGoogle(idToken);
         }
     };
     const navigateLogin = () => {
@@ -33,6 +43,10 @@ const Signup = ({ navigation, signup }) => {
                             <Image source={require('../assets/logos/Sizzle_White_Transparent.png')} style={{ height: 150, width: 220 }} ></Image>
                         </View>
                         <View>
+                            <TouchableOpacity onPress={() => signupWithGoogle()} style={{ flexDirection: "row", height: 50, width: 300, borderRadius: 5, backgroundColor: "white", alignSelf: "center", marginBottom: 20, alignItems: "center" }}>
+                                <Image source={require('../assets/logos/google-light-signin-logo.png')} style={{ height: 50, width: 50 }}></Image>
+                                <Text>Sign Up With Google</Text>
+                            </TouchableOpacity>
                             <TextInput
                                 autoCapitalize='none'
                                 style={input.formInput}
@@ -79,7 +93,7 @@ const Signup = ({ navigation, signup }) => {
                                     <Text style={{ fontFamily: 'Avenir-Light', fontSize: 18, color: 'white', fontWeight: 'bold' }}>Log In</Text>
                                 </TouchableOpacity>
                             </View>
-                            <View style={{height: 10}}></View>
+                            <View style={{ height: 10 }}></View>
                             <View style={{ flexDirection: 'row', justifyContent: 'center' }}>
                                 <Text style={{ fontFamily: 'Avenir-Light', fontSize: 18, color: 'white' }}>For businesses, please visit www.szzl.app</Text>
                             </View>
@@ -91,4 +105,4 @@ const Signup = ({ navigation, signup }) => {
     );
 };
 
-export default connect(null, { signup })(Signup);
+export default connect(null, { signup, signupGoogle })(Signup);

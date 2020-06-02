@@ -1,8 +1,12 @@
 {
   "expo": {
-    "name": "Sizzle-App",
-    "slug": "Sizzle-App",
-    "platforms": ["ios", "android", "web"],
+    "name": "Sizzle",
+    "slug": "Sizzle",
+    "platforms": [
+      "ios",
+      "android",
+      "web"
+    ],
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/icon.png",
@@ -14,10 +18,16 @@
     "updates": {
       "fallbackToCacheTimeout": 0
     },
-    "assetBundlePatterns": ["**/*"],
+    "assetBundlePatterns": [
+      "**/*"
+    ],
     "ios": {
       "supportsTablet": true,
       "bundleIdentifier": "com.tonyjiang02.sizzle"
+    },
+    "android": {
+      "package": "com.tonyjiang02.sizzle",
+      "versionCode": 1
     }
   }
 }

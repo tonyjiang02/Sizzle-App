@@ -9,13 +9,18 @@
   },
   "dependencies": {
     "@react-native-community/async-storage": "^1.9.0",
-    "@react-native-community/google-signin": "^4.0.0",
+    "@react-native-community/google-signin": "^4.0.3",
     "@react-native-community/masked-view": "0.1.6",
     "@react-navigation/native": "^5.1.4",
     "@react-navigation/stack": "^5.2.9",
     "bootstrap": "^4.4.1",
     "expo": "~37.0.3",
+    "expo-barcode-scanner": "~8.1.0",
+    "expo-blur": "~8.1.0",
+    "expo-camera": "~8.2.0",
     "expo-font": "~8.1.0",
+    "expo-google-app-auth": "^8.1.0",
+    "expo-google-sign-in": "~8.1.0",
     "expo-linear-gradient": "~8.1.0",
     "expo-location": "~8.1.0",
     "react": "~16.9.0",
@@ -40,11 +45,7 @@
     "react-redux": "^7.2.0",
     "redux": "^4.0.5",
     "redux-persist": "^6.0.0",
-    "redux-thunk": "^2.3.0",
-    "expo-camera": "~8.2.0",
-    "expo-barcode-scanner": "~8.1.0",
-    "expo-blur": "~8.1.0",
-    "expo-google-sign-in": "~8.1.0"
+    "redux-thunk": "^2.3.0"
   },
   "devDependencies": {
     "babel-preset-expo": "~8.1.0",

@@ -91,11 +91,7 @@ export const Landing = ({ getRegisteredBusinesses, getAll, newSearch, navigation
             setTimeout(resolve, timeout);
         });
     }
-<<<<<<< HEAD
     const refresh = async function () {
-=======
-    const refresh = async function() {
->>>>>>> af6f1023ec839501b66c663facb180becf6f7cc3
         console.log('refresh called');
         setRefreshing(true);
         console.log("Asking Location Permissions");
@@ -148,7 +144,7 @@ export const Landing = ({ getRegisteredBusinesses, getAll, newSearch, navigation
         for (let k = 0; k < businesses.length; k++) {
             let placed = false;
             for (let i = 0; i < businesses[k].types.length; i++) {
-                if (placed === false && (businesses[k].types[i] === 'restaurants' || businesses[k].types[i] === 'bakery' || businesses[k].types[i] === 'cafe' || businesses[k].types[i] === 'night_club' || businesses[k].types[i] === 'bar')) {
+                if (placed === false && (businesses[k].types[i] === 'restaurant' || businesses[k].types[i] === 'bakery' || businesses[k].types[i] === 'cafe' || businesses[k].types[i] === 'night_club' || businesses[k].types[i] === 'bar')) {
                     s.food.push({ business: businesses[k], db: dbBusinesses[k] });
                     placed = true;
                 }

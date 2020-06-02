@@ -17,7 +17,7 @@ const ReservationScroll = ({ reservations, reservationLimit, reserve, startingDa
     let oncePerDay = false;
     let oncePerWeek = false;
     let unlimited = false;
-    
+
     const [reserved, setReserved] = useState([]);
 
     const reservationAllowed = (users, limit, dayCounter, time) => {
@@ -29,13 +29,13 @@ const ReservationScroll = ({ reservations, reservationLimit, reserve, startingDa
         4. Can't reserve on same day twice (if oncePerDay === true)
         5. Can't reserve on same week twice (if oncePerWeek === true)
         */
-       //check user limit
-        if (users >= limit){
+        //check user limit
+        if (users >= limit) {
             return false;
         }
         console.log(time);
-    }
-    
+    };
+
     for (let i = 0; i < 7; i++) {
         weekMapRelative.push(weekMap[(startingIndex + i) % 7]);
     }
@@ -47,23 +47,20 @@ const ReservationScroll = ({ reservations, reservationLimit, reserve, startingDa
                 <View style={{ alignItems: 'center', paddingBottom: 5 }}>
                     <Text style={{ fontFamily: 'AvenirNext-Bold' }}>{s.slot}</Text>
                     {reservationLimit > 0 ? <Text>{s.users} / {reservationLimit}</Text> : <Text>{s.users} reserved</Text>}
-<<<<<<< HEAD
-=======
                 </View>
-                <View pointerEvents = {(s.users < reservationLimit) ? 'auto' : 'none'}>
-                    <TouchableOpacity onPress={() => {reserve(j, currentDay); reserved.push()}}>
+                <View pointerEvents={(s.users < reservationLimit) ? 'auto' : 'none'}>
+                    <TouchableOpacity onPress={() => { reserve(j, currentDay); reserved.push(); }}>
                         <View style={{ borderRadius: 20, borderColor: 'transparent', borderWidth: 0.5, backgroundColor: (s.users < reservationLimit) ? '#ff9900' : '#B0AFAF', paddingHorizontal: 30 }}>
                             <Text style={{ color: 'white', fontWeight: 'bold', padding: 8, fontSize: 12 }}>
                                 Reserve
                             </Text>
                         </View>
                     </TouchableOpacity>
->>>>>>> af6f1023ec839501b66c663facb180becf6f7cc3
                 </View>
             </View>
         ));
         console.log(reservationDay);
-        list.push(reservationDay); 
+        list.push(reservationDay);
     }
 
     return (

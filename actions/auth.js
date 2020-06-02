@@ -30,6 +30,40 @@ export const login = (email, password) => async (dispatch, getState) => {
         });
     }
 };
+export const loginGoogle = (id) => async (dispatch) => {
+    console.log("logging in with google");
+    const res = await fetch(`${BASE_URL}/api/auth/user/google`, {
+        method: "POST",
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+            id: id
+        })
+    });
+    const json = await res.json();
+    dispatch({
+        type: LOGIN_SUCCESS,
+        payload: json
+    });
+};
+export const signupGoogle = (id) => async (dispatch) => {
+    console.log("Signing up with with google");
+    const res = await fetch(`${BASE_URL}/api/auth/user/google`, {
+        method: "POST",
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+            id: id
+        })
+    });
+    const json = await res.json();
+    dispatch({
+        type: SIGNUP_SUCCESS,
+        payload: json
+    });
+};
 export const logout = () => async dispatch => {
     console.log("Logout Action");
     await AsyncStorage.removeItem('token');

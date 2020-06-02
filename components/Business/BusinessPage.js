@@ -33,7 +33,7 @@ import { straightLineDistance, kmToMi } from '../../utils/businessUtils';
 import MapView, { Marker } from 'react-native-maps';
 import openMap from 'react-native-open-maps';
 import { getFontSize, getIconSize } from '../../utils/fontsizes';
-import { updateUser } from '../../actions/user';
+import { updateUser, updateUserWithoutReturn } from '../../actions/user';
 import { updateBusinessReservations } from '../../actions/business';
 import * as Location from 'expo-location';
 
@@ -62,14 +62,14 @@ const BusinessPage = ({ route: { params: { business, db } }, checkIn, auth, upda
     };
     function wait(timeout) {
         return new Promise(resolve => {
-          setTimeout(resolve, timeout);
+            setTimeout(resolve, timeout);
         });
     }
     const refresh = async function () {
         console.log('refreshing');
         setRefreshing(true);
         await getBusiness(business.place_id, db._id);
-        wait(2000).then(() => {setRefreshing(false); setStartRefresh(true)});
+        wait(2000).then(() => { setRefreshing(false); setStartRefresh(true); });
     };
     useEffect(() => {
         console.log("rerender");
@@ -80,7 +80,7 @@ const BusinessPage = ({ route: { params: { business, db } }, checkIn, auth, upda
         return function cleanup() {
             if (updated) {
                 console.log("updating user");
-                updateUser(user);
+                updateUserWithoutReturn(user);
             }
             if (businessUpdated) {
                 console.log("updating Business");
@@ -89,19 +89,19 @@ const BusinessPage = ({ route: { params: { business, db } }, checkIn, auth, upda
         };
     });
     useEffect(() => {
-        if (startRefresh===true){
+        if (startRefresh === true) {
             console.log('starting start refresh');
             setData(dbBusiness);
             setStartRefresh(false);
         }
-    }, [startRefresh])
+    }, [startRefresh]);
 
-    useEffect(()=> {
+    useEffect(() => {
         announcements = announcements.reverse();
         setUpdates(announcements.map((a, i) => (
             <LiveUpdate title={a.title} content={a.content} key={i}></LiveUpdate>
         )));
-    }, [])
+    }, []);
 
     //business verification
     let verified = <View></View>;
@@ -291,7 +291,7 @@ const BusinessPage = ({ route: { params: { business, db } }, checkIn, auth, upda
                     </TouchableOpacity>
                     <ScrollView showsVerticalScrollIndicator={false}>
                         <TouchableWithoutFeedback>
-                            <Text style={{fontFamily: 'Avenir-Light', fontWeight: 'bold', fontSize: getFontSize(16)}}>
+                            <Text style={{ fontFamily: 'Avenir-Light', fontWeight: 'bold', fontSize: getFontSize(16) }}>
                                 {covid19Information}
                             </Text>
                         </TouchableWithoutFeedback>
@@ -468,7 +468,7 @@ const BusinessPage = ({ route: { params: { business, db } }, checkIn, auth, upda
                                 title={name}
                             />
                         </MapView>
-                        <View style={{paddingHorizontal: 15, alignSelf: 'flex-start'}}>
+                        <View style={{ paddingHorizontal: 15, alignSelf: 'flex-start' }}>
                             <Text style={{ fontFamily: 'Avenir-Light', fontSize: getFontSize(17), fontWeight: 'bold', paddingTop: 10 }}>Address: {vicinity} </Text>
                         </View>
                         <View style={{ flexDirection: 'row' }}>

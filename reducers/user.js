@@ -19,7 +19,8 @@ export default function (state = initialState, action) {
         case UPDATE_USER: {
             return {
                 ...state,
-                user: payload,
+                user: { ...user, ...payload },
+                loadingUser: false
             };
         }
         case LOGOUT_USER:

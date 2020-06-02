@@ -284,6 +284,7 @@ export const getNearest = (params, coords) => async dispatch => {
 };
 export const checkIn = (id) => async (dispatch, getState) => {
     const token = getState().auth.token;
+    const user = getState().user.user;
     console.log("Token " + token);
     try {
         const res = await fetch(`${BASE_URL}/api/business/addPerson/${id}`, {
@@ -296,6 +297,19 @@ export const checkIn = (id) => async (dispatch, getState) => {
             })
         });
         const json = await res.json();
+        user.history.push({ business: id });
+        const userUpdate = await fetch(`${BASE_URL}/api/users/update`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+                user: {
+                    history: user.history
+                }
+            })
+        });
+        const updatedUser = await userUpdate.json();
         dispatch({
             type: UPDATE_BUSINESS,
             payload: json

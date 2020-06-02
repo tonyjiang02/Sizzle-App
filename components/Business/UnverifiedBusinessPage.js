@@ -74,17 +74,17 @@ const UnverifiedBusinessPage = ({ route: { params: { business, db } }, checkIn, 
             const res = await getAdditionalData(place_id);
             console.log(res);
             setAddData({
-                websiteURL: res.result.website,
+                websiteURL: res.website,
                 hours: {
-                    mon: res.result.opening_hours.weekday_text[0],
-                    tue: res.result.opening_hours.weekday_text[1],
-                    wed: res.result.opening_hours.weekday_text[2],
-                    thu: res.result.opening_hours.weekday_text[3],
-                    fri: res.result.opening_hours.weekday_text[4],
-                    sat: res.result.opening_hours.weekday_text[5],
-                    sun: res.result.opening_hours.weekday_text[6],
+                    mon: res.opening_hours.weekday_text[0],
+                    tue: res.opening_hours.weekday_text[1],
+                    wed: res.opening_hours.weekday_text[2],
+                    thu: res.opening_hours.weekday_text[3],
+                    fri: res.opening_hours.weekday_text[4],
+                    sat: res.opening_hours.weekday_text[5],
+                    sun: res.opening_hours.weekday_text[6],
                 },
-                phoneNumber: res.result.formatted_phone_number
+                phoneNumber: res.formatted_phone_number
             });
         };
         getMoreData();
@@ -96,17 +96,12 @@ const UnverifiedBusinessPage = ({ route: { params: { business, db } }, checkIn, 
         };
     }, []);
 
-    
+
     //business verification
     let verified = <View></View>;
     if (isVerified === true) {
         verified = <MaterialIcons name='verified-user' color='lightgreen' size={getIconSize(20)}></MaterialIcons>;
     }
-    let [addData, setAddData] = useState({
-        websiteURL: 'Not available',
-        hours: ['Not available', 'Not available', 'Not available', 'Not available', 'Not available', 'Not available', 'Not available'],
-        phoneNumber: 'Not available'
-    });
     const getMoreData = async () => {
         const res = await getAdditionalData(place_id);
         console.log(res);
@@ -330,7 +325,7 @@ const UnverifiedBusinessPage = ({ route: { params: { business, db } }, checkIn, 
                                 title={name}
                             />
                         </MapView>
-                        <View style={{paddingHorizontal: 15, alignSelf: 'flex-start'}}>
+                        <View style={{ paddingHorizontal: 15, alignSelf: 'flex-start' }}>
                             <Text style={{ fontFamily: 'Avenir-Light', fontSize: getFontSize(17), fontWeight: 'bold', paddingTop: 10 }}>Address: {vicinity} </Text>
                         </View>
                         <View style={{ flexDirection: 'row' }}>
@@ -352,15 +347,6 @@ const UnverifiedBusinessPage = ({ route: { params: { business, db } }, checkIn, 
                             <Text style={{ paddingLeft: 5, paddingRight: 15, color: 'royalblue', fontFamily: 'Avenir-Light' }}>Hours </Text>
                         </View>
                         <View style={{ flexDirection: 'column', alignItems: 'flex-start', flex: 8 }}>
-<<<<<<< HEAD
-                            <Text style={{ fontFamily: 'Avenir-Light', fontWeight: 'bold', fontSize: getFontSize(17), paddingVertical: 3 }}>{addData.hours[0]}</Text>
-                            <Text style={{ fontFamily: 'Avenir-Light', fontWeight: 'bold', fontSize: getFontSize(17), paddingVertical: 3 }}>{addData.hours[1]}</Text>
-                            <Text style={{ fontFamily: 'Avenir-Light', fontWeight: 'bold', fontSize: getFontSize(17), paddingVertical: 3 }}>{addData.hours[2]}</Text>
-                            <Text style={{ fontFamily: 'Avenir-Light', fontWeight: 'bold', fontSize: getFontSize(17), paddingVertical: 3 }}>{addData.hours[3]}</Text>
-                            <Text style={{ fontFamily: 'Avenir-Light', fontWeight: 'bold', fontSize: getFontSize(17), paddingVertical: 3 }}>{addData.hours[4]}</Text>
-                            <Text style={{ fontFamily: 'Avenir-Light', fontWeight: 'bold', fontSize: getFontSize(17), paddingVertical: 3 }}>{addData.hours[5]}</Text>
-                            <Text style={{ fontFamily: 'Avenir-Light', fontWeight: 'bold', fontSize: getFontSize(17), paddingVertical: 3 }}>{addData.hours[6]}</Text>
-=======
                             <Text style={{ fontFamily: 'Avenir-Light', fontWeight: 'bold', fontSize: getFontSize(15), paddingVertical: 3 }}>{addData.hours.mon}</Text>
                             <Text style={{ fontFamily: 'Avenir-Light', fontWeight: 'bold', fontSize: getFontSize(15), paddingVertical: 3 }}>{addData.hours.tue}</Text>
                             <Text style={{ fontFamily: 'Avenir-Light', fontWeight: 'bold', fontSize: getFontSize(15), paddingVertical: 3 }}>{addData.hours.wed}</Text>
@@ -368,7 +354,6 @@ const UnverifiedBusinessPage = ({ route: { params: { business, db } }, checkIn, 
                             <Text style={{ fontFamily: 'Avenir-Light', fontWeight: 'bold', fontSize: getFontSize(15), paddingVertical: 3 }}>{addData.hours.fri}</Text>
                             <Text style={{ fontFamily: 'Avenir-Light', fontWeight: 'bold', fontSize: getFontSize(15), paddingVertical: 3 }}>{addData.hours.sat}</Text>
                             <Text style={{ fontFamily: 'Avenir-Light', fontWeight: 'bold', fontSize: getFontSize(15), paddingVertical: 3 }}>{addData.hours.sun}</Text>
->>>>>>> af6f1023ec839501b66c663facb180becf6f7cc3
                         </View>
                     </View>
                 </View>
