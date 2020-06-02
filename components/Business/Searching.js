@@ -161,6 +161,7 @@ const Searching = ({ getNearby, newSearch, newFilter, loadFilter, route: { param
                     elevation: 3,
                 }}
                 inputContainerStyle={{ backgroundColor: 'white', borderRadius: 5, height: 45 }}
+                cancelButtonProps={{ disabled: true, buttonStyle: { width: 8 } }}
                 returnKeyType="search"
                 onSubmitEditing={(e) => newQuery(e.nativeEvent.text)}
             />

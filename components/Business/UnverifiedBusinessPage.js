@@ -46,15 +46,7 @@ const UnverifiedBusinessPage = ({ route: { params: { business, db } }, checkIn, 
     let updated = false;
     const [addData, setAddData] = useState({
         websiteURL: 'Not available',
-        hours: {
-            mon: 'Monday: Not available',
-            tue: 'Tuesday: Not available',
-            wed: 'Wednesday: Not available',
-            thu: 'Thursday: Not available',
-            fri: 'Friday: Not available',
-            sat: 'Saturday: Not available',
-            sun: 'Sunday: Not available',
-        },
+        hours: { mon: 'Not available', tue: 'Not available', wed: 'Not available', thu: 'Not available', fri: 'Not available', sat: 'Not available', sun: 'Not available' },
         phoneNumber: 'Not available'
     });
 
@@ -72,7 +64,7 @@ const UnverifiedBusinessPage = ({ route: { params: { business, db } }, checkIn, 
         getDistance();
         async function getMoreData() {
             const res = await getAdditionalData(place_id);
-            console.log(res);
+            console.log(res.formatted_phone_number);
             setAddData({
                 websiteURL: res.website,
                 hours: {
@@ -102,18 +94,18 @@ const UnverifiedBusinessPage = ({ route: { params: { business, db } }, checkIn, 
     if (isVerified === true) {
         verified = <MaterialIcons name='verified-user' color='lightgreen' size={getIconSize(20)}></MaterialIcons>;
     }
-    const getMoreData = async () => {
-        const res = await getAdditionalData(place_id);
-        console.log(res);
-        console.log(res.opening_hours.weekday_text);
-        setAddData({
-            ...addData,
-            websiteURL: res.website,
-            hours: res.opening_hours.weekday_text,
-            phoneNumber: res.formatted_phone_number
-        });
-        console.log(addData.hours);
-    };
+    // const getMoreData = async () => {
+    //     const res = await getAdditionalData(place_id);
+    //     console.log(res);
+    //     console.log(res.opening_hours.weekday_text);
+    //     setAddData({
+    //         ...addData,
+    //         websiteURL: res.website,
+    //         hours: res.opening_hours.weekday_text,
+    //         phoneNumber: res.formatted_phone_number
+    //     });
+    //     console.log(addData.hours);
+    // };
     //distance 
     let [lineDistance, setLineDistance] = useState(null);
     const getDistance = () => {
