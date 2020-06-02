@@ -20,7 +20,7 @@ export const Favorites = ({navigation, User}) => {
                 <Ionicons name="md-heart" color='red' size={35} style={{ paddingLeft: 8, paddingRight: 10, paddingLeft: 2 }} />
                 <Text style={{ color: '#323131', fontSize: 24, fontFamily: 'AvenirNext-Bold' }}>Favorites</Text>
             </View>
-            <BusinessList businesses={User.user.Favorites}></BusinessList>
+            {/*<BusinessList businesses={User.user.Favorites}></BusinessList>*/}
         </View>
     );
 };

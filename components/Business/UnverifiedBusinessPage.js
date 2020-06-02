@@ -46,15 +46,7 @@ const UnverifiedBusinessPage = ({ route: { params: { business, db } }, checkIn, 
     let updated = false;
     const [addData, setAddData] = useState({
         websiteURL: 'Not available',
-        hours: {
-            mon: 'Monday: Not available',
-            tue: 'Tuesday: Not available',
-            wed: 'Wednesday: Not available',
-            thu: 'Thursday: Not available',
-            fri: 'Friday: Not available',
-            sat: 'Saturday: Not available',
-            sun: 'Sunday: Not available',
-        },
+        hours: {mon: 'Not available', tue: 'Not available', wed: 'Not available', thu: 'Not available', fri: 'Not available', sat: 'Not available', sun: 'Not available'},
         phoneNumber: 'Not available'
     });
 
@@ -72,19 +64,19 @@ const UnverifiedBusinessPage = ({ route: { params: { business, db } }, checkIn, 
         getDistance();
         async function getMoreData() {
             const res = await getAdditionalData(place_id);
-            console.log(res);
+            console.log(res.formatted_phone_number);
             setAddData({
-                websiteURL: res.result.website,
+                websiteURL: res.website,
                 hours: {
-                    mon: res.result.opening_hours.weekday_text[0],
-                    tue: res.result.opening_hours.weekday_text[1],
-                    wed: res.result.opening_hours.weekday_text[2],
-                    thu: res.result.opening_hours.weekday_text[3],
-                    fri: res.result.opening_hours.weekday_text[4],
-                    sat: res.result.opening_hours.weekday_text[5],
-                    sun: res.result.opening_hours.weekday_text[6],
+                    mon: res.opening_hours.weekday_text[0],
+                    tue: res.opening_hours.weekday_text[1],
+                    wed: res.opening_hours.weekday_text[2],
+                    thu: res.opening_hours.weekday_text[3],
+                    fri: res.opening_hours.weekday_text[4],
+                    sat: res.opening_hours.weekday_text[5],
+                    sun: res.opening_hours.weekday_text[6],
                 },
-                phoneNumber: res.result.formatted_phone_number
+                phoneNumber: res.formatted_phone_number
             });
         };
         getMoreData();
@@ -102,12 +94,7 @@ const UnverifiedBusinessPage = ({ route: { params: { business, db } }, checkIn, 
     if (isVerified === true) {
         verified = <MaterialIcons name='verified-user' color='lightgreen' size={getIconSize(20)}></MaterialIcons>;
     }
-    let [addData, setAddData] = useState({
-        websiteURL: 'Not available',
-        hours: ['Not available', 'Not available', 'Not available', 'Not available', 'Not available', 'Not available', 'Not available'],
-        phoneNumber: 'Not available'
-    });
-    const getMoreData = async () => {
+    /*const getMoreData = async () => {
         const res = await getAdditionalData(place_id);
         console.log(res);
         console.log(res.opening_hours.weekday_text);
@@ -118,7 +105,7 @@ const UnverifiedBusinessPage = ({ route: { params: { business, db } }, checkIn, 
             phoneNumber: res.formatted_phone_number
         });
         console.log(addData.hours);
-    };
+    };*/
     //distance 
     let [lineDistance, setLineDistance] = useState(null);
     const getDistance = () => {
@@ -352,15 +339,6 @@ const UnverifiedBusinessPage = ({ route: { params: { business, db } }, checkIn, 
                             <Text style={{ paddingLeft: 5, paddingRight: 15, color: 'royalblue', fontFamily: 'Avenir-Light' }}>Hours </Text>
                         </View>
                         <View style={{ flexDirection: 'column', alignItems: 'flex-start', flex: 8 }}>
-<<<<<<< HEAD
-                            <Text style={{ fontFamily: 'Avenir-Light', fontWeight: 'bold', fontSize: getFontSize(17), paddingVertical: 3 }}>{addData.hours[0]}</Text>
-                            <Text style={{ fontFamily: 'Avenir-Light', fontWeight: 'bold', fontSize: getFontSize(17), paddingVertical: 3 }}>{addData.hours[1]}</Text>
-                            <Text style={{ fontFamily: 'Avenir-Light', fontWeight: 'bold', fontSize: getFontSize(17), paddingVertical: 3 }}>{addData.hours[2]}</Text>
-                            <Text style={{ fontFamily: 'Avenir-Light', fontWeight: 'bold', fontSize: getFontSize(17), paddingVertical: 3 }}>{addData.hours[3]}</Text>
-                            <Text style={{ fontFamily: 'Avenir-Light', fontWeight: 'bold', fontSize: getFontSize(17), paddingVertical: 3 }}>{addData.hours[4]}</Text>
-                            <Text style={{ fontFamily: 'Avenir-Light', fontWeight: 'bold', fontSize: getFontSize(17), paddingVertical: 3 }}>{addData.hours[5]}</Text>
-                            <Text style={{ fontFamily: 'Avenir-Light', fontWeight: 'bold', fontSize: getFontSize(17), paddingVertical: 3 }}>{addData.hours[6]}</Text>
-=======
                             <Text style={{ fontFamily: 'Avenir-Light', fontWeight: 'bold', fontSize: getFontSize(15), paddingVertical: 3 }}>{addData.hours.mon}</Text>
                             <Text style={{ fontFamily: 'Avenir-Light', fontWeight: 'bold', fontSize: getFontSize(15), paddingVertical: 3 }}>{addData.hours.tue}</Text>
                             <Text style={{ fontFamily: 'Avenir-Light', fontWeight: 'bold', fontSize: getFontSize(15), paddingVertical: 3 }}>{addData.hours.wed}</Text>
@@ -368,7 +346,6 @@ const UnverifiedBusinessPage = ({ route: { params: { business, db } }, checkIn, 
                             <Text style={{ fontFamily: 'Avenir-Light', fontWeight: 'bold', fontSize: getFontSize(15), paddingVertical: 3 }}>{addData.hours.fri}</Text>
                             <Text style={{ fontFamily: 'Avenir-Light', fontWeight: 'bold', fontSize: getFontSize(15), paddingVertical: 3 }}>{addData.hours.sat}</Text>
                             <Text style={{ fontFamily: 'Avenir-Light', fontWeight: 'bold', fontSize: getFontSize(15), paddingVertical: 3 }}>{addData.hours.sun}</Text>
->>>>>>> af6f1023ec839501b66c663facb180becf6f7cc3
                         </View>
                     </View>
                 </View>

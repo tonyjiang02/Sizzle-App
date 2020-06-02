@@ -91,11 +91,7 @@ export const Landing = ({ getRegisteredBusinesses, getAll, newSearch, navigation
             setTimeout(resolve, timeout);
         });
     }
-<<<<<<< HEAD
-    const refresh = async function () {
-=======
     const refresh = async function() {
->>>>>>> af6f1023ec839501b66c663facb180becf6f7cc3
         console.log('refresh called');
         setRefreshing(true);
         console.log("Asking Location Permissions");

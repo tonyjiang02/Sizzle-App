@@ -47,8 +47,6 @@ const ReservationScroll = ({ reservations, reservationLimit, reserve, startingDa
                 <View style={{ alignItems: 'center', paddingBottom: 5 }}>
                     <Text style={{ fontFamily: 'AvenirNext-Bold' }}>{s.slot}</Text>
                     {reservationLimit > 0 ? <Text>{s.users} / {reservationLimit}</Text> : <Text>{s.users} reserved</Text>}
-<<<<<<< HEAD
-=======
                 </View>
                 <View pointerEvents = {(s.users < reservationLimit) ? 'auto' : 'none'}>
                     <TouchableOpacity onPress={() => {reserve(j, currentDay); reserved.push()}}>
@@ -58,7 +56,6 @@ const ReservationScroll = ({ reservations, reservationLimit, reserve, startingDa
                             </Text>
                         </View>
                     </TouchableOpacity>
->>>>>>> af6f1023ec839501b66c663facb180becf6f7cc3
                 </View>
             </View>
         ));
