@@ -6,6 +6,8 @@ import { styles, input } from './Styles';
 import { LinearGradient } from 'expo-linear-gradient';
 import { Dimensions } from 'react-native';
 import * as Google from 'expo-google-app-auth';
+import * as Font from 'expo-font';
+
 const Login = ({ login, auth1, business, navigation, loginGoogle }) => {
     const [fields, setFields] = useState({
         email: '',
@@ -33,16 +35,13 @@ const Login = ({ login, auth1, business, navigation, loginGoogle }) => {
             style={{ flex: 1 }}
         >
             <KeyboardAvoidingView style={{ flex: 1, alignItems: 'center', paddingTop: 50 }}>
+                {console.log('login screen displayed')}
                 <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
                     <View>
                         <View style={{ backgroundColor: 'transparent', alignItems: 'center', paddingTop: 30 }}>
                             <Image source={require('../assets/logos/Sizzle_White_Transparent.png')} style={{ height: 150, width: 220 }} ></Image>
                         </View>
                         <View>
-                            <TouchableOpacity onPress={() => loginWithGoogle()} style={{ flexDirection: "row", height: 50, width: 300, borderRadius: 5, backgroundColor: "white", alignSelf: "center", marginBottom: 20, alignItems: "center" }}>
-                                <Image source={require('../assets/logos/google-light-signin-logo.png')} style={{ height: 50, width: 50 }}></Image>
-                                <Text>Sign In With Google</Text>
-                            </TouchableOpacity>
                             <TextInput
                                 autoCapitalize='none'
                                 style={input.formInput}
@@ -70,6 +69,12 @@ const Login = ({ login, auth1, business, navigation, loginGoogle }) => {
                             }}>
                                 <Text style={{ color: 'white', alignSelf: 'center', fontFamily: 'AvenirNext-Bold', fontSize: 16 }}>Log In</Text>
                             </TouchableOpacity>
+                            <TouchableOpacity onPress={() => loginWithGoogle()} style={{ flexDirection: "row", height: 50, backgroundColor: '#4285f4', width: 300, borderRadius: 5, marginBottom: 20, shadowColor: "#000",
+                                shadowOffset: { width: 0, height: 2 }, shadowOpacity: 0.25, shadowRadius: 3.84, elevation: 5, alignSelf: 'center', alignItems: 'center'}}>
+                                <Image source={require('../assets/logos/google-light-signin-logo.png')} style={{ height: 50, width: 50 }}></Image>
+                                <View style={{width: 24}}></View>
+                                <Image source={require('../assets/logos/googletext.png')} style={{height: 40, width: 160}}></Image>
+                            </TouchableOpacity>
                             <View style={{ height: 115, borderBottomColor: 'gainsboro', borderBottomWidth: 0.7 }}></View>
                             <View style={{ height: 20 }}></View>
                             <View style={{ flexDirection: 'row', justifyContent: 'center', alignItems: 'center' }}>
@@ -85,8 +90,8 @@ const Login = ({ login, auth1, business, navigation, loginGoogle }) => {
                         </View>
                     </View>
                 </TouchableWithoutFeedback>
-            </KeyboardAvoidingView>
-        </LinearGradient>
+            </KeyboardAvoidingView> 
+        </LinearGradient> 
     );
 };
 const mapStateToProps = state => ({

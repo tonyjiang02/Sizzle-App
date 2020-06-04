@@ -47,13 +47,15 @@ export const getBusiness = (googleId, id) => async dispatch => {
     var res = null;
     try {
         if (id) {
+            console.log('fetching id');
             res = await fetch(`${BASE_URL}/api/business/id/${id}`);
+            console.log(res);
         }
         else if (googleId) {
 
         }
         const data = await res.json();
-        console.log(data.announcements);
+        console.log(data.email);
         dispatch({
             type: LOAD_BUSINESS,
             payload: data

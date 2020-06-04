@@ -104,7 +104,7 @@ const BusinessSquare = ({ business, navigation, db, openBusinessPage, type, User
             openDisplay = <Text style={{
                 paddingHorizontal: 5, alignSelf: 'center', color: 'white', fontSize: getFontSize(12),
                 borderColor: 'gray', borderWidth: 1, padding: 2, backgroundColor: 'gray'
-            }}>Unknown</Text>;
+            }}>N/A</Text>;
         }
     }
 

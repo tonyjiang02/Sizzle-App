@@ -52,8 +52,8 @@ const BusinessPage = ({ route: { params: { business, db } }, checkIn, auth, upda
     const [covidModalVisible, setCovidModalVisible] = useState(false);
     const [livePopulation, setLivePopulation] = useState(population);
     const [updates, setUpdates] = useState(null);
-    const [refreshing, setRefreshing] = useState(false);
-    const [startRefresh, setStartRefresh] = useState(false);
+    //const [refreshing, setRefreshing] = useState(false);
+    //const [startRefresh, setStartRefresh] = useState(false);
 
     //backend
     const onPressCheckIn = async () => {
@@ -65,11 +65,11 @@ const BusinessPage = ({ route: { params: { business, db } }, checkIn, auth, upda
             setTimeout(resolve, timeout);
         });
     }
-    const refresh = async function () {
+    /*const refresh = async function () {
         setRefreshing(true);
         await getBusiness(business.place_id, db._id);
         wait(2000).then(() => { setRefreshing(false); setStartRefresh(true); });
-    };
+    };*/
     useEffect(() => {
         setData(dbBusiness);
     }, [dbBusiness]);
@@ -89,17 +89,20 @@ const BusinessPage = ({ route: { params: { business, db } }, checkIn, auth, upda
         console.log("Redux Reservations");
         console.log(User.user.reservations);
     }, [User]);
-    useEffect(() => {
+    /*useEffect(() => {
         if (startRefresh === true) {
             setData(dbBusiness);
             setStartRefresh(false);
         }
-    }, [startRefresh]);
+    }, [startRefresh]);*/
 
     useEffect(() => {
-        announcements = announcements.reverse();
-        setUpdates(announcements.map((a, i) => (
-            <LiveUpdate title={a.title} content={a.content} key={i}></LiveUpdate>
+        console.log('running useEffect');
+        let thisAnnouncements = [...announcements];
+        thisAnnouncements.reverse();
+        console.log(thisAnnouncements);
+        setUpdates(thisAnnouncements.map((a, i) => (
+            <LiveUpdate title={a.title} content={a.content} time={a.date} key={i}></LiveUpdate>
         )));
     }, []);
 
@@ -331,7 +334,7 @@ const BusinessPage = ({ route: { params: { business, db } }, checkIn, auth, upda
             </Modal>
 
             <ScrollView showsVerticalScrollIndicator={false}>
-                <RefreshControl refreshing={refreshing} onRefresh={refresh} />
+                {/*<RefreshControl refreshing={refreshing} onRefresh={refresh} />*/}
                 <View style={{
                     borderBottomColor: 'transparent', borderTopColor: 'transparent',
                     shadowColor: "#000",
@@ -343,7 +346,7 @@ const BusinessPage = ({ route: { params: { business, db } }, checkIn, auth, upda
                     shadowRadius: 9.51,
                     elevation: 15,
                 }}>
-                    <ImageBackground source={coverImageUrl ? { uri: coverImageUrl } : { uri: 'https://picsum.photos/400/300' }} style={{ width: '100%', height: 250 }}>
+                    <ImageBackground source={coverImageUrl ? { uri: coverImageUrl } : require('../../assets/backgroundhue.png')} style={{ width: '100%', height: 250 }}>
                         <LinearGradient
                             colors={['transparent', 'rgba(0,0,0,0.8)']}
                             style={{
@@ -418,7 +421,7 @@ const BusinessPage = ({ route: { params: { business, db } }, checkIn, auth, upda
                                 <AntDesign name='rightcircle' color='#ff9900' size={getIconSize(18)} style={{ paddingTop: 12 }}></AntDesign>
                             </View>
                             <View style={{ flex: 5 }}>
-                                {(announcements[0]) && <LiveUpdate title={announcements[0].title ? announcements[0].title : ""} content={announcements[0].content ? announcements[0].content : ""}></LiveUpdate>}
+                                {(announcements[announcements.length-1]) && <LiveUpdate title={announcements[announcements.length-1].title ? announcements[announcements.length-1].title : ""} content={announcements[announcements.length-1].content ? announcements[announcements.length-1].content : ""} time={announcements[announcements.length-1].date ? announcements[announcements.length-1].date : 0}></LiveUpdate>}
                             </View>
                         </TouchableOpacity>
                     </View>
