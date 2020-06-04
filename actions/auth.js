@@ -37,38 +37,55 @@ export const login = (email, password) => async (dispatch, getState) => {
     }
 };
 export const loginGoogle = (id) => async (dispatch) => {
-    console.log("logging in with google");
-    const res = await fetch(`${BASE_URL}/api/auth/user/google`, {
-        method: "POST",
-        headers: {
-            'Content-Type': 'application/json'
-        },
-        body: JSON.stringify({
-            id: id
-        })
-    });
-    const json = await res.json();
-    dispatch({
-        type: LOGIN_SUCCESS,
-        payload: json
-    });
+    try {
+        console.log("logging in with google");
+        const res = await fetch(`${BASE_URL}/api/auth/user/google`, {
+            method: "POST",
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+                id: id
+            })
+        });
+        if (!res.ok) {
+            const err = await res.text();
+            throw Error(err);
+        }
+        const json = await res.json();
+        dispatch({
+            type: LOGIN_SUCCESS,
+            payload: json
+        });
+    } catch (err) {
+        console.log(err);
+    }
 };
 export const signupGoogle = (id) => async (dispatch) => {
-    console.log("Signing up with with google");
-    const res = await fetch(`${BASE_URL}/api/auth/user/google`, {
-        method: "POST",
-        headers: {
-            'Content-Type': 'application/json'
-        },
-        body: JSON.stringify({
-            id: id
-        })
-    });
-    const json = await res.json();
-    dispatch({
-        type: SIGNUP_SUCCESS,
-        payload: json
-    });
+    try {
+        console.log("Signing up with with google");
+        const res = await fetch(`${BASE_URL}/api/users/google`, {
+            method: "POST",
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+                id: id
+            })
+        });
+        if (!res.ok) {
+            const err = await res.text();
+            throw Error(err);
+        }
+        const json = await res.json();
+        console.log(json);
+        dispatch({
+            type: SIGNUP_SUCCESS,
+            payload: json
+        });
+    } catch (err) {
+        console.log(err);
+    }
 };
 export const logout = () => async dispatch => {
     console.log("Logout Action");
@@ -90,6 +107,10 @@ export const signup = (email, password) => async dispatch => {
                 password: password
             })
         });
+        if (!res.ok) {
+            const err = await res.text();
+            throw Error(err);
+        }
         const data = await res.json();
         console.log(data);
         dispatch({
@@ -111,6 +132,10 @@ export const loadUser = () => async dispatch => {
                     'x-auth-token': token
                 }
             });
+            if (!res.ok) {
+                const err = await res.text();
+                throw Error(err);
+            }
             const json = await res.json();
             console.log(json);
             console.log('dispatching');
@@ -119,6 +144,7 @@ export const loadUser = () => async dispatch => {
                 payload: json
             });
         } catch (err) {
+            console.log(err);
             dispatch({
                 type: ERROR,
                 payload: err

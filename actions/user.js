@@ -1,6 +1,7 @@
 import { UPDATE_USER, LOAD_USER, ALLOW_LOC } from './types';
 import { BASE_URL } from '../config';
 export const updateUser = (user) => async (dispatch, getState) => {
+    console.log("RUNNING UPDATED USER");
     console.log("updating user");
     const token = getState().auth.token;
     console.log(user);
@@ -23,7 +24,8 @@ export const updateUser = (user) => async (dispatch, getState) => {
 };
 //Updates redux and database without syncing
 export const updateUserWithoutReturn = (user) => async dispatch => {
-    updateUser(user);
+    console.log(user);
+    await updateUser(user);
     dispatch({
         type: UPDATE_USER,
         payload: user

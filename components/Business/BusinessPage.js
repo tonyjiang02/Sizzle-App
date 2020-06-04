@@ -37,7 +37,7 @@ import { updateUser, updateUserWithoutReturn } from '../../actions/user';
 import { updateBusinessReservations } from '../../actions/business';
 import * as Location from 'expo-location';
 
-const BusinessPage = ({ route: { params: { business, db } }, checkIn, auth, updateUser, User, getBusiness, updateBusinessReservations, dbBusiness }) => {
+const BusinessPage = ({ route: { params: { business, db } }, checkIn, auth, updateUser, User, getBusiness, updateBusinessReservations, dbBusiness, updateUserWithoutReturn }) => {
     //destructuring
     let { vicinity, geometry } = business;
     const [data, setData] = useState(dbBusiness);
@@ -66,31 +66,31 @@ const BusinessPage = ({ route: { params: { business, db } }, checkIn, auth, upda
         });
     }
     const refresh = async function () {
-        console.log('refreshing');
         setRefreshing(true);
         await getBusiness(business.place_id, db._id);
         wait(2000).then(() => { setRefreshing(false); setStartRefresh(true); });
     };
     useEffect(() => {
-        console.log("rerender");
         setData(dbBusiness);
     }, [dbBusiness]);
     useEffect(() => {
         getDistance();
         return function cleanup() {
             if (updated) {
-                console.log("updating user");
-                updateUserWithoutReturn(user);
+                console.log(user.reservations);
+                updateUserWithoutReturn({ reservations: user.reservations });
             }
             if (businessUpdated) {
-                console.log("updating Business");
                 updateBusinessReservations(db._id, reservations);
             }
         };
     });
     useEffect(() => {
+        console.log("Redux Reservations");
+        console.log(User.user.reservations);
+    }, [User]);
+    useEffect(() => {
         if (startRefresh === true) {
-            console.log('starting start refresh');
             setData(dbBusiness);
             setStartRefresh(false);
         }
@@ -158,13 +158,17 @@ const BusinessPage = ({ route: { params: { business, db } }, checkIn, auth, upda
     const [currentReservations, setReservations] = useState({ ...reservations });
     const reserveSpot = (i, day) => {
         let date = new Date();
+        console.log("current date" + date);
         let indexDay = weekMap.indexOf(day);
-        date.setDate(date.getDate() + (7 + indexDay - date.getDay()) & 7);
+        console.log(indexDay);
+        date.setDate(date.getDate() + (7 + indexDay - date.getDay()) % 7);
+        console.log("new date " + date);
         user.reservations.push({
             business: _id,
             businessName: name,
-            time: date,
-            index: i
+            time: reservations[day][i].slot,
+            index: i,
+            date: date
         });
         //TODO : add reservation to users array 
         reservations[day][i].users += 1;
@@ -522,4 +526,4 @@ const mapStateToProps = state => ({
     auth: state.auth,
     User: state.user
 });
-export default connect(mapStateToProps, { checkIn, updateUser, updateBusinessReservations, getBusiness })(BusinessPage);
+export default connect(mapStateToProps, { checkIn, updateUser, updateBusinessReservations, getBusiness, updateUserWithoutReturn })(BusinessPage);
