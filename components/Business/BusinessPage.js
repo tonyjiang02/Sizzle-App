@@ -168,7 +168,7 @@ const BusinessPage = ({ route: { params: { business, db } }, checkIn, auth, upda
             businessName: name,
             time: reservations[day][i].slot,
             index: i,
-            date: date
+            date: date.toDateString()
         });
         //TODO : add reservation to users array 
         reservations[day][i].users += 1;

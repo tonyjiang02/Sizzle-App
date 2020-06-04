@@ -53,6 +53,7 @@ export const loginGoogle = (id) => async (dispatch) => {
             throw Error(err);
         }
         const json = await res.json();
+        console.log(json);
         dispatch({
             type: LOGIN_SUCCESS,
             payload: json
@@ -81,7 +82,7 @@ export const signupGoogle = (id) => async (dispatch) => {
         console.log(json);
         dispatch({
             type: SIGNUP_SUCCESS,
-            payload: json
+            payload: json.token
         });
     } catch (err) {
         console.log(err);

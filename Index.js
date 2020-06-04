@@ -33,6 +33,7 @@ const Index = ({ auth, User }) => {
         const isAuthenticated = async () => {
             const token = await AsyncStorage.getItem('token');
             if (token) {
+                console.log(token);
                 store.dispatch(loadUser());
                 setAuth(2);
                 console.log("Is Authenticated");
@@ -72,10 +73,10 @@ const Index = ({ auth, User }) => {
                     <Stack.Screen name="SearchLoading" component={SearchLoading}></Stack.Screen>
                     <Stack.Screen name="ExampleBusinessPage" component={ExampleBusinessPage} />
                     <Stack.Screen name="UnverifiedBusinessPage" component={UnverifiedBusinessPage} />
-                    <Stack.Screen name="CheckedIn" component={CheckedIn}/>
-                    <Stack.Screen name="BusinessHistoryList" component={BusinessHistoryList}/>
-                    <Stack.Screen name="Favorites" component={Favorites}/>
-                    <Stack.Screen name="UserReservations" component={UserReservations}/>
+                    <Stack.Screen name="CheckedIn" component={CheckedIn} />
+                    <Stack.Screen name="BusinessHistoryList" component={BusinessHistoryList} />
+                    <Stack.Screen name="Favorites" component={Favorites} />
+                    <Stack.Screen name="UserReservations" component={UserReservations} />
                 </Fragment>
             );
         }

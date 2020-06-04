@@ -14,6 +14,7 @@ export default function (state = initialState, action) {
         case LOGIN_SUCCESS:
             console.log("AUTH REDUCER: LOGIN SUCCESS");
             AsyncStorage.setItem('token', payload.token);
+            console.log(payload);
             return {
                 ...state,
                 isAuthenticated: true,
@@ -32,6 +33,7 @@ export default function (state = initialState, action) {
         case SIGNUP_SUCCESS:
             console.log("AUTH REDUCER: SIGNUP SUCCESS");
             AsyncStorage.setItem('token', payload.token);
+            console.log(payload);
             return {
                 ...state,
                 isAuthenticated: true,

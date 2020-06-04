@@ -12,7 +12,6 @@ const ReservationScroll = ({ reservations, reservationLimit, reserve, startingDa
     //Needs this reservation's date, current time, opening time, closing time, time slot length, #ppl allowed, #ppl currently registered at each time slot
     let weekMap = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
     let startingIndex = weekMap.indexOf(startingDate);
-    console.log(startingIndex);
     let weekMapRelative = [];
     let oncePerDay = false;
     let oncePerWeek = false;
@@ -33,7 +32,6 @@ const ReservationScroll = ({ reservations, reservationLimit, reserve, startingDa
         if (users >= limit) {
             return false;
         }
-        console.log(time);
     };
 
     for (let i = 0; i < 7; i++) {
@@ -59,7 +57,6 @@ const ReservationScroll = ({ reservations, reservationLimit, reserve, startingDa
                 </View>
             </View>
         ));
-        console.log(reservationDay);
         list.push(reservationDay);
     }
 

@@ -1,9 +1,8 @@
 import { UPDATE_USER, LOAD_USER, ALLOW_LOC } from './types';
 import { BASE_URL } from '../config';
-export const updateUser = (user) => async (dispatch, getState) => {
+export const updateUser = async (user, token) => {
     console.log("RUNNING UPDATED USER");
     console.log("updating user");
-    const token = getState().auth.token;
     console.log(user);
     try {
         const res = await fetch(`${BASE_URL}/api/users/update`, {
@@ -13,9 +12,13 @@ export const updateUser = (user) => async (dispatch, getState) => {
                 'x-auth-token': token
             },
             body: JSON.stringify({
-                user: user
+                user: { ...user }
             })
         });
+        if (!res.ok) {
+            const text = await res.text();
+            console.log(text);
+        }
         const json = await res.json();
         return json;
     } catch (err) {
@@ -23,13 +26,32 @@ export const updateUser = (user) => async (dispatch, getState) => {
     }
 };
 //Updates redux and database without syncing
-export const updateUserWithoutReturn = (user) => async dispatch => {
-    console.log(user);
-    await updateUser(user);
+export const updateUserWithoutReturn = (user) => async (dispatch, getState) => {
+    console.log("updating user");
+    const token = getState().auth.token;
+    console.log(token);
     dispatch({
         type: UPDATE_USER,
         payload: user
     });
+    // try {
+    //     const res = await fetch(`${BASE_URL}/api/users/user`, {
+    //         method: 'GET',
+    //         headers: {
+    //             'Content-Type': 'application/json',
+    //             'x-auth-token': token
+    //         },
+    //     });
+    //     if (!res.ok) {
+    //         const text = await res.text();
+    //         console.log(text);
+    //     }
+    //     const json = await res.json();
+    //     return json;
+    // } catch (err) {
+    //     console.log(err);
+    // }
+    updateUser(user, token);
 };
 //Updates the redux with the return from the database
 export const updateUserWithReturn = (user) => async dispatch => {
