@@ -12,12 +12,12 @@ import { getFontSize, getIconSize } from '../../utils/fontsizes';
 import * as Location from 'expo-location';
 
 const BusinessSquare = ({ business, navigation, db, openBusinessPage, type, User }) => {
-    const [lineDistance, setLineDistance ] = useState('N/A');
+    const [lineDistance, setLineDistance] = useState('N/A');
     let { vicinity, opening_hours } = business;
     let { isVerified, openStatus, coverImageUrl, population } = db;
     useEffect(() => {
         let distance = 0;
-        async function fetchDistance () {
+        async function fetchDistance() {
             distance = await getDistance();
             setLineDistance(distance + 'mi');
         }
@@ -28,7 +28,7 @@ const BusinessSquare = ({ business, navigation, db, openBusinessPage, type, User
         if (db.isVerified) {
             navigation.navigate('BusinessPage', { business: business, db: db });
         } else {
-            navigation.navigate('UnverifiedBusinessPage', { business: business, db: db })
+            navigation.navigate('UnverifiedBusinessPage', { business: business, db: db });
         }
     };
 
@@ -36,11 +36,12 @@ const BusinessSquare = ({ business, navigation, db, openBusinessPage, type, User
     let verifiedDisplay = <View></View>;
     let image = <Image style={{ height: '100%', width: '100%' }}></Image>;
     let openPictureStyle = styles.openPictureStyle;
-    if (isVerified===true){
-        verifiedDisplay = <MaterialIcons name='verified-user' color='lightgreen' size={getIconSize(18)} style={{paddingLeft: 5}}></MaterialIcons>;
+    if (isVerified === true) {
+        verifiedDisplay = <MaterialIcons name='verified-user' color='lightgreen' size={getIconSize(18)} style={{ paddingLeft: 5 }}></MaterialIcons>;
+        image = <Image source={coverImageUrl ? { uri: coverImageUrl } : require('../../assets/logos/image_unavailable.png')} style={openPictureStyle}></Image>;
     }
     if (isVerified === false) {
-        image = <Image source={require('../../assets/logos/image_unavailable.png')} style={openPictureStyle}></Image>
+        image = <Image source={require('../../assets/logos/image_unavailable.png')} style={openPictureStyle}></Image>;
     }
 
     //population display
@@ -57,18 +58,17 @@ const BusinessSquare = ({ business, navigation, db, openBusinessPage, type, User
     else {
         popDisplay = <Text style={{ paddingLeft: 3, alignSelf: 'center', color: 'gray', fontSize: getFontSize(20), fontWeight: 'bold' }}>{population}</Text>;
     }
-    
+
     //open status
     let openDisplay = <Text></Text>;
-    let openPicture = <Image source={coverImageUrl ? { uri: coverImageUrl } : require('../../assets/logos/image_unavailable.png')} style={{ height: 115, width: 115 }}></Image>;
-    if (isVerified === true){
+    if (isVerified === true) {
         if (openStatus === true) {
             openDisplay = <Text style={{
                 paddingHorizontal: 2, alignSelf: 'center', color: 'white', fontSize: getFontSize(12),
                 borderColor: 'green', borderWidth: 1, paddingVertical: 1, backgroundColor: 'green'
             }}>Open</Text>;
         }
-        else if (openStatus === false){
+        else if (openStatus === false) {
             openDisplay = <Text style={{
                 alignSelf: 'center', color: 'white', fontSize: getFontSize(12),
                 borderColor: 'red', borderWidth: 1, padding: 3, backgroundColor: 'red'
@@ -78,14 +78,14 @@ const BusinessSquare = ({ business, navigation, db, openBusinessPage, type, User
     else {
         let openStatus2 = 2;
         try {
-            if (business.opening_hours.open_now===false){
+            if (business.opening_hours.open_now === false) {
                 openStatus2 = 0;
             }
-            else if (business.opening_hours.open_now===true){
+            else if (business.opening_hours.open_now === true) {
                 openStatus2 = 1;
             }
         }
-        catch(err){
+        catch (err) {
             openStatus2 = 2;
         }
         if (openStatus2 === 1) {
@@ -94,13 +94,13 @@ const BusinessSquare = ({ business, navigation, db, openBusinessPage, type, User
                 borderColor: 'green', borderWidth: 1, padding: 2, backgroundColor: 'green'
             }}>Open</Text>;
         }
-        else if (openStatus2 === 0){
+        else if (openStatus2 === 0) {
             openDisplay = <Text style={{
                 paddingHorizontal: 5, alignSelf: 'center', color: 'white', fontSize: getFontSize(12),
                 borderColor: 'red', borderWidth: 1, padding: 2, backgroundColor: 'red'
             }}>Closed</Text>;
         }
-        else if (openStatus2 === 2){
+        else if (openStatus2 === 2) {
             openDisplay = <Text style={{
                 paddingHorizontal: 5, alignSelf: 'center', color: 'white', fontSize: getFontSize(12),
                 borderColor: 'gray', borderWidth: 1, padding: 2, backgroundColor: 'gray'
@@ -112,7 +112,7 @@ const BusinessSquare = ({ business, navigation, db, openBusinessPage, type, User
     const getDistance = async () => {
         let currentLoc = User.user.location;
         let response = await Location.requestPermissionsAsync();
-        if (response.granted){
+        if (response.granted) {
             let loc = await Location.getLastKnownPositionAsync();
             let coords = loc.coords;
             currentLoc = coords;

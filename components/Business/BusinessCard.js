@@ -12,15 +12,15 @@ import { straightLineDistance, kmToMi } from '../../utils/businessUtils';
 import * as Location from 'expo-location';
 
 const BusinessCard = ({ business, navigation, db, openBusinessPage, User }) => {
-    const [lineDistance, setLineDistance ] = useState('unknown');
+    const [lineDistance, setLineDistance] = useState('unknown');
     useEffect(() => {
         let distance = 0;
-        async function fetchDistance () {
+        async function fetchDistance() {
             distance = await getDistance();
-            if (distance > 99){
+            if (distance > 99) {
                 setLineDistance('>99mi');
             }
-            else{
+            else {
                 setLineDistance(distance + 'mi');
             }
         }
@@ -56,10 +56,10 @@ const BusinessCard = ({ business, navigation, db, openBusinessPage, User }) => {
         popDisplay = <Text style={{ paddingLeft: 3, color: 'red', fontSize: getFontSize(20), fontWeight: 'bold' }}>{db.population}</Text>;
     }
     else if (db.population >= 10000 && db.population <= 1000000) {
-        popDisplay = <Text style={{ paddingLeft: 3, color: 'red', fontSize: getFontSize(20), fontWeight: 'bold' }}>{Math.trunc(9999/ 100)/10}k</Text>;
+        popDisplay = <Text style={{ paddingLeft: 3, color: 'red', fontSize: getFontSize(20), fontWeight: 'bold' }}>{Math.trunc(9999 / 100) / 10}k</Text>;
     }
     else if (db.population >= 1000000) {
-        popDisplay = <Text style={{ paddingLeft: 3, color: 'red', fontSize: getFontSize(20), fontWeight: 'bold' }}>{Math.trunc(db.population / 100000)/10}m</Text>;
+        popDisplay = <Text style={{ paddingLeft: 3, color: 'red', fontSize: getFontSize(20), fontWeight: 'bold' }}>{Math.trunc(db.population / 100000) / 10}m</Text>;
     }
     else {
         popDisplay = <Text style={{ paddingLeft: 3, color: 'gray', fontSize: getFontSize(20), fontWeight: 'bold' }}>{db.population}</Text>;
@@ -68,14 +68,14 @@ const BusinessCard = ({ business, navigation, db, openBusinessPage, User }) => {
     //open status
     let openDisplay = <Text></Text>;
     let openPicture = <Image source={coverImageUrl ? { uri: coverImageUrl } : require('../../assets/logos/image_unavailable.png')} style={{ height: 115, width: 115 }}></Image>;
-    if (isVerified === true){
+    if (isVerified === true) {
         if (openStatus === true) {
             openDisplay = <Text style={{
                 paddingHorizontal: 2, alignSelf: 'center', color: 'white', fontSize: getFontSize(12),
                 borderColor: 'green', borderWidth: 1, paddingVertical: 1, backgroundColor: 'green'
             }}>Open</Text>;
         }
-        else if (openStatus === false){
+        else if (openStatus === false) {
             openDisplay = <Text style={{
                 alignSelf: 'center', color: 'white', fontSize: getFontSize(12),
                 borderColor: 'red', borderWidth: 1, padding: 3, backgroundColor: 'red'
@@ -85,14 +85,14 @@ const BusinessCard = ({ business, navigation, db, openBusinessPage, User }) => {
     else {
         let openStatus2 = 2;
         try {
-            if (business.opening_hours.open_now===false){
+            if (business.opening_hours.open_now === false) {
                 openStatus2 = 0;
             }
-            else if (business.opening_hours.open_now===true){
+            else if (business.opening_hours.open_now === true) {
                 openStatus2 = 1;
             }
         }
-        catch(err){
+        catch (err) {
             openStatus2 = 2;
         }
         if (openStatus2 === 1) {
@@ -101,13 +101,13 @@ const BusinessCard = ({ business, navigation, db, openBusinessPage, User }) => {
                 borderColor: 'green', borderWidth: 1, padding: 2, backgroundColor: 'green'
             }}>Open</Text>;
         }
-        else if (openStatus2 === 0){
+        else if (openStatus2 === 0) {
             openDisplay = <Text style={{
                 paddingHorizontal: 5, alignSelf: 'center', color: 'white', fontSize: getFontSize(12),
                 borderColor: 'red', borderWidth: 1, padding: 2, backgroundColor: 'red'
             }}>Closed</Text>;
         }
-        else if (openStatus2 === 2){
+        else if (openStatus2 === 2) {
             openDisplay = <Text style={{
                 paddingHorizontal: 5, alignSelf: 'center', color: 'white', fontSize: getFontSize(12),
                 borderColor: 'gray', borderWidth: 1, padding: 2, backgroundColor: 'gray'
@@ -119,7 +119,7 @@ const BusinessCard = ({ business, navigation, db, openBusinessPage, User }) => {
     const getDistance = async () => {
         let currentloc = User.user.location;
         let response = await Location.requestPermissionsAsync();
-        if (response.granted){
+        if (response.granted) {
             let loc = await Location.getLastKnownPositionAsync();
             let coords = loc.coords;
             currentloc = coords;
@@ -158,7 +158,7 @@ const BusinessCard = ({ business, navigation, db, openBusinessPage, User }) => {
                         </View>
                     </View>
                 </TouchableOpacity>
-            </View> 
+            </View>
         </View>
     );
 };

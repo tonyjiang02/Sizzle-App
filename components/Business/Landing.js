@@ -145,6 +145,7 @@ export const Landing = ({ getRegisteredBusinesses, getAll, newSearch, navigation
             for (let i = 0; i < businesses[k].types.length; i++) {
                 if (placed === false && (businesses[k].types[i] === 'restaurant' || businesses[k].types[i] === 'bakery' || businesses[k].types[i] === 'cafe' || businesses[k].types[i] === 'night_club' || businesses[k].types[i] === 'bar')) {
                     s.food.push({ business: businesses[k], db: dbBusinesses[k] });
+                    console.log(businesses[k].name);
                     placed = true;
                 }
                 else if (placed === false && (businesses[k].types[i] === 'supermarket' || businesses[k].types[i] === 'drugstore' || businesses[k].types[i] === 'convenience_store' || businesses[k].types[i] === 'liquor_store')) {
