@@ -18,7 +18,6 @@ const LiveUpdate = ({ title, content, time }) => {
         let postSeconds = postTime / 1000;
         let diffSeconds = currentSeconds - postSeconds;
         let diffMin = diffSeconds / 60;
-        console.log(diffMin);
         setTimeDiff(Math.round(diffMin));
     }, [])
 
@@ -26,7 +25,7 @@ const LiveUpdate = ({ title, content, time }) => {
     if (timeDiff < 1){
         timeDisplay = "now";
     }
-    if (timeDiff < 60) {
+    else if (timeDiff < 60) {
         timeDisplay = timeDiff + 'min.';
     }
     else if (timeDiff < 1440) {

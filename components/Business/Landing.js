@@ -330,12 +330,12 @@ export const Landing = ({ getRegisteredBusinesses, getAll, newSearch, navigation
                         <View>
                             <ScrollView showsVerticalScrollIndicator={false}>
                                 <RefreshControl refreshing={refreshing} onRefresh={refresh} />
-                                <BusinessSideScroll key={1} businesses={sorted.food} category={'Restaurants, Cafes, and Bars'} navigation={navigation}></BusinessSideScroll>
                                 <BusinessSideScroll key={2} businesses={sorted.grocery} category={'Groceries'} navigation={navigation}></BusinessSideScroll>
                                 <BusinessSideScroll key={3} businesses={sorted.supply} category={'Supplies'} navigation={navigation}></BusinessSideScroll>
                                 <BusinessSideScroll key={4} businesses={sorted.store} category={'Stores'} navigation={navigation}></BusinessSideScroll>
-                                <BusinessSideScroll key={5} businesses={sorted.services} category={'Services'} navigation={navigation}></BusinessSideScroll>
+                                <BusinessSideScroll key={1} businesses={sorted.food} category={'Restaurants, Cafes, and Bars'} navigation={navigation}></BusinessSideScroll>
                                 <BusinessSideScroll key={6} businesses={sorted.public} category={'Public'} navigation={navigation}></BusinessSideScroll>
+                                <BusinessSideScroll key={5} businesses={sorted.services} category={'Services'} navigation={navigation}></BusinessSideScroll>
                                 <BusinessSideScroll key={7} businesses={sorted.attraction} category={'Attractions'} navigation={navigation}></BusinessSideScroll>
                                 <BusinessSideScroll key={8} businesses={sorted.entertainment} category={'Entertainment'} navigation={navigation}></BusinessSideScroll>
                                 <BusinessSideScroll key={9} businesses={sorted.recreation} category={'Recreation'} navigation={navigation}></BusinessSideScroll>

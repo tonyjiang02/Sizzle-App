@@ -16,10 +16,10 @@ import BusinessCard from './Business/BusinessCard';
 import BusinessList from './Business/BusinessList';
 import Outlines from '../assets/Outlines';
 import * as Location from 'expo-location';
-import {getNearest} from '../actions/business';
+import {getNearest, getBusiness} from '../actions/business';
 import SearchLoading from './layout/LandingLoading';
 
-export const Checkin = ({navigation, getNearest, loadingNearest, dbNearestBusinesses, nearestBusinesses, User}) => {
+export const Checkin = ({navigation, getNearest, loadingNearest, dbNearestBusinesses, nearestBusinesses, getBusiness, User}) => {
     const openCheckedIn = () => {
         navigation.navigate('CheckedIn', {navigation: navigation});
     }
@@ -81,6 +81,9 @@ export const Checkin = ({navigation, getNearest, loadingNearest, dbNearestBusine
 
     const handleBarCodeScanned = ({ type, data }) => {
         setScanned(true);
+        console.log(data);
+        const dataID = data.substring(56);
+        getBusiness(null, dataID);
         Linking.openURL(data);
       };
 
@@ -131,4 +134,4 @@ const mapStateToProps = state => ({
     loadingNearest: state.business.loadingNearest,
     User: state.user
 });
-export default connect(mapStateToProps, {getNearest})(Checkin);
+export default connect(mapStateToProps, {getNearest, getBusiness})(Checkin);
