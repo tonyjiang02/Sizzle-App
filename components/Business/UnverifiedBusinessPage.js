@@ -54,8 +54,8 @@ const UnverifiedBusinessPage = ({ route: { params: { business, db } }, checkIn, 
     const [livePopulation, setLivePopulation] = useState(population);
     //backend
     const onPressCheckIn = async () => {
-        const newPopulation = await checkIn(business.place_id);
-        setLivePopulation(newPopulation);
+        const biz = await checkIn(business.place_id);
+        setLivePopulation(biz.population);
     };
     const refresh = () => {
         getBusiness(business.place_id, db._id);

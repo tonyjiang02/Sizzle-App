@@ -8,7 +8,7 @@ import { openBusinessPage } from '../../actions/business';
 import { Ionicons, MaterialCommunityIcons, AntDesign, FontAwesome5, MaterialIcons } from '@expo/vector-icons';
 import { connect } from 'react-redux';
 import { ScrollView } from 'react-native-gesture-handler';
-const ReservationScroll = ({ reservations, reservationLimit, reserve, day }) => {
+const ReservationScroll = ({ reservations, reservationLimit, reserve, day, checkReserved }) => {
     //Needs this reservation's date, current time, opening time, closing time, time slot length, #ppl allowed, #ppl currently registered at each time slot
 
     let list = reservations.map((s, i) => (

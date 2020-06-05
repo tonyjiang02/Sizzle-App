@@ -8,7 +8,7 @@ import { openBusinessPage } from '../../actions/business';
 import { Ionicons, MaterialCommunityIcons, AntDesign, FontAwesome5, MaterialIcons } from '@expo/vector-icons';
 import { connect } from 'react-redux';
 import { ScrollView } from 'react-native-gesture-handler';
-const ReservationScroll = ({ reservations, reservationLimit, reserve, startingDate }) => {
+const ReservationScroll = ({ reservations, reservationLimit, reserve, startingDate, checkReserved }) => {
     //Needs this reservation's date, current time, opening time, closing time, time slot length, #ppl allowed, #ppl currently registered at each time slot
     let weekMap = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
     let startingIndex = weekMap.indexOf(startingDate);
@@ -33,10 +33,13 @@ const ReservationScroll = ({ reservations, reservationLimit, reserve, startingDa
             return false;
         }
     };
+    useEffect(() => {
+        for (let i = 0; i < 7; i++) {
+            weekMapRelative.push(weekMap[(startingIndex + i) % 7]);
+        }
+    }, [null]);
 
-    for (let i = 0; i < 7; i++) {
-        weekMapRelative.push(weekMap[(startingIndex + i) % 7]);
-    }
+    console.log(weekMapRelative);
     let list = [];
     for (let i = 0; i < 7; i++) {
         let currentDay = weekMapRelative[i].toLowerCase();

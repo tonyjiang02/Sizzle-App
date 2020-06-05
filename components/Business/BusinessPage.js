@@ -57,8 +57,9 @@ const BusinessPage = ({ route: { params: { business, db } }, checkIn, auth, upda
 
     //backend
     const onPressCheckIn = async () => {
-        const newPopulation = await checkIn(business.place_id);
-        setLivePopulation(newPopulation);
+        const biz = await checkIn(business.place_id);
+
+        setLivePopulation(biz.population);
     };
     function wait(timeout) {
         return new Promise(resolve => {
@@ -78,7 +79,7 @@ const BusinessPage = ({ route: { params: { business, db } }, checkIn, auth, upda
         return function cleanup() {
             if (updated) {
                 console.log(user.reservations);
-                updateUserWithoutReturn({ reservations: user.reservations });
+                updateUserWithoutReturn({ reservations: user.reservations, favorites: user.favorites });
             }
             if (businessUpdated) {
                 updateBusinessReservations(db._id, reservations);
@@ -155,10 +156,30 @@ const BusinessPage = ({ route: { params: { business, db } }, checkIn, auth, upda
             { cancelable: false }
         );
     //reservations
+    let alreadyReserved = [];
+    useEffect(() => {
+        // for (let i = 0; i < 7; i++) {
+        //     alreadyReserved[i] = [];
+        //     for (let k = 0; k < 20; k++) {
+        //         alreadyReserved[i].push(false);
+        //     }
+        // }
+        // let usr = User.user;
+        // for (let i = 0; i < usr.reservations.length; i++) {
+        //     if (usr.reservations[i].business === _id) {
+        //         alreadyReserved[usr.reservations[i].index.day][usr.reserations[i].index.index] = true;
+        //     }
+        // }
+    }, [null]);
     let weekMap = ['sunday', 'monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday'];
     let currentDate = new Date();
     const [currentDay, setDay] = useState(weekMap[currentDate.getDay()]);
     const [currentReservations, setReservations] = useState({ ...reservations });
+
+    const checkReserved = (i, day) => {
+        let indexDay = weekMap.indexOf(day);
+        return alreadyReserved[indexDay][i];
+    };
     const reserveSpot = (i, day) => {
         let date = new Date();
         console.log("current date" + date);
@@ -170,8 +191,9 @@ const BusinessPage = ({ route: { params: { business, db } }, checkIn, auth, upda
             business: _id,
             businessName: name,
             time: reservations[day][i].slot,
-            index: i,
-            date: date.toDateString()
+            index: { indexDay, i },
+            date: date.toDateString(),
+            timestamp: date
         });
         //TODO : add reservation to users array 
         reservations[day][i].users += 1;
@@ -179,6 +201,7 @@ const BusinessPage = ({ route: { params: { business, db } }, checkIn, auth, upda
         updated = true;
         setReservations({ ...reservations });
     };
+
     //map
     const openMapToBusiness = () => {
         Alert.alert(
@@ -326,7 +349,7 @@ const BusinessPage = ({ route: { params: { business, db } }, checkIn, auth, upda
                     <ScrollView showsVerticalScrollIndicator={false}>
                         <TouchableWithoutFeedback>
                             <View>
-                                <ReservationScrollModal reservations={reservations} reservationLimit={50} reserve={reserveSpot} startingDate={currentDay}></ReservationScrollModal>
+                                <ReservationScrollModal reservations={reservations} reservationLimit={50} reserve={reserveSpot} startingDate={currentDay} checkReserved={checkReserved}></ReservationScrollModal>
                             </View>
                         </TouchableWithoutFeedback>
                     </ScrollView>
@@ -421,7 +444,7 @@ const BusinessPage = ({ route: { params: { business, db } }, checkIn, auth, upda
                                 <AntDesign name='rightcircle' color='#ff9900' size={getIconSize(18)} style={{ paddingTop: 12 }}></AntDesign>
                             </View>
                             <View style={{ flex: 5 }}>
-                                {(announcements[announcements.length-1]) && <LiveUpdate title={announcements[announcements.length-1].title ? announcements[announcements.length-1].title : ""} content={announcements[announcements.length-1].content ? announcements[announcements.length-1].content : ""} time={announcements[announcements.length-1].date ? announcements[announcements.length-1].date : 0}></LiveUpdate>}
+                                {(announcements[announcements.length - 1]) && <LiveUpdate title={announcements[announcements.length - 1].title ? announcements[announcements.length - 1].title : ""} content={announcements[announcements.length - 1].content ? announcements[announcements.length - 1].content : ""} time={announcements[announcements.length - 1].date ? announcements[announcements.length - 1].date : 0}></LiveUpdate>}
                             </View>
                         </TouchableOpacity>
                     </View>
@@ -436,7 +459,7 @@ const BusinessPage = ({ route: { params: { business, db } }, checkIn, auth, upda
                             </TouchableOpacity>
                             <View style={{ flex: 4 }}>
                                 <View>
-                                    <ReservationScroll day={currentDay.toLowerCase()} reserve={reserveSpot} reservations={currentReservations[currentDay.toLowerCase()]} style={{ alignItems: 'flex-start' }}></ReservationScroll>
+                                    <ReservationScroll day={currentDay.toLowerCase()} reserve={reserveSpot} reservations={currentReservations[currentDay.toLowerCase()]} checkReserved={checkReserved} style={{ alignItems: 'flex-start' }}></ReservationScroll>
                                 </View>
                             </View>
                         </View>

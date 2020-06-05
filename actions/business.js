@@ -299,24 +299,24 @@ export const checkIn = (id) => async (dispatch, getState) => {
             })
         });
         const json = await res.json();
-        user.history.push({ business: id });
-        const userUpdate = await fetch(`${BASE_URL}/api/users/update`, {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify({
-                user: {
-                    history: user.history
-                }
-            })
-        });
-        const updatedUser = await userUpdate.json();
+        // user.history.push({ business: json.id });
+        // const userUpdate = await fetch(`${BASE_URL}/api/users/update`, {
+        //     method: 'POST',
+        //     headers: {
+        //         'Content-Type': 'application/json'
+        //     },
+        //     body: JSON.stringify({
+        //         user: {
+        //             history: user.history
+        //         }
+        //     })
+        // });
+        // const updatedUser = await userUpdate.json();
         dispatch({
             type: UPDATE_BUSINESS,
             payload: json
         });
-        return json.population;
+        return json;
     } catch (error) {
 
     }
