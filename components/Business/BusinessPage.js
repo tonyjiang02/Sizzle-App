@@ -78,7 +78,6 @@ const BusinessPage = ({ route: { params: { business, db } }, checkIn, auth, upda
         getDistance();
         return function cleanup() {
             if (updated) {
-                console.log(user.reservations);
                 updateUserWithoutReturn({ reservations: user.reservations, favorites: user.favorites });
             }
             if (businessUpdated) {
@@ -86,10 +85,6 @@ const BusinessPage = ({ route: { params: { business, db } }, checkIn, auth, upda
             }
         };
     });
-    useEffect(() => {
-        console.log("Redux Reservations");
-        console.log(User.user.reservations);
-    }, [User]);
     /*useEffect(() => {
         if (startRefresh === true) {
             setData(dbBusiness);
@@ -158,20 +153,19 @@ const BusinessPage = ({ route: { params: { business, db } }, checkIn, auth, upda
     //reservations
     let alreadyReserved = [];
     useEffect(() => {
-        // for (let i = 0; i < 7; i++) {
-        //     alreadyReserved[i] = [];
-        //     for (let k = 0; k < 20; k++) {
-        //         alreadyReserved[i].push(false);
-        //     }
-        // }
-        // let usr = User.user;
-        // for (let i = 0; i < usr.reservations.length; i++) {
-        //     if (usr.reservations[i].business === _id) {
-        //         alreadyReserved[usr.reservations[i].index.day][usr.reserations[i].index.index] = true;
-        //     }
-        // }
+        for (let i = 0; i < 7; i++) {
+            alreadyReserved[i] = [];
+            for (let k = 0; k < 20; k++) {
+                alreadyReserved[i].push(false);
+            }
+        }
+        for (let i = 0; i < user.reservations.length; i++) {
+            if (user.reservations[i].business === _id) {
+                alreadyReserved[user.reservations[i].index.day][user.reservations[i].index.index] = true;
+            }
+        }
     }, [null]);
-    let weekMap = ['sunday', 'monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday'];
+    let weekMap = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
     let currentDate = new Date();
     const [currentDay, setDay] = useState(weekMap[currentDate.getDay()]);
     const [currentReservations, setReservations] = useState({ ...reservations });
@@ -182,21 +176,19 @@ const BusinessPage = ({ route: { params: { business, db } }, checkIn, auth, upda
     };
     const reserveSpot = (i, day) => {
         let date = new Date();
-        console.log("current date" + date);
         let indexDay = weekMap.indexOf(day);
-        console.log(indexDay);
         date.setDate(date.getDate() + (7 + indexDay - date.getDay()) % 7);
-        console.log("new date " + date);
         user.reservations.push({
             business: _id,
             businessName: name,
-            time: reservations[day][i].slot,
+            time: reservations[day.toLowerCase()][i].slot,
             index: { indexDay, i },
             date: date.toDateString(),
             timestamp: date
         });
+        alreadyReserved[indexDay][i] = true;
         //TODO : add reservation to users array 
-        reservations[day][i].users += 1;
+        reservations[day.toLowerCase()][i].users += 1;
         businessUpdated = true;
         updated = true;
         setReservations({ ...reservations });
@@ -459,7 +451,7 @@ const BusinessPage = ({ route: { params: { business, db } }, checkIn, auth, upda
                             </TouchableOpacity>
                             <View style={{ flex: 4 }}>
                                 <View>
-                                    <ReservationScroll day={currentDay.toLowerCase()} reserve={reserveSpot} reservations={currentReservations[currentDay.toLowerCase()]} checkReserved={checkReserved} style={{ alignItems: 'flex-start' }}></ReservationScroll>
+                                    <ReservationScroll day={currentDay} reserve={reserveSpot} reservations={currentReservations[currentDay.toLowerCase()]} checkReserved={checkReserved} style={{ alignItems: 'flex-start' }}></ReservationScroll>
                                 </View>
                             </View>
                         </View>

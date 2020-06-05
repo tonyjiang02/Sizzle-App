@@ -2,7 +2,7 @@ import 'react-native-gesture-handler';
 import React, { useState, useEffect, Fragment } from 'react';
 import { connect } from 'react-redux';
 import { AsyncStorage } from 'react-native';
-import { loadUser } from './actions/auth';
+import { loadUser, loadToken } from './actions/auth';
 import Login from './components/Login';
 import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
@@ -25,7 +25,7 @@ import Favorites from './components/Business/Favorites';
 import UserReservations from './components/Business/UserReservations';
 
 const Stack = createStackNavigator();
-const Index = ({ auth, User }) => {
+const Index = ({ auth }) => {
     const [isAuth, setAuth] = useState(0);
     useEffect(() => {
         console.log("Auth State Changed");
@@ -53,6 +53,13 @@ const Index = ({ auth, User }) => {
         }
 
     }, [auth]);
+    useEffect(() => {
+        AsyncStorage.getItem('token', function (err, res) {
+            if (res) {
+                store.dispatch(loadToken(res));
+            }
+        });
+    }, [null]);
     const authController = () => {
         if (isAuth === 1) {
             return (
@@ -94,8 +101,7 @@ const Index = ({ auth, User }) => {
 };
 
 const mapStateToProps = state => ({
-    auth: state.auth,
-    User: state.user
+    auth: state.auth
 });
 
 export default connect(mapStateToProps, { loadUser })(Index);
