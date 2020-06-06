@@ -7,10 +7,11 @@ import { styles } from '../Styles';
 import Header from '../layout/Header';
 import { Octicons, Ionicons, MaterialCommunityIcons, AntDesign, FontAwesome5, MaterialIcons, FontAwesome } from '@expo/vector-icons';
 
-export const BusinessHistoryList = ({navigation}) => {
+export const BusinessHistoryList = ({navigation, User}) => {
         /*const businessList = businesses.map((biz, i) => (
         <BusinessCard key={biz._id ? biz_.id : biz.id} business={biz} navigation={navigation} db={dbBusinesses[i]}></BusinessCard>
     ));*/
+    console.log(User.user.history);
     return (
         <View style={{ flex: 20, backgroundColor: 'white'}}>
             <Header navigation={navigation}></Header>
@@ -32,4 +33,7 @@ export const BusinessHistoryList = ({navigation}) => {
         </View>
     );
 };
-export default BusinessHistoryList;
+const mapStateToProps = state => ({
+    User: state.user
+});
+export default connect(mapStateToProps, {})(BusinessHistoryList);

@@ -22,7 +22,6 @@ export const getCoords = async (name) => {
         const res = await fetch(url);
         const json = await res.json();
         const location = {longitude: json.features[0].geometry.coordinates[0], latitude: json.features[0].geometry.coordinates[1]}
-        console.log(location);
         return location;
     } catch (err) {
         console.log(err);
@@ -35,7 +34,6 @@ export const reverseCoords = async (lat, lon) => {
         console.log(url);
         const res = await fetch(url);
         const json = await res.json();
-        console.log(json);
         return json;
     }
     catch (err) {

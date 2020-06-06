@@ -1,9 +1,7 @@
 import { UPDATE_USER, LOAD_USER, ALLOW_LOC } from './types';
 import { BASE_URL } from '../config';
 export const updateUser = async (user, token) => {
-    console.log("RUNNING UPDATED USER");
-    console.log("updating user");
-    console.log(user);
+    console.log("running updateUser");
     try {
         const res = await fetch(`${BASE_URL}/api/users/update`, {
             method: 'POST',
@@ -20,6 +18,7 @@ export const updateUser = async (user, token) => {
             console.log(text);
         }
         const json = await res.json();
+        console.log(json);
         return json;
     } catch (err) {
         console.log(err);
@@ -27,9 +26,9 @@ export const updateUser = async (user, token) => {
 };
 //Updates redux and database without syncing
 export const updateUserWithoutReturn = (user) => async (dispatch, getState) => {
-    console.log("updating user");
+    console.log("updating userwithoutreturn");
     const token = getState().auth.token;
-    console.log(token);
+    console.log('token: ' + token);
     dispatch({
         type: UPDATE_USER,
         payload: user

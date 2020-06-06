@@ -49,7 +49,6 @@ export const getBusiness = (googleId, id) => async dispatch => {
         if (id) {
             console.log('fetching id');
             res = await fetch(`${BASE_URL}/api/business/id/${id}`);
-            console.log(res);
         }
         else if (googleId) {
 
@@ -111,7 +110,6 @@ export const loadFilter = (within, pop, open, verified, search, dbSearch, curren
         }
         if (open === true) {
             let counter = 0;
-            console.log(dbTemp[3]);
             while (counter < dbTemp.length) {
                 try {
                     if (dbTemp[counter].isVerified === true) {
@@ -234,7 +232,7 @@ export const getAll = (params, coords) => async dispatch => {
         console.log('getAll called');
         let p = { ...params, key: PLACES_API_KEY, type: "point_of_interest" };
         let location = `location=${coords.latitude},${coords.longitude}`;
-        console.log("getAll coords: " + coords.latitude + " " + coords.longitude);
+        //console.log("getAll coords: " + coords.latitude + " " + coords.longitude);
         let url = `https://maps.googleapis.com/maps/api/place/nearbysearch/json?&${location}&${toQueryString(p)}&fields=formatted_address,name,place_id,opening_hours,types`;
         const res = await fetch(url);
         const json = await res.json();

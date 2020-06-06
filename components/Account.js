@@ -12,7 +12,7 @@ import { ScrollView, TouchableOpacity } from 'react-native-gesture-handler';
 import { Octicons, Ionicons, MaterialCommunityIcons, AntDesign, FontAwesome5, MaterialIcons, FontAwesome, EvilIcons, Entypo } from '@expo/vector-icons';
 import { Linking } from 'expo';
 import { logout } from '../actions/auth';
-import { updateUser, updateUserRedux } from '../actions/user';
+import { updateUser, updateUserWithoutReturn } from '../actions/user';
 import { newLocation, origLocation } from '../actions/business';
 import * as Location from 'expo-location';
 import {getCoords, reverseCoords } from '../utils/businessUtils';
@@ -377,4 +377,4 @@ const mapStateToProps = state => ({
 });
 
 
-export default connect(mapStateToProps, { logout, newLocation, updateUser, origLocation, updateUserRedux })(Account);
+export default connect(mapStateToProps, { logout, newLocation, updateUser, origLocation, updateUserWithoutReturn })(Account);

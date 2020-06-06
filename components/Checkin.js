@@ -16,10 +16,11 @@ import BusinessCard from './Business/BusinessCard';
 import BusinessList from './Business/BusinessList';
 import Outlines from '../assets/Outlines';
 import * as Location from 'expo-location';
-import {getNearest, getBusiness} from '../actions/business';
+import {getNearest, getBusiness, checkIn} from '../actions/business';
+import {updateUserWithoutReturn} from '../actions/user';
 import SearchLoading from './layout/LandingLoading';
 
-export const Checkin = ({navigation, getNearest, loadingNearest, dbNearestBusinesses, nearestBusinesses, getBusiness, User}) => {
+export const Checkin = ({navigation, getNearest, loadingNearest, updateUserWithoutReturn, checkIn, dbNearestBusinesses, nearestBusinesses, getBusiness, User, Auth}) => {
     const openCheckedIn = () => {
         navigation.navigate('CheckedIn', {navigation: navigation});
     }
@@ -28,6 +29,7 @@ export const Checkin = ({navigation, getNearest, loadingNearest, dbNearestBusine
     const [type, setType] = useState(Camera.Constants.Type.back);
     const [scanned, setScanned] = useState(false);
     const fadeAnim = useRef(new Animated.Value(0)).current;
+    let user = User.user;
 
     const fadeIn = () => {
         // Will change fadeAnim value to 1 in 5 seconds
@@ -79,13 +81,33 @@ export const Checkin = ({navigation, getNearest, loadingNearest, dbNearestBusine
         })();
     }, [User.loadingUser]);
 
-    const handleBarCodeScanned = ({ type, data }) => {
-        setScanned(true);
-        console.log(data);
-        const dataID = data.substring(56);
-        getBusiness(null, dataID);
-        Linking.openURL(data);
+    const handleBarCodeScanned = async ({ type, data }) => {
+        if (data.indexOf('http://sizzleco.herokuapp.com/api/business/addPerson') > -1){
+
+            setScanned(true);
+            console.log(data);
+            const dataID = data.substring(56);
+            const businessJSON = await checkIn(dataID);
+            user.history.push({business: businessJSON._id, date: Date.now()});
+            console.log(user.history);
+            updateUserWithoutReturn({history: user.history});
+        }
       };
+
+    const getCurrentLocation = async () => {
+        console.log('getting loc permissions');
+        let response = await Location.requestPermissionsAsync();
+        if (response.granted){
+            let location = await Location.getLastKnownPositionAsync();
+            User.user.location.latitude = location.coords.latitude;
+            User.user.location.longitude = location.coords.longitude;
+            updateUserRedux();
+            origLocation();
+        }
+        else {
+            Alert.alert('Location Permissions not granted. To see nearby businesses from your current location, please either allow location permissions or enter your current location in the "Set Location" search bar.');
+        }
+    }
 
     const noPermissionDisplay = <Text style={{alignSelf: 'center', color: 'white', paddingTop: 30}}>Sizzle currently has no access to your camera. Please go to "Settings" and change your camera permissions.</Text>;
     
@@ -132,6 +154,7 @@ const mapStateToProps = state => ({
     dbNearestBusinesses: state.business.dbNearestBusinesses,
     nearestBusinesses: state.business.nearestBusinesses,
     loadingNearest: state.business.loadingNearest,
-    User: state.user
+    User: state.user,
+    Auth: state.auth
 });
-export default connect(mapStateToProps, {getNearest, getBusiness})(Checkin);
+export default connect(mapStateToProps, {getNearest, getBusiness, checkIn, updateUserWithoutReturn})(Checkin);
