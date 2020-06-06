@@ -16,30 +16,26 @@ const ReservationScroll = ({ reservations, reservationLimit, reserve, startingDa
     let oncePerDay = false;
     let oncePerWeek = false;
     let unlimited = false;
-
+    console.log(startingDate);
     const [reserved, setReserved] = useState([]);
 
-    const reservationAllowed = (users, limit, dayCounter, time) => {
-        /*
-        Dont allow if:
-        1. Time has already passed
-        2. Reservation limit reached
-        3. Can't reserve same time twice
-        4. Can't reserve on same day twice (if oncePerDay === true)
-        5. Can't reserve on same week twice (if oncePerWeek === true)
-        */
-        //check user limit
-        if (users >= limit) {
-            return false;
-        }
-    };
-    useEffect(() => {
-        for (let i = 0; i < 7; i++) {
-            weekMapRelative.push(weekMap[(startingIndex + i) % 7]);
-        }
-    }, [null]);
-
-    console.log(weekMapRelative);
+    // const reservationAllowed = (users, limit, dayCounter, time) => {
+    //     /*
+    //     Dont allow if:
+    //     1. Time has already passed
+    //     2. Reservation limit reached
+    //     3. Can't reserve same time twice
+    //     4. Can't reserve on same day twice (if oncePerDay === true)
+    //     5. Can't reserve on same week twice (if oncePerWeek === true)
+    //     */
+    //     //check user limit
+    //     if (users >= limit) {
+    //         return false;
+    //     }
+    // };
+    for (let i = 0; i < 7; i++) {
+        weekMapRelative.push(weekMap[(startingIndex + i) % 7]);
+    }
     let list = [];
     for (let i = 0; i < 7; i++) {
         let currentDay = weekMapRelative[i].toLowerCase();
@@ -50,7 +46,7 @@ const ReservationScroll = ({ reservations, reservationLimit, reserve, startingDa
                     {reservationLimit > 0 ? <Text>{s.users} / {reservationLimit}</Text> : <Text>{s.users} reserved</Text>}
                 </View>
                 <View pointerEvents={(s.users < reservationLimit) ? 'auto' : 'none'}>
-                    <TouchableOpacity onPress={() => { reserve(j, currentDay); reserved.push(); }}>
+                    <TouchableOpacity onPress={() => { reserve(j, weekMapRelative[i]); reserved.push(); }}>
                         <View style={{ borderRadius: 20, borderColor: 'transparent', borderWidth: 0.5, backgroundColor: (s.users < reservationLimit) ? '#ff9900' : '#B0AFAF', paddingHorizontal: 30 }}>
                             <Text style={{ color: 'white', fontWeight: 'bold', padding: 8, fontSize: 12 }}>
                                 Reserve

@@ -33,14 +33,12 @@ export const getRegisteredBusinesses = (params) => async dispatch => {
     }
 };
 export const openBusinessPage = (business, db) => dispatch => {
-    console.log("Open Business Page");
     dispatch({
         type: LOAD_BUSINESS,
         payload: { db: db, business: business }
     });
 };
 export const test = () => {
-    console.log("test");
 };
 export const getBusiness = (googleId, id) => async dispatch => {
     console.log('getting business again');

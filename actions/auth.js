@@ -1,4 +1,4 @@
-import { SIGNUP_SUCCESS, LOGIN_SUCCESS, LOGIN_FAIL, ERROR, LOAD_USER, LOGOUT_USER } from './types';
+import { SIGNUP_SUCCESS, LOGIN_SUCCESS, LOGIN_FAIL, ERROR, LOAD_USER, LOGOUT_USER, SET_TOKEN } from './types';
 import { BASE_URL } from '../config';
 import { AsyncStorage } from 'react-native';
 //saves user token into local storage (only handles localstorage of token)
@@ -17,13 +17,11 @@ export const login = (email, password) => async (dispatch, getState) => {
                 password: password
             })
         });
-        console.log("recieving data");
         if (!res.ok) {
             const err = await res.text();
             throw Error(err);
         }
         const data = await res.json();
-        console.log(data);
         dispatch({
             type: LOGIN_SUCCESS,
             payload: data
@@ -79,7 +77,6 @@ export const signupGoogle = (id) => async (dispatch) => {
             throw Error(err);
         }
         const json = await res.json();
-        console.log(json);
         dispatch({
             type: SIGNUP_SUCCESS,
             payload: json.token
@@ -113,7 +110,6 @@ export const signup = (email, password) => async dispatch => {
             throw Error(err);
         }
         const data = await res.json();
-        console.log(data);
         dispatch({
             type: SIGNUP_SUCCESS,
             payload: data
@@ -138,7 +134,6 @@ export const loadUser = () => async dispatch => {
                 throw Error(err);
             }
             const json = await res.json();
-            console.log(json);
             console.log('dispatching');
             dispatch({
                 type: LOAD_USER,
@@ -157,4 +152,11 @@ export const loadUser = () => async dispatch => {
             payload: { msg: 'No user found' }
         });
     }
+};
+//sets redux token on app launch
+export const loadToken = (token) => dispatch => {
+    dispatch({
+        type: SET_TOKEN,
+        payload: token
+    });
 };

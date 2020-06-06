@@ -1,4 +1,4 @@
-import { SIGNUP_SUCCESS, LOGIN_SUCCESS, LOGIN_FAIL, LOAD_USER, LOGOUT_USER, ERROR } from '../actions/types';
+import { SIGNUP_SUCCESS, LOGIN_SUCCESS, LOGIN_FAIL, LOAD_USER, LOGOUT_USER, ERROR, SET_TOKEN } from '../actions/types';
 import { AsyncStorage } from 'react-native';
 const initialState = {
     token: null,
@@ -40,6 +40,13 @@ export default function (state = initialState, action) {
                 loading: false,
                 token: payload.token,
                 firstTime: true
+            };
+        case SET_TOKEN:
+            return {
+                ...state,
+                token: payload,
+                isAuthenticated: true,
+                loading: false
             };
         case ERROR:
             return {
