@@ -117,7 +117,7 @@ const BusinessCard = ({ business, navigation, db, openBusinessPage, User }) => {
 
     //distance
     const getDistance = async () => {
-        let currentloc = User.user.location;
+        let currentloc = User.location;
         let response = await Location.requestPermissionsAsync();
         if (response.granted) {
             let loc = await Location.getLastKnownPositionAsync();

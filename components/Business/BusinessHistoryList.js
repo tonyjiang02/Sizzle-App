@@ -11,7 +11,7 @@ export const BusinessHistoryList = ({navigation, User}) => {
         /*const businessList = businesses.map((biz, i) => (
         <BusinessCard key={biz._id ? biz_.id : biz.id} business={biz} navigation={navigation} db={dbBusinesses[i]}></BusinessCard>
     ));*/
-    console.log(User.user.history);
+    console.log(User.user);
     return (
         <View style={{ flex: 20, backgroundColor: 'white'}}>
             <Header navigation={navigation}></Header>

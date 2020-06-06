@@ -34,8 +34,8 @@ const BusinessSquare = ({ business, navigation, db, openBusinessPage, type, User
 
     //if the business is verified
     let verifiedDisplay = <View></View>;
-    let image = <Image style={{ height: '100%', width: '100%' }}></Image>;
     let openPictureStyle = styles.openPictureStyle;
+    let image = <Image style={openPictureStyle}></Image>;
     if (isVerified === true) {
         verifiedDisplay = <MaterialIcons name='verified-user' color='lightgreen' size={getIconSize(18)} style={{ paddingLeft: 5 }}></MaterialIcons>;
         image = <Image source={coverImageUrl ? { uri: coverImageUrl } : require('../../assets/logos/image_unavailable.png')} style={openPictureStyle}></Image>;
@@ -110,7 +110,7 @@ const BusinessSquare = ({ business, navigation, db, openBusinessPage, type, User
 
     //distance
     const getDistance = async () => {
-        let currentLoc = User.user.location;
+        let currentLoc = User.location;
         let response = await Location.requestPermissionsAsync();
         if (response.granted) {
             let loc = await Location.getLastKnownPositionAsync();

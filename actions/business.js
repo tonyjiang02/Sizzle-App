@@ -204,10 +204,11 @@ export const getNomatimNearby = (name, coords) => async dispatch => {
     }
 };
 
-export const newLocation = () => dispatch => {
-    console.log('new location method called');
+export const newLocation = (coords) => dispatch => {
+    console.log('newLocation method called from business actions');
     dispatch({
-        type: NEW_LOCATION
+        type: NEW_LOCATION,
+        payload: coords
     });
 };
 
@@ -215,13 +216,6 @@ export const oldLocation = () => dispatch => {
     console.log('old location method called');
     dispatch({
         type: OLD_LOCATION
-    });
-};
-
-export const origLocation = () => dispatch => {
-    console.log('old location method called');
-    dispatch({
-        type: ORIG_LOCATION
     });
 };
 

@@ -83,13 +83,11 @@ export const Checkin = ({navigation, getNearest, loadingNearest, updateUserWitho
 
     const handleBarCodeScanned = async ({ type, data }) => {
         if (data.indexOf('http://sizzleco.herokuapp.com/api/business/addPerson') > -1){
-
             setScanned(true);
             console.log(data);
             const dataID = data.substring(56);
             const businessJSON = await checkIn(dataID);
             user.history.push({business: businessJSON._id, date: Date.now()});
-            console.log(user.history);
             updateUserWithoutReturn({history: user.history});
         }
       };
@@ -99,14 +97,9 @@ export const Checkin = ({navigation, getNearest, loadingNearest, updateUserWitho
         let response = await Location.requestPermissionsAsync();
         if (response.granted){
             let location = await Location.getLastKnownPositionAsync();
-            User.user.location.latitude = location.coords.latitude;
-            User.user.location.longitude = location.coords.longitude;
-            updateUserRedux();
-            origLocation();
+            return location.coords;
         }
-        else {
-            Alert.alert('Location Permissions not granted. To see nearby businesses from your current location, please either allow location permissions or enter your current location in the "Set Location" search bar.');
-        }
+        return "none";
     }
 
     const noPermissionDisplay = <Text style={{alignSelf: 'center', color: 'white', paddingTop: 30}}>Sizzle currently has no access to your camera. Please go to "Settings" and change your camera permissions.</Text>;

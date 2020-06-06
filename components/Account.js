@@ -13,11 +13,11 @@ import { Octicons, Ionicons, MaterialCommunityIcons, AntDesign, FontAwesome5, Ma
 import { Linking } from 'expo';
 import { logout } from '../actions/auth';
 import { updateUser, updateUserWithoutReturn } from '../actions/user';
-import { newLocation, origLocation } from '../actions/business';
+import { newLocation } from '../actions/business';
 import * as Location from 'expo-location';
 import {getCoords, reverseCoords } from '../utils/businessUtils';
 import { getFontSize, getIconSize } from '../utils/fontsizes';
-export const Account = ({ navigation, logout, User, newLocation, updateUser, origLocation, updateUserRedux }) => {
+export const Account = ({ navigation, logout, User, newLocation, updateUser, updateUserRedux }) => {
     const [FAQModalVisible, setFAQVisible] = useState(false);
     const [contactModalVisible, setContactVisible] = useState(false);
     const [locationInfoModalVisible, setLocationInfoVisible] = useState(false);
@@ -41,57 +41,79 @@ export const Account = ({ navigation, logout, User, newLocation, updateUser, ori
         }
     }
 
-    const updateLocationDisplay = async () => {
-        if (User.loadingUser === false){
-            console.log('refreshing loc');
-            if (User.user.location.latitude != 0 && User.user.location.latitude != 0){
-                let reverse = await reverseCoords(User.user.location.latitude, User.user.location.longitude);
-                let city = "";
-                let county = "";
-                let state="";
-                if (typeof reverse.address.city !== 'undefined'){
-                    city = reverse.address.city + ", "
+    useEffect(() => {
+        console.log('running start useEffect from Account')
+        const updateLocationDisplay = async () => {
+            if (User.loadingUser === false){
+                console.log('refreshing loc');
+                console.log(User.location);
+                if (User.location.latitude != 0 && User.location.longitude != 0){
+                    let reverse = await reverseCoords(User.location.latitude, User.location.longitude);
+                    let city = "";
+                    let county = "";
+                    let state="";
+                    if (typeof reverse.address.city !== 'undefined'){
+                        city = reverse.address.city + ", "
+                    }
+                    if (typeof reverse.address.county !== 'undefined'){
+                        county = reverse.address.county + ", "
+                    }
+                    let display = city + county + reverse.address.state;
+                    console.log(display);
+                    updateLocDisplay(display);
                 }
-                if (typeof reverse.address.county !== 'undefined'){
-                    county = reverse.address.county + ", "
+                else{
+                    updateLocDisplay("Unknown/Unavailable");
                 }
-                let display = city + county + reverse.address.state;
-                updateLocDisplay(display);
-            }
-            else{
-                updateLocDisplay("Unknown/Unavailable");
             }
         }
-    }
+        updateLocationDisplay();
+    }, []);
+
+    useEffect(() => {
+        const updateLocationDisplay = async () => {
+            if (User.loadingUser === false){
+                if (User.location.latitude != 0 && User.location.longitude != 0){
+                    let reverse = await reverseCoords(User.location.latitude, User.location.longitude);
+                    let city = "";
+                    let county = "";
+                    let state="";
+                    if (typeof reverse.address.city !== 'undefined'){
+                        city = reverse.address.city + ", "
+                    }
+                    if (typeof reverse.address.county !== 'undefined'){
+                        county = reverse.address.county + ", "
+                    }
+                    let display = city + county + reverse.address.state;
+                    updateLocDisplay(display);
+                }
+                else{
+                    updateLocDisplay("Unknown/Unavailable");
+                }
+            }
+        }
+        if (User.newLocationSet){
+            console.log('running newLocationSet useEffect from Account');
+            updateLocationDisplay();
+        }
+    }, [User.newLocationSet])
 
     const setNewLocation = async function (input) {
         let coords = await getCoords(input);
-        console.log('coords' + coords);
-        User.user.location.latitude = coords.latitude;
-        User.user.location.longitude = coords.longitude;
-        updateUserRedux();
-        newLocation();
-        updateLocationDisplay();
+        console.log(coords);
+        newLocation(coords);
     };
-
-    useEffect(() => {
-        updateLocationDisplay();
-    }, []);
 
     const getCurrentLocation = async () => {
         console.log('getting loc permissions');
         let response = await Location.requestPermissionsAsync();
         if (response.granted){
             let location = await Location.getLastKnownPositionAsync();
-            User.user.location.latitude = location.coords.latitude;
-            User.user.location.longitude = location.coords.longitude;
-            updateUserRedux();
-            origLocation();
+            newLocation(location.coords);
         }
         else {
             Alert.alert('Location Permissions not granted. To see nearby businesses from your current location, please either allow location permissions or enter your current location in the "Set Location" search bar.');
         }
-        updateLocationDisplay();
     }
 
     return (
@@ -377,4 +399,4 @@ const mapStateToProps = state => ({
 });
 
 
-export default connect(mapStateToProps, { logout, newLocation, updateUser, origLocation, updateUserWithoutReturn })(Account);
+export default connect(mapStateToProps, { logout, newLocation, updateUser, updateUserWithoutReturn })(Account);

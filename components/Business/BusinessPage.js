@@ -126,7 +126,7 @@ const BusinessPage = ({ route: { params: { business, db } }, checkIn, auth, upda
     //distance 
     let [lineDistance, setLineDistance] = useState(null);
     const getDistance = () => {
-        var mi = kmToMi(straightLineDistance(User.user.location, { latitude: parseFloat(business.geometry.location.lat), longitude: parseFloat(business.geometry.location.lng) }));
+        var mi = kmToMi(straightLineDistance(User.location, { latitude: parseFloat(business.geometry.location.lat), longitude: parseFloat(business.geometry.location.lng) }));
         var rounded = Math.round(mi * 10) / 10;
         setLineDistance(rounded + 'mi');
     };
@@ -246,13 +246,17 @@ const BusinessPage = ({ route: { params: { business, db } }, checkIn, auth, upda
         return User.user.favorites.includes(_id);
     };
     const toggleFavorite = () => {
+        setFavorite(!isFavorite);
         if (!isFavorite) {
             user.favorites.push(_id);
         } else {
-            user.favorites.splice(user.favorites.indexOf(_id));
+            if (user.favorites.indexOf(_id) > -1){
+                console.log("INDEX OF ID: " + user.favorites.indexOf(_id));
+                user.favorites.splice(user.favorites.indexOf(_id), 1);
+            }
         }
+        updateUserWithoutReturn({favorites: user.favorites});
         updated = true;
-        setFavorite(!isFavorite);
 
     };
     const [isFavorite, setFavorite] = useState(inFavorites());

@@ -92,13 +92,6 @@ export default function (state = initialState, action) {
                 dbBusinesses: [],
                 loadingAll: true
             }
-        case ORIG_LOCATION:
-            return {
-                ...state,
-                businesses: [],
-                dbBusinesses: [],
-                loadingAll: true
-            }
         case UPDATE_BUSINESS:
             const indexSearch = state.dbSearchBusinesses.findIndex(b => b._id === payload._id);
             const indexLanding = state.dbBusinesses.findIndex(b => b._id === payload._id);
