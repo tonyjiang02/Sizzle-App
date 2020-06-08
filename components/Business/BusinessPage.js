@@ -151,20 +151,19 @@ const BusinessPage = ({ route: { params: { business, db } }, checkIn, auth, upda
             { cancelable: false }
         );
     //reservations
-    let alreadyReserved = [];
-    useEffect(() => {
-        for (let i = 0; i < 7; i++) {
-            alreadyReserved[i] = [];
-            for (let k = 0; k < 20; k++) {
-                alreadyReserved[i].push(false);
-            }
+    var alreadyReserved = [];
+    for (let i = 0; i < 7; i++) {
+        alreadyReserved[i] = [];
+        for (let k = 0; k < 20; k++) {
+            alreadyReserved[i].push(false);
         }
-        for (let i = 0; i < user.reservations.length; i++) {
-            if (user.reservations[i].business === _id) {
-                alreadyReserved[user.reservations[i].index.day][user.reservations[i].index.index] = true;
-            }
+    }
+    for (let i = 0; i < user.reservations.length; i++) {
+        if (user.reservations[i].business === _id) {
+            alreadyReserved[user.reservations[i].index.day][user.reservations[i].index.index] = true;
         }
-    }, [null]);
+    }
+    console.log(alreadyReserved);
     let weekMap = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
     let currentDate = new Date();
     const [currentDay, setDay] = useState(weekMap[currentDate.getDay()]);
@@ -182,10 +181,12 @@ const BusinessPage = ({ route: { params: { business, db } }, checkIn, auth, upda
             business: _id,
             businessName: name,
             time: reservations[day.toLowerCase()][i].slot,
-            index: { indexDay, i },
+            index: { day: indexDay, index: i },
             date: date.toDateString(),
             timestamp: date
         });
+        console.log(`Finding already reserved of ${indexDay} , ${i}`);
+        console.log(alreadyReserved);
         alreadyReserved[indexDay][i] = true;
         //TODO : add reservation to users array 
         reservations[day.toLowerCase()][i].users += 1;
