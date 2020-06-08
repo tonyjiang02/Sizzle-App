@@ -27,6 +27,12 @@ export const BusinessList = ({ type, business, navigation }) => {
             <BusinessCard key={biz._id ? biz_.id : biz.id} business={biz} navigation={navigation} db={filterdb[i]}></BusinessCard>
         ));
     }
+    else if (type==='favorites'){
+        var favoritesdb = business.dbFavoriteBusinesses;
+        businessList = favoritesdb.map((biz, i) => (
+            <BusinessCard key={i} business={null} navigation={navigation} db={biz}></BusinessCard>
+        ));        
+    }
 
     return (
         <View style={{ flex: 20 }}>

@@ -64,8 +64,16 @@ const UnverifiedBusinessPage = ({ route: { params: { business, db } }, checkIn, 
         getDistance();
         async function getMoreData() {
             const res = await getAdditionalData(place_id);
+            let w = "Unavailable";
+            let p = "Unavailable";
+            if (typeof res.website !== 'undefined' && typeof res.website !== 'null'){
+                w = res.website;
+            }
+            if (typeof res.formatted_phone_number !== 'undefined' && typeof res.formatted_phone_number !== 'null'){
+                p = res.formatted_phone_number;
+            }
             setAddData({
-                websiteURL: res.website,
+                websiteURL: w,
                 hours: {
                     mon: res.opening_hours.weekday_text[0],
                     tue: res.opening_hours.weekday_text[1],
@@ -75,7 +83,7 @@ const UnverifiedBusinessPage = ({ route: { params: { business, db } }, checkIn, 
                     sat: res.opening_hours.weekday_text[5],
                     sun: res.opening_hours.weekday_text[6],
                 },
-                phoneNumber: res.formatted_phone_number
+                phoneNumber: p
             });
         };
         getMoreData();
@@ -108,7 +116,7 @@ const UnverifiedBusinessPage = ({ route: { params: { business, db } }, checkIn, 
     //distance 
     let [lineDistance, setLineDistance] = useState(null);
     const getDistance = () => {
-        var mi = kmToMi(straightLineDistance(User.user.location, { latitude: parseFloat(business.geometry.location.lat), longitude: parseFloat(business.geometry.location.lng) }));
+        var mi = kmToMi(straightLineDistance(User.location, { latitude: parseFloat(business.geometry.location.lat), longitude: parseFloat(business.geometry.location.lng) }));
         var rounded = Math.round(mi * 10) / 10;
         setLineDistance(rounded + 'mi');
     };

@@ -8,7 +8,7 @@ import { openBusinessPage } from '../../actions/business';
 import { connect } from 'react-redux';
 import { Ionicons, MaterialIcons } from '@expo/vector-icons';
 import { getFontSize, getIconSize } from '../../utils/fontsizes';
-import { straightLineDistance, kmToMi } from '../../utils/businessUtils';
+import { straightLineDistance, kmToMi, getCoords } from '../../utils/businessUtils';
 import * as Location from 'expo-location';
 
 const BusinessCard = ({ business, navigation, db, openBusinessPage, User }) => {
@@ -26,9 +26,20 @@ const BusinessCard = ({ business, navigation, db, openBusinessPage, User }) => {
         }
         fetchDistance();
     }, []);
+    //let { vicinity, opening_hours } = business;
+    let { isVerified, openStatus, coverImageUrl, population, address, name } = db;
 
-    let { vicinity, opening_hours } = business;
-    let { isVerified, openStatus, coverImageUrl, population } = db;
+    let cardName = "";
+    let cardAddress = "";
+
+    if (db.isVerified === true){
+        cardName = db.name;
+        cardAddress = db.address;
+    }
+    else if (db.isVerified === false){
+        cardName = business.name;
+        cardAddress = business.vicinity;
+    }
     const onPress = () => {
         openBusinessPage(business, db);
         if (db.isVerified) {
@@ -40,7 +51,7 @@ const BusinessCard = ({ business, navigation, db, openBusinessPage, User }) => {
 
     //business verification
     let verified = <View></View>;
-    if (isVerified === true) {
+    if (db.isVerified === true) {
         verified = <MaterialIcons name='verified-user' color='lightgreen' size={getIconSize(18.5)} style={{ paddingBottom: 3 }}></MaterialIcons>;
     }
     let number = 9999999;
@@ -68,7 +79,7 @@ const BusinessCard = ({ business, navigation, db, openBusinessPage, User }) => {
     //open status
     let openDisplay = <Text></Text>;
     let openPicture = <Image source={coverImageUrl ? { uri: coverImageUrl } : require('../../assets/logos/image_unavailable.png')} style={{ height: 115, width: 115 }}></Image>;
-    if (isVerified === true) {
+    if (db.isVerified === true) {
         if (openStatus === true) {
             openDisplay = <Text style={{
                 paddingHorizontal: 2, alignSelf: 'center', color: 'white', fontSize: getFontSize(12),
@@ -117,16 +128,24 @@ const BusinessCard = ({ business, navigation, db, openBusinessPage, User }) => {
 
     //distance
     const getDistance = async () => {
+        var rounded = 0;
         let currentloc = User.location;
-        let response = await Location.requestPermissionsAsync();
-        if (response.granted) {
-            let loc = await Location.getLastKnownPositionAsync();
-            let coords = loc.coords;
-            currentloc = coords;
+            let response = await Location.requestPermissionsAsync();
+            if (response.granted) {
+                let loc = await Location.getLastKnownPositionAsync();
+                let coords = loc.coords;
+                currentloc = coords;
+            }
+        if (db.isVerified === true && (typeof business.geometry === 'undefined')){
+            var mi = kmToMi(straightLineDistance(currentloc, { latitude: parseFloat((await getCoords(db.address)).latitude), longitude: parseFloat((await getCoords(db.address)).longitude) }));
+            rounded = Math.round(mi * 10) / 10;
         }
-        var mi = kmToMi(straightLineDistance(currentloc, { latitude: parseFloat(business.geometry.location.lat), longitude: parseFloat(business.geometry.location.lng) }));
-        var rounded = Math.round(mi * 10) / 10;
-        return rounded;
+        else {
+            console.log('lat: ' + business.geometry.location.lat);
+            var mi = kmToMi(straightLineDistance(currentloc, { latitude: parseFloat(business.geometry.location.lat), longitude: parseFloat(business.geometry.location.lng) }));
+            rounded = Math.round(mi * 10) / 10;
+        }
+       return rounded;
     };
 
     return (
@@ -138,8 +157,8 @@ const BusinessCard = ({ business, navigation, db, openBusinessPage, User }) => {
                     </View>
                     <View style={{ flex: 17 }}>
                         <View style={{ flex: 5, paddingBottom: 8 }}>
-                            <Text style={{ fontSize: getFontSize(20), paddingTop: 10, flexWrap: 'wrap' }}>{business.name.length > 33 ? textTruncateBySpaceTwo(33, business.name) : business.name}</Text>
-                            <Text style={{ fontSize: getFontSize(12), paddingBottom: 5 }}>{textTruncateBySpaceTwo(33, vicinity)}</Text>
+                            <Text style={{ fontSize: getFontSize(20), paddingTop: 10, flexWrap: 'wrap' }}>{cardName.length > 33 ? textTruncateBySpaceTwo(33, cardName) : cardName}</Text>
+                            <Text style={{ fontSize: getFontSize(12), paddingBottom: 5 }}>{textTruncateBySpaceTwo(33, cardAddress)}</Text>
                         </View>
                         <View style={{ flex: 3, flexDirection: 'row', justifyContent: 'space-around', alignItems: 'flex-end', paddingBottom: 10 }}>
                             {verified}

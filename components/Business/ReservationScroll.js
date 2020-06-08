@@ -10,7 +10,9 @@ import { connect } from 'react-redux';
 import { ScrollView } from 'react-native-gesture-handler';
 const ReservationScroll = ({ reservations, reservationLimit, reserve, day, checkReserved }) => {
     //Needs this reservation's date, current time, opening time, closing time, time slot length, #ppl allowed, #ppl currently registered at each time slot
-
+    if (typeof reservations === 'undefined'){
+        return <View></View>;
+    }
     let list = reservations.map((s, i) => (
         <View index={i} style={{ paddingRight: 10, flexDirection: 'column' }}>
             <View style={{ alignItems: 'center', paddingBottom: 5 }}>

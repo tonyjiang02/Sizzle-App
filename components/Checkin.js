@@ -17,6 +17,7 @@ import BusinessList from './Business/BusinessList';
 import Outlines from '../assets/Outlines';
 import * as Location from 'expo-location';
 import {getNearest, getBusiness, checkIn} from '../actions/business';
+import {timeDifferenceInMin} from '../utils/businessUtils';
 import {updateUserWithoutReturn} from '../actions/user';
 import SearchLoading from './layout/LandingLoading';
 
@@ -86,9 +87,41 @@ export const Checkin = ({navigation, getNearest, loadingNearest, updateUserWitho
             setScanned(true);
             console.log(data);
             const dataID = data.substring(56);
+            console.log(dataID);
+            if (user.occupying.length !== 0){
+                try{
+                    console.log(timeDifferenceInMin(Date.now(), user.occupying[0].date));
+                    //console.log(user.occupying[0]);
+                    if (user.occupying[0].publicID === dataID && timeDifferenceInMin(Date.now(), user.occupying[0].date) < 60){
+                        console.log('already checked in');
+                        return;
+                    }
+                    else {
+                        user.occupying[0] = {publicID: dataID, date: Date.now()};
+                    }
+                }
+                catch(err){
+                    console.log('error checking user.occupying[0]');
+                    return;
+                }
+            }
+            else{
+                user.occupying.push({publicID: dataID, date: Date.now()});
+            }
             const businessJSON = await checkIn(dataID);
-            user.history.push({business: businessJSON._id, date: Date.now()});
-            updateUserWithoutReturn({history: user.history});
+            console.log(businessJSON);
+            user.history.push({business: businessJSON._id, publicIdate: Date.now()});
+            //user.occupying.splice(0, user.occupying.length);
+            console.log('occupying length: ' + user.occupying.length);
+            updateUserWithoutReturn({history: user.history, occupying: user.occupying});
+        }
+        else if (data.indexOf(data.indexOf('http://sizzleco.herokuapp.com/api/business/addPerson') <= -1)){
+            setScanned(true);
+            user.history.splice(0, user.history.length);
+            user.occupying.splice(0, user.occupying.length);
+            user.favorites.splice(0, user.favorites.length);
+            updateUserWithoutReturn({history: user.history, occupying: user.occupying, favorites: user.favorites})
+            console.log("cleared history occupying favorites");
         }
       };
 

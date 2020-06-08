@@ -11,7 +11,6 @@
     Text desc., hours of operation, goods and services list (shows what is in and out of stock, on sale)
     Contact desc. 
 5. Population Graph Display
-
 FUTURE INTEGRATIONS:
     Live posts from restaurant itself or users, like ig stories but for businesses
 */
@@ -163,7 +162,7 @@ const BusinessPage = ({ route: { params: { business, db } }, checkIn, auth, upda
             alreadyReserved[user.reservations[i].index.day][user.reservations[i].index.index] = true;
         }
     }
-    console.log(alreadyReserved);
+    //console.log(alreadyReserved);
     let weekMap = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
     let currentDate = new Date();
     const [currentDay, setDay] = useState(weekMap[currentDate.getDay()]);
@@ -186,7 +185,7 @@ const BusinessPage = ({ route: { params: { business, db } }, checkIn, auth, upda
             timestamp: date
         });
         console.log(`Finding already reserved of ${indexDay} , ${i}`);
-        console.log(alreadyReserved);
+        //console.log(alreadyReserved);
         alreadyReserved[indexDay][i] = true;
         //TODO : add reservation to users array 
         reservations[day.toLowerCase()][i].users += 1;
@@ -244,20 +243,16 @@ const BusinessPage = ({ route: { params: { business, db } }, checkIn, auth, upda
 
     //This changes the favorite color; once you have the actual favorite parameter change the color based on the true/false of favorite
     function inFavorites() {
-        return User.user.favorites.includes(_id);
+        return User.user.favorites.includes(publicId);
     };
     const toggleFavorite = () => {
-        setFavorite(!isFavorite);
         if (!isFavorite) {
-            user.favorites.push(_id);
+            user.favorites.push(publicId);
         } else {
-            if (user.favorites.indexOf(_id) > -1){
-                console.log("INDEX OF ID: " + user.favorites.indexOf(_id));
-                user.favorites.splice(user.favorites.indexOf(_id), 1);
-            }
+            user.favorites.splice(user.favorites.indexOf(publicId), 1);
         }
-        updateUserWithoutReturn({favorites: user.favorites});
         updated = true;
+        setFavorite(!isFavorite);
 
     };
     const [isFavorite, setFavorite] = useState(inFavorites());
@@ -346,7 +341,7 @@ const BusinessPage = ({ route: { params: { business, db } }, checkIn, auth, upda
                     <ScrollView showsVerticalScrollIndicator={false}>
                         <TouchableWithoutFeedback>
                             <View>
-                                <ReservationScrollModal reservations={reservations} reservationLimit={50} reserve={reserveSpot} startingDate={currentDay} checkReserved={checkReserved}></ReservationScrollModal>
+                                {(typeof reservations === 'undefined') ? <View></View> : <ReservationScrollModal reservations={reservations} reservationLimit={50} reserve={reserveSpot} startingDate={currentDay} checkReserved={checkReserved}></ReservationScrollModal>}
                             </View>
                         </TouchableWithoutFeedback>
                     </ScrollView>

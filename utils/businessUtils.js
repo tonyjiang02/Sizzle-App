@@ -17,10 +17,11 @@ export const kmToMi = (km) => {
 
 export const getCoords = async (name) => {
     try {
-        let url = `https://nominatim.openstreetmap.org/search?q=${name}+USA&format=geojson`;
+        let url = `https://nominatim.openstreetmap.org/search?q=${name}&format=geojson`;
         console.log(url);
         const res = await fetch(url);
         const json = await res.json();
+        console.log(json);
         const location = {longitude: json.features[0].geometry.coordinates[0], latitude: json.features[0].geometry.coordinates[1]}
         return location;
     } catch (err) {
@@ -39,4 +40,12 @@ export const reverseCoords = async (lat, lon) => {
     catch (err) {
         console.log(err);
     }
+}
+
+export const timeDifferenceInMin = (date1, date2) => {
+    let currentSeconds = date1 / 1000;
+    let postSeconds = date2 / 1000;
+    let diffSeconds = currentSeconds - postSeconds;
+    let diffMin = diffSeconds / 60;
+    return diffMin;
 }
