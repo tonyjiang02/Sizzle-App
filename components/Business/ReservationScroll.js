@@ -17,13 +17,21 @@ const ReservationScroll = ({ reservations, reservationLimit, reserve, day, check
                 <Text style={{ fontFamily: 'AvenirNext-Bold' }}>{s.slot}</Text>
                 {reservationLimit > 0 ? <Text>{s.users.length} / {reservationLimit}</Text> : <Text>{s.users} reserved</Text>}
             </View>
-            <TouchableOpacity onPress={() => reserve(i, day)}>
-                <View style={{ borderRadius: 20, borderColor: 'gray', borderWidth: 0.5, backgroundColor: 'gray', paddingHorizontal: 30 }}>
-                    <Text style={{ color: 'white', fontWeight: 'bold', padding: 8, fontSize: 12, textAlign: 'center' }}>
-                        Reserve
+            {!checkReserved(i, day) ?
+                <TouchableOpacity onPress={() => reserve(i, day)}>
+                    <View style={{ borderRadius: 20, borderColor: 'gray', borderWidth: 0.5, backgroundColor: 'gray', paddingHorizontal: 30 }}>
+                        <Text style={{ color: 'white', fontWeight: 'bold', padding: 8, fontSize: 12, textAlign: 'center' }}>
+                            Reserve
+                        </Text>
+                    </View>
+                </TouchableOpacity>
+                :
+                <View style={{ borderRadius: 20, borderColor: 'transparent', borderWidth: 0.5, backgroundColor: (s.users < reservationLimit) ? '#ff9900' : '#B0AFAF', paddingHorizontal: 30 }}>
+                    <Text style={{ color: 'white', fontWeight: 'bold', padding: 8, fontSize: 12 }}>
+                        Already Reserved
                     </Text>
                 </View>
-            </TouchableOpacity>
+            }
         </View>
     ));
     return (

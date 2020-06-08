@@ -18,7 +18,6 @@ const ReservationScroll = ({ reservations, reservationLimit, reserve, startingDa
     let unlimited = false;
     console.log(startingDate);
     const [reserved, setReserved] = useState([]);
-
     // const reservationAllowed = (users, limit, dayCounter, time) => {
     //     /*
     //     Dont allow if:
@@ -45,14 +44,21 @@ const ReservationScroll = ({ reservations, reservationLimit, reserve, startingDa
                     <Text style={{ fontFamily: 'AvenirNext-Bold' }}>{s.slot}</Text>
                     {reservationLimit > 0 ? <Text>{s.users} / {reservationLimit}</Text> : <Text>{s.users} reserved</Text>}
                 </View>
-                <View pointerEvents={(s.users < reservationLimit) ? 'auto' : 'none'}>
-                    <TouchableOpacity onPress={() => { reserve(j, weekMapRelative[i]); reserved.push(); }}>
-                        <View style={{ borderRadius: 20, borderColor: 'transparent', borderWidth: 0.5, backgroundColor: (s.users < reservationLimit) ? '#ff9900' : '#B0AFAF', paddingHorizontal: 30 }}>
+                <View>
+                    {!checkReserved(j, weekMapRelative[i]) ?
+                        <TouchableOpacity onPress={() => { reserve(j, weekMapRelative[i]); reserved.push(); }}>
+                            <View style={{ borderRadius: 20, borderColor: 'transparent', borderWidth: 0.5, backgroundColor: (s.users < reservationLimit) ? '#ff9900' : '#B0AFAF', paddingHorizontal: 30 }}>
+                                <Text style={{ color: 'white', fontWeight: 'bold', padding: 8, fontSize: 12 }}>
+                                    {(s.users < reservationLimit) ? Reserve : Full}
+                                </Text>
+                            </View>
+                        </TouchableOpacity> :
+                        <View style={{ borderRadius: 20, borderColor: 'transparent', borderWidth: 0.5, backgroundColor: '#B0AFAF', paddingHorizontal: 30 }}>
                             <Text style={{ color: 'white', fontWeight: 'bold', padding: 8, fontSize: 12 }}>
-                                Reserve
+                                Already Reserved
                             </Text>
                         </View>
-                    </TouchableOpacity>
+                    }
                 </View>
             </View>
         ));

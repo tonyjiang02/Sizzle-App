@@ -1,5 +1,5 @@
 import 'react-native-gesture-handler';
-import React, { useState, useEffect, Fragment } from 'react';
+import React, { useState, useEffect, Fragment, useRef } from 'react';
 import { connect } from 'react-redux';
 import { AsyncStorage } from 'react-native';
 import { loadUser, loadToken } from './actions/auth';
@@ -27,9 +27,8 @@ import UserReservations from './components/Business/UserReservations';
 const Stack = createStackNavigator();
 const Index = ({ auth }) => {
     const [isAuth, setAuth] = useState(0);
+    const initialMount = useRef(true);
     useEffect(() => {
-        console.log("Auth State Changed");
-        console.log("Running Auth Check");
         const isAuthenticated = async () => {
             const token = await AsyncStorage.getItem('token');
             if (token) {
@@ -43,13 +42,19 @@ const Index = ({ auth }) => {
             }
 
         };
-        if (auth.isAuthenticated) {
-            setAuth(2);
-            store.dispatch(loadUser());
-            console.log("Is Authenticated First Time");
+        if (initialMount.current) {
+            initialMount.current = false;
         } else {
-            console.log("Checking local storage");
-            isAuthenticated();
+            console.log("Auth State Changed");
+            console.log("Running Auth Check");
+            if (auth.isAuthenticated) {
+                setAuth(2);
+                store.dispatch(loadUser());
+                console.log("Is Authenticated First Time");
+            } else {
+                console.log("Checking local storage");
+                isAuthenticated();
+            }
         }
 
     }, [auth]);
