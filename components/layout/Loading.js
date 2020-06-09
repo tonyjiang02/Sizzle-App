@@ -16,7 +16,7 @@ export default function Loading() {
 
     return (
         <LinearGradient
-            colors={['#ff9900','#FFDF7D', '#AED6FB', '#A38EFA' ]}
+            colors={['#ff9900', '#ff5f6d']}
             style={{flex: 1}}
         >
             <Animated.View onLayout={fadeIn} style={{ opacity: fadeAnim, flex: 1, justifyContent: "center", alignItems: "center", backgroundColor: 'white'}}>

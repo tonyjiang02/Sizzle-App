@@ -64,9 +64,16 @@ const UnverifiedBusinessPage = ({ route: { params: { business, db } }, checkIn, 
         getDistance();
         async function getMoreData() {
             const res = await getAdditionalData(place_id);
-            console.log(res.formatted_phone_number);
+            let w = "Unavailable";
+            let p = "Unavailable";
+            if (typeof res.website !== 'undefined' && typeof res.website !== 'null'){
+                w = res.website;
+            }
+            if (typeof res.formatted_phone_number !== 'undefined' && typeof res.formatted_phone_number !== 'null'){
+                p = res.formatted_phone_number;
+            }
             setAddData({
-                websiteURL: res.website,
+                websiteURL: w,
                 hours: {
                     mon: res.opening_hours.weekday_text[0],
                     tue: res.opening_hours.weekday_text[1],
@@ -76,7 +83,7 @@ const UnverifiedBusinessPage = ({ route: { params: { business, db } }, checkIn, 
                     sat: res.opening_hours.weekday_text[5],
                     sun: res.opening_hours.weekday_text[6],
                 },
-                phoneNumber: res.formatted_phone_number
+                phoneNumber: p
             });
         };
         getMoreData();
@@ -109,7 +116,7 @@ const UnverifiedBusinessPage = ({ route: { params: { business, db } }, checkIn, 
     //distance 
     let [lineDistance, setLineDistance] = useState(null);
     const getDistance = () => {
-        var mi = kmToMi(straightLineDistance(User.user.location, { latitude: parseFloat(business.geometry.location.lat), longitude: parseFloat(business.geometry.location.lng) }));
+        var mi = kmToMi(straightLineDistance(User.location, { latitude: parseFloat(business.geometry.location.lat), longitude: parseFloat(business.geometry.location.lng) }));
         var rounded = Math.round(mi * 10) / 10;
         setLineDistance(rounded + 'mi');
     };
@@ -160,30 +167,6 @@ const UnverifiedBusinessPage = ({ route: { params: { business, db } }, checkIn, 
     }
     else {
         popDisplay = <Text style={{ paddingLeft: 3, alignSelf: 'center', color: 'gray', fontSize: getFontSize(22), fontWeight: 'bold' }}>{livePopulation}</Text>;
-    }
-
-    //This changes the favorite color; once you have the actual favorite parameter change the color based on the true/false of favorite
-    function inFavorites() {
-        return user.favorites.includes(_id);
-    };
-    const toggleFavorite = () => {
-        console.log(user.favorites);
-        if (!isFavorite) {
-            user.favorites.push(_id);
-        } else {
-            user.favorites.splice(user.favorites.indexOf(_id));
-        }
-        updated = true;
-        setFavorite(!isFavorite);
-
-    };
-    const [isFavorite, setFavorite] = useState(inFavorites());
-    let favoriteDisplay = <Ionicons name="md-heart-empty" color='white' size={getIconSize(21)} />;
-    if (isFavorite === true) {
-        favoriteDisplay = <Ionicons name="md-heart" color='red' size={getIconSize(21)} />;
-    }
-    else if (isFavorite === false) {
-        favoriteDisplay = <Ionicons name="md-heart-empty" color='white' size={getIconSize(21)} />;
     }
 
     //open display
@@ -252,9 +235,6 @@ const UnverifiedBusinessPage = ({ route: { params: { business, db } }, checkIn, 
                                 </View>
                             </View>
                         </View>
-                        <TouchableOpacity style={{ position: 'absolute', right: 15, bottom: 5 }} onPress={() => toggleFavorite()}>
-                            {favoriteDisplay}
-                        </TouchableOpacity>
                     </ImageBackground>
 
                     <View style={{

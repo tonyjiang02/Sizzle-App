@@ -1,4 +1,4 @@
-import { LOAD_BUSINESSES, LOAD_BUSINESS, CLEAR_BUSINESSES, LOAD_SEARCH, NEW_SEARCH, LEAVE_SEARCH, LOAD_LANDING, LOAD_FILTER, NEW_FILTER, NEW_LOCATION, LOAD_NEAREST, UPDATE_POPULATION, UPDATE_BUSINESS, LOG_OUT, ORIG_LOCATION } from "../actions/types";
+import { LOAD_BUSINESSES, LOAD_BUSINESS, CLEAR_BUSINESSES, LOAD_SEARCH, NEW_SEARCH, LEAVE_SEARCH, LOAD_LANDING, LOAD_FILTER, LOAD_FAVORITES, NEW_FILTER, NEW_LOCATION, LOAD_NEAREST, UPDATE_POPULATION, UPDATE_BUSINESS, LOG_OUT, ORIG_LOCATION, RELOAD_FAVORITES } from "../actions/types";
 
 
 /*
@@ -17,12 +17,14 @@ const initialState = {
     filterBusinesses: [],
     dbFilterBusinesses: [], 
     dbNearestBusinesses: [],
+    dbFavoriteBusinesses: [],
     query: null,
     loadingAll: true,
     loadingOne: true,
     loadingSearch: true,
     loadingFilter: false,
     loadingNearest: true,
+    loadingFavorites: true
 };
 
 export default function (state = initialState, action) {
@@ -71,6 +73,17 @@ export default function (state = initialState, action) {
                 dbFilterBusinesses: payload.local,
                 loadingFilter: false
             }
+        case LOAD_FAVORITES:
+            return {
+                ...state,
+                dbFavoriteBusinesses: payload,
+                loadingFavorites: false
+            }
+        case RELOAD_FAVORITES:
+            return {
+                ...state,
+                loadingFavorites: true
+            }
         case LOAD_LANDING:
             return {
                 ...state,
@@ -86,13 +99,6 @@ export default function (state = initialState, action) {
                 loadingNearest: false,
             }
         case NEW_LOCATION:
-            return {
-                ...state,
-                businesses: [],
-                dbBusinesses: [],
-                loadingAll: true
-            }
-        case ORIG_LOCATION:
             return {
                 ...state,
                 businesses: [],

@@ -6,7 +6,7 @@ import { connect } from 'react-redux';
 import { styles, input } from '../Styles';
 import { SearchBar } from 'react-native-elements';
 import { getStatusBarHeight } from 'react-native-status-bar-height';
-import { getRegisteredBusinesses, getNearby, getAll, getGeoLocation, resetLocation, newSearch, getNomatimNearby, oldLocation, origLocation } from '../../actions/business';
+import { getRegisteredBusinesses, getNearby, getAll, getGeoLocation, resetLocation, newSearch, getNomatimNearby, oldLocation, newLocation } from '../../actions/business';
 import { updateUserRedux, locPermissionChange, updateReduxUser } from '../../actions/user';
 import Loading from '../layout/Loading';
 import LandingLoading from '../layout/LandingLoading';
@@ -21,7 +21,7 @@ import { Dimensions } from 'react-native';
 import Outlines from '../../assets/Outlines';
 import { getFontSize, getIconSize } from '../../utils/fontsizes';
 
-export const Landing = ({ getRegisteredBusinesses, getAll, newSearch, navigation, businesses, loadingAll, dbBusinesses, oldLocation, origLocation, firstTime, User, updateUserRedux, updateReduxUser, locPermissionChange }) => {
+export const Landing = ({ getRegisteredBusinesses, getAll, newSearch, navigation, businesses, loadingAll, dbBusinesses, newLocation, oldLocation, firstTime, User, updateUserRedux, updateReduxUser, locPermissionChange }) => {
     const [location, setLocation] = useState(null);
     const [locPermission, setLocPermission] = useState(false);
     const [userCoords, setUserCoords] = useState(null);
@@ -46,24 +46,19 @@ export const Landing = ({ getRegisteredBusinesses, getAll, newSearch, navigation
                 let coords = location.coords;
                 setUserCoords(coords);
                 setLocation(location);
-                user.location.latitude = coords.latitude;
-                user.location.longitude = coords.longitude;
-
-                //update user action
-                //updateUserRedux();
-                getAll({ radius: 5000 }, coords);
+                newLocation(coords);
             }
             else {
                 locPermissionChange(false);
                 console.log("Location permissions not granted.");
                 setLocPermission(false);
-                if (User.user.location.latitude === 0 && User.user.location.longitude === 0) {
+                if (User.location.latitude === 0 && User.location.longitude === 0) {
                     setNoLocation(true);
                     Alert.alert("Please set your location through the Account page or share your location with Sizzle to see nearby locations. ");
                 }
                 else {
                     console.log('getting all with manual location');
-                    getAll({ radius: 5000 }, User.user.location);
+                    getAll({ radius: 5000 }, User.location);
                 }
             }
         }
@@ -81,7 +76,7 @@ export const Landing = ({ getRegisteredBusinesses, getAll, newSearch, navigation
         if (User.newLocationSet === true && User.loadingUser === false) {
             setNoLocation(false);
             oldLocation();
-            getAll({ radius: 5000 }, User.user.location);
+            getAll({ radius: 5000 }, User.location);
         }
     }, [User.newLocationSet]);
 
@@ -97,28 +92,25 @@ export const Landing = ({ getRegisteredBusinesses, getAll, newSearch, navigation
         console.log("Asking Location Permissions");
         let response = await Location.requestPermissionsAsync();
         if (response.granted) {
+            locPermissionChange(true);
             setLocPermission(true);
             let location = await Location.getLastKnownPositionAsync();
             let coords = location.coords;
             setUserCoords(coords);
             setLocation(location);
-            user.location.latitude = coords.latitude;
-            user.location.longitude = coords.longitude;
-            //update user action
-            updateUserRedux();
-            origLocation();
-            getAll({ radius: 5000 }, coords);
+            newLocation(coords);
         }
         else {
+            locPermissionChange(false);
             console.log("Location permissions not granted.");
             setLocPermission(false);
-            if (User.user.location.latitude === 0 && User.user.location.longitude === 0) {
+            if (User.location.latitude === 0 && User.location.longitude === 0) {
                 setNoLocation(true);
                 Alert.alert("Please set your location through the Account page or share your location with Sizzle to see nearby locations. ");
             }
             else {
                 console.log('getting all with manual location');
-                getAll({ radius: 5000 }, User.user.location);
+                getAll({ radius: 5000 }, {latitude: User.latitude, longitude: User.longitude});
             }
         }
         wait(2000).then(() => setRefreshing(false));
@@ -202,7 +194,12 @@ export const Landing = ({ getRegisteredBusinesses, getAll, newSearch, navigation
     };
     const query = function (input) {
         newSearch();
-        navigation.navigate('Searching', { query: input, location: User.user.location });
+        if (User.location.latitude !== 0 && User.location.longitude !== 0) {
+            navigation.navigate('Searching', { query: input, location: User.location });
+        }
+        else{
+            Alert.alert("Please set your location to search.");
+        }
     };
 
     return (
@@ -359,4 +356,4 @@ const mapStateToProps = state => ({
     User: state.user
 });
 
-export default connect(mapStateToProps, { getRegisteredBusinesses, getAll, newSearch, getNomatimNearby, oldLocation, updateUserRedux, origLocation, locPermissionChange, updateReduxUser })(Landing);
+export default connect(mapStateToProps, { getRegisteredBusinesses, getAll, newSearch, getNomatimNearby, oldLocation, updateUserRedux, newLocation, locPermissionChange, updateReduxUser })(Landing);

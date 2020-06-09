@@ -1,6 +1,6 @@
 import { SIGNUP_SUCCESS, LOGIN_SUCCESS, LOGIN_FAIL, ERROR, LOAD_USER, LOGOUT_USER, SET_TOKEN } from './types';
 import { BASE_URL } from '../config';
-import { AsyncStorage } from 'react-native';
+import { AsyncStorage, Alert } from 'react-native';
 //saves user token into local storage (only handles localstorage of token)
 export const login = (email, password) => async (dispatch, getState) => {
     //login user using fetch
@@ -116,6 +116,7 @@ export const signup = (email, password) => async dispatch => {
         });
     } catch (err) {
         console.log(err);
+        //Alert.alert(err);
     }
 };
 //Loads basic user data into redux state 

@@ -11,7 +11,6 @@
     Text desc., hours of operation, goods and services list (shows what is in and out of stock, on sale)
     Contact desc. 
 5. Population Graph Display
-
 FUTURE INTEGRATIONS:
     Live posts from restaurant itself or users, like ig stories but for businesses
 */
@@ -42,6 +41,7 @@ const BusinessPage = ({ route: { params: { business, db } }, checkIn, auth, upda
     let { vicinity, geometry } = business;
     const [data, setData] = useState(dbBusiness);
     let { _id, name, owner, googleId, publicId, isVerified, images, coverImageUrl, website, phone, address, openStatus, hours, description, population, reservations, announcements, reservationLimit, covid19Information } = data;
+    console.log(data);
     let location = geometry.location;
     let user = User.user;
     let updated = false;
@@ -54,11 +54,9 @@ const BusinessPage = ({ route: { params: { business, db } }, checkIn, auth, upda
     const [updates, setUpdates] = useState(null);
     //const [refreshing, setRefreshing] = useState(false);
     //const [startRefresh, setStartRefresh] = useState(false);
-
     //backend
     const onPressCheckIn = async () => {
-        const biz = await checkIn(business.place_id);
-
+        const biz = await checkIn(_id);
         setLivePopulation(biz.population);
     };
     function wait(timeout) {
@@ -72,6 +70,7 @@ const BusinessPage = ({ route: { params: { business, db } }, checkIn, auth, upda
         wait(2000).then(() => { setRefreshing(false); setStartRefresh(true); });
     };*/
     useEffect(() => {
+        console.log("dbBusiness changed");
         setData(dbBusiness);
     }, [dbBusiness]);
     useEffect(() => {
@@ -116,17 +115,26 @@ const BusinessPage = ({ route: { params: { business, db } }, checkIn, auth, upda
         return open + close;
     };
     //make page specifically for unverified
-    const monBusinessHours = hoursToString(hours.monday);
-    const tueBusinessHours = hoursToString(hours.tuesday);
-    const wedBusinessHours = hoursToString(hours.wednesday);
-    const thuBusinessHours = hoursToString(hours.thursday);
-    const friBusinessHours = hoursToString(hours.friday);
-    const satBusinessHours = hoursToString(hours.saturday);
-    const sunBusinessHours = hoursToString(hours.sunday);
+    let monBusinessHours = "Not available";
+    let tueBusinessHours = "Not available";
+    let wedBusinessHours = "Not available";
+    let thuBusinessHours = "Not available";
+    let friBusinessHours = "Not available";
+    let satBusinessHours = "Not available";
+    let sunBusinessHours = "Not available";
+    if (hours) {
+        monBusinessHours = hoursToString(hours.monday);
+        tueBusinessHours = hoursToString(hours.tuesday);
+        wedBusinessHours = hoursToString(hours.wednesday);
+        thuBusinessHours = hoursToString(hours.thursday);
+        friBusinessHours = hoursToString(hours.friday);
+        satBusinessHours = hoursToString(hours.saturday);
+        sunBusinessHours = hoursToString(hours.sunday);
+    }
     //distance 
     let [lineDistance, setLineDistance] = useState(null);
     const getDistance = () => {
-        var mi = kmToMi(straightLineDistance(User.user.location, { latitude: parseFloat(business.geometry.location.lat), longitude: parseFloat(business.geometry.location.lng) }));
+        var mi = kmToMi(straightLineDistance(User.location, { latitude: parseFloat(business.geometry.location.lat), longitude: parseFloat(business.geometry.location.lng) }));
         var rounded = Math.round(mi * 10) / 10;
         setLineDistance(rounded + 'mi');
     };
@@ -163,38 +171,49 @@ const BusinessPage = ({ route: { params: { business, db } }, checkIn, auth, upda
             alreadyReserved[user.reservations[i].index.day][user.reservations[i].index.index] = true;
         }
     }
-    console.log(alreadyReserved);
+    //console.log(alreadyReserved);
     let weekMap = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
     let currentDate = new Date();
     const [currentDay, setDay] = useState(weekMap[currentDate.getDay()]);
     const [currentReservations, setReservations] = useState({ ...reservations });
-
     const checkReserved = (i, day) => {
         let indexDay = weekMap.indexOf(day);
         return alreadyReserved[indexDay][i];
     };
-    const reserveSpot = (i, day) => {
-        let date = new Date();
+    const validReservation = (day) => {
         let indexDay = weekMap.indexOf(day);
-        date.setDate(date.getDate() + (7 + indexDay - date.getDay()) % 7);
-        user.reservations.push({
-            business: _id,
-            businessName: name,
-            time: reservations[day.toLowerCase()][i].slot,
-            index: { day: indexDay, index: i },
-            date: date.toDateString(),
-            timestamp: date
-        });
-        console.log(`Finding already reserved of ${indexDay} , ${i}`);
-        console.log(alreadyReserved);
-        alreadyReserved[indexDay][i] = true;
-        //TODO : add reservation to users array 
-        reservations[day.toLowerCase()][i].users += 1;
-        businessUpdated = true;
-        updated = true;
-        setReservations({ ...reservations });
+        for (let j = 0; j < alreadyReserved[indexDay].length; j++) {
+            if (alreadyReserved[indexDay][j]) {
+                return false;
+            }
+        }
+        return true;
     };
-
+    const reserveSpot = (i, day) => {
+        if (validReservation(day)) {
+            let date = new Date();
+            let indexDay = weekMap.indexOf(day);
+            date.setDate(date.getDate() + (7 + indexDay - date.getDay()) % 7);
+            user.reservations.push({
+                business: _id,
+                businessName: name,
+                time: reservations[day.toLowerCase()][i].slot,
+                index: { day: indexDay, index: i },
+                date: date.toDateString(),
+                timestamp: date
+            });
+            console.log(`Finding already reserved of ${indexDay} , ${i}`);
+            //console.log(alreadyReserved);
+            alreadyReserved[indexDay][i] = true;
+            //TODO : add reservation to users array 
+            reservations[day.toLowerCase()][i].users += 1;
+            businessUpdated = true;
+            updated = true;
+            setReservations({ ...reservations });
+        } else {
+            console.log("Cannot reserve more than once per day");
+        }
+    };
     //map
     const openMapToBusiness = () => {
         Alert.alert(
@@ -244,13 +263,13 @@ const BusinessPage = ({ route: { params: { business, db } }, checkIn, auth, upda
 
     //This changes the favorite color; once you have the actual favorite parameter change the color based on the true/false of favorite
     function inFavorites() {
-        return User.user.favorites.includes(_id);
+        return User.user.favorites.includes(publicId);
     };
     const toggleFavorite = () => {
         if (!isFavorite) {
-            user.favorites.push(_id);
+            user.favorites.push(publicId);
         } else {
-            user.favorites.splice(user.favorites.indexOf(_id));
+            user.favorites.splice(user.favorites.indexOf(publicId), 1);
         }
         updated = true;
         setFavorite(!isFavorite);
@@ -342,7 +361,7 @@ const BusinessPage = ({ route: { params: { business, db } }, checkIn, auth, upda
                     <ScrollView showsVerticalScrollIndicator={false}>
                         <TouchableWithoutFeedback>
                             <View>
-                                <ReservationScrollModal reservations={reservations} reservationLimit={50} reserve={reserveSpot} startingDate={currentDay} checkReserved={checkReserved}></ReservationScrollModal>
+                                {(typeof reservations === 'undefined') ? <View></View> : <ReservationScrollModal reservations={reservations} reservationLimit={50} reserve={reserveSpot} startingDate={currentDay} checkReserved={checkReserved}></ReservationScrollModal>}
                             </View>
                         </TouchableWithoutFeedback>
                     </ScrollView>
@@ -452,7 +471,7 @@ const BusinessPage = ({ route: { params: { business, db } }, checkIn, auth, upda
                             </TouchableOpacity>
                             <View style={{ flex: 4 }}>
                                 <View>
-                                    <ReservationScroll day={currentDay} reserve={reserveSpot} reservations={currentReservations[currentDay.toLowerCase()]} checkReserved={checkReserved} style={{ alignItems: 'flex-start' }}></ReservationScroll>
+                                    <ReservationScroll day={currentDay} reserve={reserveSpot} reservations={reservations[currentDay.toLowerCase()]} checkReserved={checkReserved} style={{ alignItems: 'flex-start' }}></ReservationScroll>
                                 </View>
                             </View>
                         </View>

@@ -1,4 +1,7 @@
 export function textTruncateBySpace(num, text) {
+    if (!text || !num) {
+        return " ";
+    }
     var finalStr = '';
     let charArr = text.split('');
     let split = 0;
@@ -21,9 +24,9 @@ export function textTruncate(num, text) {
 }
 
 export function textTruncateBySpaceTwo(num, text) {
-    var finalStr= '';
-    for (let i = 0; i < num-3; i++){
-        finalStr = finalStr + text.substring(i, i+1);
+    var finalStr = '';
+    for (let i = 0; i < num - 3; i++) {
+        finalStr = finalStr + text.substring(i, i + 1);
     }
     finalStr = finalStr + '...';
     return finalStr;
@@ -36,32 +39,32 @@ export function timeToString(date) {
     let hourStr = "";
 
     //month parser
-    monthStr = (date.getMonth()+1).toString();
+    monthStr = (date.getMonth() + 1).toString();
 
     //minute parser
-    if (date.getMinutes() < 10){
-        minuteStr = "0"+date.getMinutes().toString();
+    if (date.getMinutes() < 10) {
+        minuteStr = "0" + date.getMinutes().toString();
     }
-    else{
+    else {
         minuteStr = date.getMinutes().toSTring();
     }
 
     //hour parser
-    if (date.getHours() >= 12){
+    if (date.getHours() >= 12) {
         ampm = "pm";
-        if (date.getHours() > 12){
-            hourStr = (date.getHours()-12).toString();
+        if (date.getHours() > 12) {
+            hourStr = (date.getHours() - 12).toString();
         }
         else {
             hourStr = (date.getHours()).toString();
         }
     }
-    else{
+    else {
         ampm = 'am';
-        if (date.getHours() === 0){
+        if (date.getHours() === 0) {
             hourStr = '12';
         }
-        else{
+        else {
             hourStr = (date.getHours()).toString();
         }
     }

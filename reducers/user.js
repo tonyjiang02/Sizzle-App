@@ -4,13 +4,15 @@ const initialState = {
     loadingUser: true,
     newLocationSet: false,
     locationChanged: false,
-    locationPermissions: false
+    locationPermissions: false,
+    location: { latitude: 0, longitude: 0 }
 };
 
 export default function (state = initialState, action) {
     const { type, payload } = action;
     switch (type) {
         case LOAD_USER:
+            console.log("LOADING USER INTO REDUX STATE");
             console.log(payload);
             return {
                 ...state,
@@ -29,13 +31,15 @@ export default function (state = initialState, action) {
                 ...state,
                 user: null,
                 loadingUser: true,
-                newLocationSet: false
+                newLocationSet: false,
+                location: { latitude: 0, longitude: 0 }
             };
         case NEW_LOCATION:
             return {
                 ...state,
                 newLocationSet: true,
-                locationChanged: true
+                locationChanged: true,
+                location: payload
             };
         case OLD_LOCATION:
             return {
@@ -47,7 +51,8 @@ export default function (state = initialState, action) {
                 ...state,
                 newLocationSet: true,
                 locationChanged: false,
-                locationPermissions: true
+                locationPermissions: true,
+                location: payload
             };
         case ALLOW_LOC:
             return {

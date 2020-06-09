@@ -1,4 +1,4 @@
-import { LOAD_BUSINESSES, LOAD_BUSINESS, CLEAR_BUSINESSES, CLEAR_SEARCH, CLEAR_BUSINESS, ERROR, LOAD_SEARCH, LOAD_NEAREST, LOAD_FILTER, NEW_FILTER, NEW_SEARCH, NEW_LOCATION, LOAD_LANDING, UPDATE_POPULATION, UPDATE_BUSINESS, OLD_LOCATION, ORIG_LOCATION, ALLOW_LOC } from './types';
+import { LOAD_BUSINESSES, LOAD_BUSINESS, CLEAR_BUSINESSES, CLEAR_SEARCH, CLEAR_BUSINESS, ERROR, LOAD_SEARCH, LOAD_FAVORITES, RELOAD_FAVORITES, LOAD_NEAREST, LOAD_FILTER, NEW_FILTER, NEW_SEARCH, NEW_LOCATION, LOAD_LANDING, UPDATE_POPULATION, UPDATE_BUSINESS, OLD_LOCATION, ORIG_LOCATION, ALLOW_LOC } from './types';
 import { BASE_URL, PLACES_API_KEY, ADD_API_KEY } from '../config';
 import { straightLineDistance, kmToMi } from '../utils/businessUtils';
 import toQueryString from '../utils/QueryString';
@@ -204,10 +204,11 @@ export const getNomatimNearby = (name, coords) => async dispatch => {
     }
 };
 
-export const newLocation = () => dispatch => {
-    console.log('new location method called');
+export const newLocation = (coords) => dispatch => {
+    console.log('newLocation method called from business actions');
     dispatch({
-        type: NEW_LOCATION
+        type: NEW_LOCATION,
+        payload: coords
     });
 };
 
@@ -215,13 +216,6 @@ export const oldLocation = () => dispatch => {
     console.log('old location method called');
     dispatch({
         type: OLD_LOCATION
-    });
-};
-
-export const origLocation = () => dispatch => {
-    console.log('old location method called');
-    dispatch({
-        type: ORIG_LOCATION
     });
 };
 
@@ -280,7 +274,30 @@ export const getNearest = (params, coords) => async dispatch => {
         console.log(err);
     }
 };
+export const getFavorites = (ids) => async dispatch => {
+    const local = await fetch(`${BASE_URL}/api/business/ids`, {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+            ids: ids
+        })
+    });
+    const json1 = await local.json();
+    dispatch({
+        type: LOAD_FAVORITES,
+        payload: json1
+    });
+    return json1;
+};
+export const reloadFavorites = () => dispatch => {
+    dispatch({
+        type: RELOAD_FAVORITES,
+    });
+};
 export const checkIn = (id) => async (dispatch, getState) => {
+    console.log(id);
     const token = getState().auth.token;
     const user = getState().user.user;
     console.log("Token " + token);
@@ -291,23 +308,11 @@ export const checkIn = (id) => async (dispatch, getState) => {
                 'Content-Type': 'application/json'
             },
             body: JSON.stringify({
-                googleId: id
+                id: id
             })
         });
         const json = await res.json();
-        // user.history.push({ business: json.id });
-        // const userUpdate = await fetch(`${BASE_URL}/api/users/update`, {
-        //     method: 'POST',
-        //     headers: {
-        //         'Content-Type': 'application/json'
-        //     },
-        //     body: JSON.stringify({
-        //         user: {
-        //             history: user.history
-        //         }
-        //     })
-        // });
-        // const updatedUser = await userUpdate.json();
+        console.log(json);
         dispatch({
             type: UPDATE_BUSINESS,
             payload: json
