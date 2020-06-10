@@ -21,7 +21,8 @@ const ReservationScroll = ({ reservations, reservationLimit, reserve, day, check
             </View>
             {!checkReserved(i, day) ?
                 <TouchableOpacity onPress={() => reserve(i, day)}>
-                    <View style={{ borderRadius: 20, borderColor: 'gray', borderWidth: 0.5, backgroundColor: 'gray', paddingHorizontal: 30 }}>
+                    {console.log("Reservation Scroll" + s.users + " limit: " + reservationLimit)}
+                    <View style={{ borderRadius: 20, borderColor: 'transparent', borderWidth: 0.5, backgroundColor: (s.users < reservationLimit) ? '#ff9900' : '#B0AFAF', paddingHorizontal: 30 }}>
                         <Text style={{ color: 'white', fontWeight: 'bold', padding: 8, fontSize: 12, textAlign: 'center' }}>
                             Reserve
                         </Text>

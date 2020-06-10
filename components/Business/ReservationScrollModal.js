@@ -50,7 +50,7 @@ const ReservationScrollModal = ({ reservations, reservationLimit, reserve, start
                         {!checkReserved(j, weekMapRelative[i]) ?
                             <TouchableOpacity onPress={() => { reserve(j, weekMapRelative[i]); }}>
                                 <View style={{ borderRadius: 20, borderColor: 'transparent', borderWidth: 0.5, backgroundColor: (s.users < reservationLimit) ? '#ff9900' : '#B0AFAF', paddingHorizontal: 30 }}>
-                                    <Text style={{ color: 'white', fontWeight: 'bold', padding: 8, fontSize: 12 }}>
+                                    <Text style={{ color: 'white', fontWeight: 'bold', padding: 8, fontSize: 12, textAlign: 'center' }}>
                                         {console.log()}
                                         {(s.users < reservationLimit) ? "Reserve" : "Full"}
                                     </Text>
