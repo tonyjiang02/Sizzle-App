@@ -31,12 +31,11 @@ const BusinessCard = ({ business, navigation, db, openBusinessPage, User }) => {
 
     let cardName = "";
     let cardAddress = "";
-
     if (db.isVerified === true){
         cardName = db.name;
         cardAddress = db.address;
     }
-    else if (db.isVerified === false){
+    else{
         cardName = business.name;
         cardAddress = business.vicinity;
     }
@@ -141,7 +140,6 @@ const BusinessCard = ({ business, navigation, db, openBusinessPage, User }) => {
             rounded = Math.round(mi * 10) / 10;
         }
         else {
-            console.log('lat: ' + business.geometry.location.lat);
             var mi = kmToMi(straightLineDistance(currentloc, { latitude: parseFloat(business.geometry.location.lat), longitude: parseFloat(business.geometry.location.lng) }));
             rounded = Math.round(mi * 10) / 10;
         }

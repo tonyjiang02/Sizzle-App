@@ -1,6 +1,6 @@
 import React, { useEffect } from 'react';
 import { connect } from 'react-redux';
-import { View, Text, FlatList, ScrollView, Dimensions, TouchableOpacity } from 'react-native';
+import { View, Text, FlatList, ScrollView, Dimensions, TouchableOpacity, Alert } from 'react-native';
 import ExampleBusinessCard from './ExampleBusinessCard';
 import { styles } from '../Styles';
 import Outlines from '../../assets/Outlines';
@@ -18,18 +18,31 @@ export const ReservationCard = ({ date, time, name, address, key, reservations, 
         };
         updateUserWithoutReturn(user);
     };
+    const createCancelAlert = () =>
+        Alert.alert(
+            'Do you want to cancel this reservation?',
+            '',
+            [
+                {text: "No"},
+                { text: "Yes", onPress: () => cancelReservation() }
+            ],
+            { cancelable: false }
+        );
     return (
-        <View>
-            <View style={{ padding: 10, width: Dimensions.get('window').width, backgroundColor: 'white', flex: 1, flexDirection: "row" }}>
-                <View style={{ paddingLeft: 15, flex: 3 }}>
-                    <Text style={{ fontFamily: 'Avenir-Light', color: 'black', fontSize: getFontSize(19) }}>{date}</Text>
-                    <Text style={{ fontSize: getFontSize(20), paddingTop: 10, flexWrap: 'wrap' }}>{name > 33 ? textTruncateBySpace(33, name) : name}</Text>
-                    <Text style={{ fontSize: getFontSize(12), paddingBottom: 5 }}>{textTruncateBySpace(33, address)}</Text>
-                    <Text style={{ fontSize: getFontSize(12), paddingBottom: 5 }}>{time}</Text>
+        <View style={{paddingTop: 15 }}>
+            <View style={{ height: (Dimensions.get('window').width / 2.5), width: Dimensions.get('window').width - 20, alignSelf: 'center', backgroundColor: 'green', flex: 1, flexDirection: "row", borderRadius: 10}}>
+                <View style={{ paddingLeft: 15, flex: 3.5, alignSelf: 'center' }}>
+                    <Text style={{ fontSize: getFontSize(22), flexWrap: 'wrap', fontFamily: 'AvenirNext-Bold', color: 'white' }}>{name > 25 ? textTruncateBySpace(25, name) : name}</Text>
+                    <Text style={{ fontSize: getFontSize(12), color: 'white'}}>{address}</Text>
+                    <View style={{height: 10}}></View>
+                    <Text style={{ fontSize: getFontSize(18), color: 'white'}}>{time}</Text>
+                    <Text style={{ fontFamily: 'Avenir-Light', color: 'white', fontSize: getFontSize(19) }}>{date}</Text>
                 </View>
-                <View style={{ flex: 1, justifyContent: 'center', alignContent: 'center' }}>
-                    <TouchableOpacity onPress={() => cancelReservation()}><Text>Cancel</Text></TouchableOpacity>
-                </View>
+                <TouchableOpacity onPress={() => createCancelAlert()} style={{ flex: 1, justifyContent: 'center', alignContent: 'center', backgroundColor: 'red', borderTopRightRadius: 10, borderBottomRightRadius: 10 }}>
+                    <View>
+                        <Text style={{alignSelf: 'center', color: 'white', fontWeight: 'bold'}}>Cancel </Text>
+                    </View>
+                </TouchableOpacity>
                 <View style={{ borderBottomWidth: 0.5, borderBottomColor: 'gainsboro' }}></View>
             </View>
         </View>

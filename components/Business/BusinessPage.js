@@ -197,6 +197,7 @@ const BusinessPage = ({ route: { params: { business, db } }, checkIn, auth, upda
             user.reservations.push({
                 business: _id,
                 businessName: name,
+                address: address,
                 time: reservations[day.toLowerCase()][i].slot,
                 index: { day: indexDay, index: i },
                 date: date.toDateString(),
@@ -471,7 +472,7 @@ const BusinessPage = ({ route: { params: { business, db } }, checkIn, auth, upda
                             </TouchableOpacity>
                             <View style={{ flex: 4 }}>
                                 <View>
-                                    <ReservationScroll day={currentDay} reserve={reserveSpot} reservations={reservations[currentDay.toLowerCase()]} checkReserved={checkReserved} style={{ alignItems: 'flex-start' }}></ReservationScroll>
+                                    <ReservationScroll day={currentDay} reserve={reserveSpot} reservations={reservations[currentDay.toLowerCase()]} reservationLimit={50} checkReserved={checkReserved} style={{ alignItems: 'flex-start' }}></ReservationScroll>
                                 </View>
                             </View>
                         </View>

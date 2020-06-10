@@ -13,21 +13,21 @@ export const UserReservations = ({ user, navigation }) => {
     <BusinessCard key={biz._id ? biz_.id : biz.id} business={biz} navigation={navigation} db={dbBusinesses[i]}></BusinessCard>
 ));*/
     const [reservationDisplay, updateDisplay] = useState([]);
+    console.log(user.reservations);
     useEffect(() => {
         let res = user.reservations.map((res, i) =>
-            <ReservationCard key={i} date={res.date} name={res.businessName} time={res.time}></ReservationCard>
+            <ReservationCard key={i} date={res.date} name={res.businessName} address={res.address} time={res.time}></ReservationCard>
         );
         updateDisplay(res);
     }, [user]);
     return (
-        <View style={{ flex: 20, backgroundColor: 'white' }}>
+        <View style={{ flex: 20, backgroundColor: '#E1FDE2' }}>
             <Header navigation={navigation}></Header>
-            <View style={{ flexDirection: 'row', paddingTop: 10, backgroundColor: 'white', alignItems: 'center', justifyContent: 'center' }}>
+            <View style={{ flexDirection: 'row', paddingTop: 10, backgroundColor: '#E1FDE2', alignItems: 'center', justifyContent: 'center' }}>
                 <MaterialCommunityIcons name="clock" size={35} color='green' style={{ paddingRight: 5 }}></MaterialCommunityIcons>
-                <Text style={{ color: '#323131', fontSize: 24, fontFamily: 'AvenirNext-Bold' }}>Reservations</Text>
+                <Text style={{ color: 'green', fontSize: 24, fontFamily: 'AvenirNext-Bold' }}>Reservations</Text>
             </View>
-            <Text style={{ color: '#323131', fontFamily: 'Avenir-Light', fontSize: 16, textAlign: 'center' }}>If required, show this screen with your reservation upon entrance.</Text>
-            <View style={{ height: 10, borderBottomColor: 'gainsboro', borderBottomWidth: 0.5 }}></View>
+            <Text style={{ color: 'black', fontFamily: 'Avenir-Light', fontSize: 16, textAlign: 'center' }}>If required, show this screen with your reservation upon entrance.</Text>
             <ScrollView showsVerticalScrollIndicator={false} style-={{ backgroundColor: 'white' }}>
                 {reservationDisplay}
                 <View style={{ height: 50 }}></View>
