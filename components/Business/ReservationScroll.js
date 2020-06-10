@@ -17,7 +17,7 @@ const ReservationScroll = ({ reservations, reservationLimit, reserve, day, check
         <View index={i} style={{ paddingRight: 10, flexDirection: 'column' }}>
             <View style={{ alignItems: 'center', paddingBottom: 5 }}>
                 <Text style={{ fontFamily: 'AvenirNext-Bold' }}>{s.slot}</Text>
-                {reservationLimit > 0 ? <Text>{s.users.length} / {reservationLimit}</Text> : <Text>{s.users} reserved</Text>}
+                {reservationLimit > 0 ? <Text>{s.users} / {reservationLimit}</Text> : <Text>{s.users} reserved</Text>}
             </View>
             {!checkReserved(i, day) ?
                 <TouchableOpacity onPress={() => reserve(i, day)}>

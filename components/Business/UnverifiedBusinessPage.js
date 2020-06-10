@@ -33,11 +33,11 @@ import MapView, { Marker } from 'react-native-maps';
 import openMap from 'react-native-open-maps';
 import { getFontSize, getIconSize } from '../../utils/fontsizes';
 import { textTruncateBySpace, textTruncateBySpaceTwo } from '../../utils/TextTruncate';
-import { updateUser } from '../../actions/user';
+import { updateUser, updateUserWithoutReturn } from '../../actions/user';
 import { updateBusinessReservations, getAdditionalData } from '../../actions/business';
 import * as Location from 'expo-location';
 
-const UnverifiedBusinessPage = ({ route: { params: { business, db } }, checkIn, updateUser, User, updateBusinessReservations, dbBusiness }) => {
+const UnverifiedBusinessPage = ({ route: { params: { business, db } }, checkIn, updateUser, updateUserWithoutReturn, User, updateBusinessReservations, dbBusiness }) => {
     //destructuring
     let { name, vicinity, geometry, place_id } = business;
     let { _id, googleId, isVerified, population } = dbBusiness;
@@ -54,7 +54,8 @@ const UnverifiedBusinessPage = ({ route: { params: { business, db } }, checkIn, 
     const [livePopulation, setLivePopulation] = useState(population);
     //backend
     const onPressCheckIn = async () => {
-        const biz = await checkIn(business.place_id);
+        const biz = await checkIn(_id);
+        await updateUserWithoutReturn({ occupying: { id: _id, name: name } });
         setLivePopulation(biz.population);
     };
     const refresh = () => {
@@ -66,10 +67,10 @@ const UnverifiedBusinessPage = ({ route: { params: { business, db } }, checkIn, 
             const res = await getAdditionalData(place_id);
             let w = "Unavailable";
             let p = "Unavailable";
-            if (typeof res.website !== 'undefined' && typeof res.website !== 'null'){
+            if (typeof res.website !== 'undefined' && typeof res.website !== 'null') {
                 w = res.website;
             }
-            if (typeof res.formatted_phone_number !== 'undefined' && typeof res.formatted_phone_number !== 'null'){
+            if (typeof res.formatted_phone_number !== 'undefined' && typeof res.formatted_phone_number !== 'null') {
                 p = res.formatted_phone_number;
             }
             setAddData({
@@ -245,10 +246,17 @@ const UnverifiedBusinessPage = ({ route: { params: { business, db } }, checkIn, 
                             <MaterialCommunityIcons name='directions' color='royalblue' size={getIconSize(21)} />
                             <Text style={{ color: 'black', fontFamily: "Avenir-Light" }}>Directions</Text>
                         </TouchableOpacity>
-                        <TouchableOpacity onPress={onPressCheckIn} style={{ alignItems: 'center', flex: 1 }}>
-                            <MaterialCommunityIcons name='map-marker-check' color='#ff9900' size={getIconSize(22)} />
-                            <Text style={{ color: '#ff9900', fontFamily: 'Avenir-Light', fontWeight: 'bold' }}>Check In</Text>
-                        </TouchableOpacity>
+                        {user.occupying.id !== _id ?
+                            <TouchableOpacity onPress={onPressCheckIn} style={{ alignItems: 'center', flex: 1 }}>
+                                <MaterialCommunityIcons name='map-marker-check' color='#ff9900' size={getIconSize(22)} />
+                                <Text style={{ color: '#ff9900', fontFamily: 'Avenir-Light', fontWeight: 'bold' }}>Check In</Text>
+                            </TouchableOpacity>
+                            :
+                            <View style={{ alignItems: 'center', flex: 1 }}>
+                                <MaterialCommunityIcons name='map-marker-check' color='#00c707' size={getIconSize(22)} />
+                                <Text style={{ color: '#00c707', fontFamily: 'Avenir-Light', fontWeight: 'bold' }}>Checked In</Text>
+                            </View>
+                        }
                         <TouchableOpacity onPress={() => { Linking.openURL(phoneNumberURL); }} style={{ alignItems: 'center', flex: 1 }}>
                             <MaterialIcons name='phone' color='royalblue' size={getIconSize(20)} style={{ paddingBottom: 5 }} />
                             <Text style={{ color: 'black', fontFamily: 'Avenir-Light' }}>Call</Text>
@@ -338,4 +346,4 @@ const mapStateToProps = state => ({
     auth: state.auth,
     User: state.user
 });
-export default connect(mapStateToProps, { checkIn, updateUser, updateBusinessReservations })(UnverifiedBusinessPage);
+export default connect(mapStateToProps, { checkIn, updateUser, updateBusinessReservations, updateUserWithoutReturn })(UnverifiedBusinessPage);

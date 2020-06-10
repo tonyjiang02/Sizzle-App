@@ -1,4 +1,4 @@
-import { SIGNUP_SUCCESS, LOGIN_SUCCESS, LOGIN_FAIL, ERROR, LOAD_USER, LOGOUT_USER, SET_TOKEN } from './types';
+import { SIGNUP_SUCCESS, LOGIN_SUCCESS, LOGIN_FAIL, ERROR, LOAD_USER, LOGOUT_USER, SET_TOKEN, NOT_AUTHENTICATED } from './types';
 import { BASE_URL } from '../config';
 import { AsyncStorage, Alert } from 'react-native';
 //saves user token into local storage (only handles localstorage of token)
@@ -159,5 +159,11 @@ export const loadToken = (token) => dispatch => {
     dispatch({
         type: SET_TOKEN,
         payload: token
+    });
+};
+//runs on not authenticated, triggers reload of auth redux
+export const notAuthenticated = () => dispatch => {
+    dispatch({
+        type: ERROR
     });
 };

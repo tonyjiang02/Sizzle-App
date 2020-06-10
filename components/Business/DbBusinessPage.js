@@ -36,13 +36,11 @@ import { updateUser, updateUserWithoutReturn } from '../../actions/user';
 import { updateBusinessReservations } from '../../actions/business';
 import * as Location from 'expo-location';
 
-const BusinessPage = ({ route: { params: { business, db } }, checkIn, auth, updateUser, User, getBusiness, updateBusinessReservations, dbBusiness, updateUserWithoutReturn }) => {
+const DbBusinessPage = ({ route: { params: { db } }, checkIn, User, updateBusinessReservations, dbBusiness, updateUserWithoutReturn }) => {
     //destructuring
-    let { vicinity, geometry } = business;
     const [data, setData] = useState(dbBusiness);
     let { _id, name, owner, googleId, publicId, isVerified, images, coverImageUrl, website, phone, address, openStatus, hours, description, population, reservations, announcements, reservationLimit, covid19Information } = data;
     console.log(data);
-    let location = geometry.location;
     let user = User.user;
     let updated = false;
     let businessUpdated = false;
@@ -75,7 +73,6 @@ const BusinessPage = ({ route: { params: { business, db } }, checkIn, auth, upda
         setData(dbBusiness);
     }, [dbBusiness]);
     useEffect(() => {
-        getDistance();
         return function cleanup() {
             if (updated) {
                 updateUserWithoutReturn({ reservations: user.reservations, favorites: user.favorites });
@@ -132,14 +129,6 @@ const BusinessPage = ({ route: { params: { business, db } }, checkIn, auth, upda
         satBusinessHours = hoursToString(hours.saturday);
         sunBusinessHours = hoursToString(hours.sunday);
     }
-    //distance 
-    let [lineDistance, setLineDistance] = useState(null);
-    const getDistance = () => {
-        var mi = kmToMi(straightLineDistance(User.location, { latitude: parseFloat(business.geometry.location.lat), longitude: parseFloat(business.geometry.location.lng) }));
-        var rounded = Math.round(mi * 10) / 10;
-        setLineDistance(rounded + 'mi');
-    };
-
     //phone number
     let phoneNumber = phone;
     let phoneNumberURL = 'tel:' + phoneNumber;
@@ -148,7 +137,7 @@ const BusinessPage = ({ route: { params: { business, db } }, checkIn, auth, upda
     let websiteURL = website;
     const createWebAlert = () =>
         Alert.alert(
-            'Do you want to open the website for ' + business.name + '?',
+            'Do you want to open the website for ' + name + '?',
             '',
             [
                 {
@@ -225,7 +214,7 @@ const BusinessPage = ({ route: { params: { business, db } }, checkIn, auth, upda
                     text: "Cancel",
                     style: "cancel"
                 },
-                { text: "OK", onPress: () => openMap({ end: name + " " + vicinity, start: "Current Location", travelType: 'drive' }) }
+                { text: "OK", onPress: () => openMap({ end: name + " " + address, start: "Current Location", travelType: 'drive' }) }
             ],
             { cancelable: false }
         );
@@ -362,7 +351,7 @@ const BusinessPage = ({ route: { params: { business, db } }, checkIn, auth, upda
                     <ScrollView showsVerticalScrollIndicator={false}>
                         <TouchableWithoutFeedback>
                             <View>
-                                {(typeof reservations === 'undefined') ? <View></View> : <ReservationScrollModal reservations={reservations} reservationLimit={reservationLimit} reserve={reserveSpot} startingDate={currentDay} checkReserved={checkReserved}></ReservationScrollModal>}
+                                {(typeof reservations === 'undefined') ? <View></View> : <ReservationScrollModal reservations={reservations} reservationLimit={50} reserve={reserveSpot} startingDate={currentDay} checkReserved={checkReserved}></ReservationScrollModal>}
                             </View>
                         </TouchableWithoutFeedback>
                     </ScrollView>
@@ -395,11 +384,8 @@ const BusinessPage = ({ route: { params: { business, db } }, checkIn, auth, upda
                             }}
                         />
                         <View style={{ position: 'absolute', bottom: 40, alignItems: 'baseline' }}>
-                            <Text style={{ color: 'white', fontSize: getFontSize(30), fontWeight: 'bold', paddingLeft: 20 }}>{business.name}</Text>
+                            <Text style={{ color: 'white', fontSize: getFontSize(30), fontWeight: 'bold', paddingLeft: 20 }}>{name}</Text>
                             <View style={{ paddingLeft: 20, paddingTop: 10, flexDirection: 'row', alignItems: 'center' }}>
-                                <Text style={{ borderRadius: 5, borderColor: 'white', color: 'white', borderWidth: 1, padding: 3, fontSize: getFontSize(16) }}>
-                                    {lineDistance}
-                                </Text>
                                 <View style={{ flexDirection: 'row', alignItems: 'center', paddingLeft: 20 }}>
                                     <Ionicons name='md-person' color='white' size={getIconSize(19)} />
                                     {popDisplay}
@@ -479,7 +465,7 @@ const BusinessPage = ({ route: { params: { business, db } }, checkIn, auth, upda
                             </TouchableOpacity>
                             <View style={{ flex: 4 }}>
                                 <View>
-                                    <ReservationScroll day={currentDay} reserve={reserveSpot} reservations={reservations[currentDay.toLowerCase()]} checkReserved={checkReserved} reservationLimit={reservationLimit} style={{ alignItems: 'flex-start' }}></ReservationScroll>
+                                    <ReservationScroll day={currentDay} reserve={reserveSpot} reservations={reservations[currentDay.toLowerCase()]} checkReserved={checkReserved} style={{ alignItems: 'flex-start' }}></ReservationScroll>
                                 </View>
                             </View>
                         </View>
@@ -507,24 +493,10 @@ const BusinessPage = ({ route: { params: { business, db } }, checkIn, auth, upda
                     </View>
 
                     <View style={styles.mapOuterStyle}>
-                        <MapView style={styles.mapStyle} showsUserLocation={true} initialRegion={{
-                            latitude: location.lat,
-                            longitude: location.lng,
-                            latitudeDelta: 0.002,
-                            longitudeDelta: 0.001,
-                        }}>
-                            <Marker
-                                coordinate={{ latitude: parseFloat(location.lat), longitude: parseFloat(location.lng) }}
-                                title={name}
-                            />
-                        </MapView>
                         <View style={{ paddingHorizontal: 15, alignSelf: 'flex-start' }}>
-                            <Text style={{ fontFamily: 'Avenir-Light', fontSize: getFontSize(17), fontWeight: 'bold', paddingTop: 10 }}>Address: {vicinity} </Text>
+                            <Text style={{ fontFamily: 'Avenir-Light', fontSize: getFontSize(17), fontWeight: 'bold', paddingTop: 10 }}>Address: {address} </Text>
                         </View>
                         <View style={{ flexDirection: 'row' }}>
-                            <View style={{ flexDirection: 'column', flex: 1, paddingLeft: 15, paddingVertical: 20 }}>
-                                <Text style={{ fontFamily: 'Avenir-Light', fontSize: getFontSize(17), fontWeight: 'bold' }}>Distance: {lineDistance} </Text>
-                            </View>
                             <View style={{ flex: 1.2, justifyContent: 'center', alignItems: 'center' }}>
                                 <TouchableOpacity onPress={openMapToBusiness}>
                                     <View style={{ borderWidth: 1, borderRadius: 5, borderColor: '#ff9900', backgroundColor: '#ff9900', paddingVertical: 12, paddingHorizontal: 8 }}>
@@ -572,4 +544,4 @@ const mapStateToProps = state => ({
     auth: state.auth,
     User: state.user
 });
-export default connect(mapStateToProps, { checkIn, updateUser, updateBusinessReservations, getBusiness, updateUserWithoutReturn })(BusinessPage);
+export default connect(mapStateToProps, { checkIn, updateUser, updateBusinessReservations, getBusiness, updateUserWithoutReturn })(DbBusinessPage);

@@ -2,7 +2,7 @@ import 'react-native-gesture-handler';
 import React, { useState, useEffect, Fragment, useRef } from 'react';
 import { connect } from 'react-redux';
 import { AsyncStorage } from 'react-native';
-import { loadUser, loadToken } from './actions/auth';
+import { loadUser, loadToken, notAuthenticated } from './actions/auth';
 import Login from './components/Login';
 import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
@@ -23,7 +23,7 @@ import CheckedIn from './components/Checkedin';
 import BusinessHistoryList from './components/Business/BusinessHistoryList';
 import Favorites from './components/Business/Favorites';
 import UserReservations from './components/Business/UserReservations';
-
+import DbBusinessPage from './components/Business/DbBusinessPage';
 const Stack = createStackNavigator();
 const Index = ({ auth }) => {
     const [isAuth, setAuth] = useState(0);
@@ -62,6 +62,8 @@ const Index = ({ auth }) => {
         AsyncStorage.getItem('token', function (err, res) {
             if (res) {
                 store.dispatch(loadToken(res));
+            } else {
+                store.dispatch(notAuthenticated());
             }
         });
     }, [null]);
@@ -89,6 +91,7 @@ const Index = ({ auth }) => {
                     <Stack.Screen name="BusinessHistoryList" component={BusinessHistoryList} />
                     <Stack.Screen name="Favorites" component={Favorites} />
                     <Stack.Screen name="UserReservations" component={UserReservations} />
+                    <Stack.Screen name="DbBusinessPage" component={DbBusinessPage} />
                 </Fragment>
             );
         }

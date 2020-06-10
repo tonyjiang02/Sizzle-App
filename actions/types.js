@@ -2,6 +2,7 @@ export const LOAD_USER = 'GET_USER';
 export const LOGIN_SUCCESS = 'LOGIN_SUCCESS';
 export const SIGNUP_SUCCESS = 'SIGNUP_SUCCESS';
 export const LOGIN_FAIL = 'LOGIN_FAIL';
+export const NOT_AUTHENTICATED = 'NOT_AUTHENTICATED';
 export const ERROR = 'ERROR';
 export const LOAD_BUSINESSES = 'LOAD_BUSINESSES';
 export const LOAD_BUSINESS = 'LOAD_BUSINESS';
