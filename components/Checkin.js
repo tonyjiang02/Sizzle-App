@@ -89,33 +89,15 @@ export const Checkin = ({ navigation, getNearest, loadingNearest, updateUserWith
             console.log(data);
             const id = data.substring(56);
             console.log(id);
-            let newOccupying = user.occupying;
-            if (newOccupying) {
-                try {
-                    console.log(timeDifferenceInMin(Date.now(), user, newOccupying.date));
-                    //console.log(user.occupying[0]);
-                    if (newOccupying.id === id && timeDifferenceInMin(Date.now(), newOccupying.date) < 60) {
-                        console.log('already checked in');
-                        return;
-                    }
-                    else {
-                        newOccupying = { id: id, date: Date.now() };
-                    }
-                }
-                catch (err) {
-                    console.log('error checking occupying');
+            if (user.occupying) {
+                if (user.occupying.id === id && timeDifferenceInMin(Date.now(), user.occupying.date) < 60) {
+                    console.log('already checked in');
                     return;
                 }
-            }
-            else {
-                newOccupying = { publicID: id, date: Date.now() };
             }
             console.log("checking in");
             const businessJSON = await checkIn(id);
             console.log(businessJSON);
-            let newHistory = user.history;
-            newHistory.push({ business: businessJSON._id, date: Date.now() });
-            updateUserWithoutReturn({ history: newHistory, occupying: newOccupying });
             openBusinessPage(null, businessJSON);
             navigation.replace('DbBusinessPage', { db: businessJSON });
         }

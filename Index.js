@@ -32,7 +32,6 @@ const Index = ({ auth }) => {
         const isAuthenticated = async () => {
             const token = await AsyncStorage.getItem('token');
             if (token) {
-                console.log(token);
                 store.dispatch(loadUser());
                 setAuth(2);
                 console.log("Is Authenticated");

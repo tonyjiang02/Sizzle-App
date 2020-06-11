@@ -41,7 +41,6 @@ const BusinessPage = ({ route: { params: { business, db } }, checkIn, auth, upda
     let { vicinity, geometry } = business;
     const [data, setData] = useState(dbBusiness);
     let { _id, name, owner, googleId, publicId, isVerified, images, coverImageUrl, website, phone, address, openStatus, hours, description, population, reservations, announcements, reservationLimit, covid19Information } = data;
-    console.log(data);
     let location = geometry.location;
     let user = User.user;
     let updated = false;
@@ -57,7 +56,7 @@ const BusinessPage = ({ route: { params: { business, db } }, checkIn, auth, upda
     //backend
     const onPressCheckIn = async () => {
         const biz = await checkIn(_id);
-        await updateUserWithoutReturn({ occupying: { id: _id, name: name } });
+        console.log(biz);
         setLivePopulation(biz.population);
     };
     function wait(timeout) {
@@ -93,10 +92,8 @@ const BusinessPage = ({ route: { params: { business, db } }, checkIn, auth, upda
     }, [startRefresh]);*/
 
     useEffect(() => {
-        console.log('running useEffect');
         let thisAnnouncements = [...announcements];
         thisAnnouncements.reverse();
-        console.log(thisAnnouncements);
         setUpdates(thisAnnouncements.map((a, i) => (
             <LiveUpdate title={a.title} content={a.content} time={a.date} key={i}></LiveUpdate>
         )));
@@ -204,7 +201,6 @@ const BusinessPage = ({ route: { params: { business, db } }, checkIn, auth, upda
                 date: date.toDateString(),
                 timestamp: date
             });
-            console.log(`Finding already reserved of ${indexDay} , ${i}`);
             //console.log(alreadyReserved);
             alreadyReserved[indexDay][i] = true;
             //TODO : add reservation to users array 
@@ -480,11 +476,7 @@ const BusinessPage = ({ route: { params: { business, db } }, checkIn, auth, upda
                             </TouchableOpacity>
                             <View style={{ flex: 4 }}>
                                 <View>
-<<<<<<< HEAD
                                     <ReservationScroll day={currentDay} reserve={reserveSpot} reservations={reservations[currentDay.toLowerCase()]} checkReserved={checkReserved} reservationLimit={reservationLimit} style={{ alignItems: 'flex-start' }}></ReservationScroll>
-=======
-                                    <ReservationScroll day={currentDay} reserve={reserveSpot} reservations={reservations[currentDay.toLowerCase()]} reservationLimit={50} checkReserved={checkReserved} style={{ alignItems: 'flex-start' }}></ReservationScroll>
->>>>>>> 6ac105bd17472a3edef8dd39a8c5f5e87be56069
                                 </View>
                             </View>
                         </View>

@@ -1,8 +1,8 @@
-import { LOAD_BUSINESSES, LOAD_BUSINESS, CLEAR_BUSINESSES, CLEAR_SEARCH, CLEAR_BUSINESS, ERROR, LOAD_SEARCH, LOAD_FAVORITES, RELOAD_FAVORITES, LOAD_NEAREST, LOAD_FILTER, NEW_FILTER, NEW_SEARCH, NEW_LOCATION, LOAD_LANDING, UPDATE_POPULATION, UPDATE_BUSINESS, OLD_LOCATION, ORIG_LOCATION, ALLOW_LOC } from './types';
+import { LOAD_BUSINESSES, LOAD_BUSINESS, CLEAR_BUSINESSES, CLEAR_SEARCH, CLEAR_BUSINESS, ERROR, LOAD_SEARCH, LOAD_FAVORITES, RELOAD_FAVORITES, LOAD_NEAREST, LOAD_FILTER, NEW_FILTER, NEW_SEARCH, NEW_LOCATION, LOAD_LANDING, UPDATE_POPULATION, UPDATE_BUSINESS, OLD_LOCATION, ORIG_LOCATION, ALLOW_LOC, UPDATE_USER } from './types';
 import { BASE_URL, PLACES_API_KEY, ADD_API_KEY } from '../config';
 import { straightLineDistance, kmToMi } from '../utils/businessUtils';
 import toQueryString from '../utils/QueryString';
-
+import { updateUser } from './user';
 
 export const getBusinesses = (params) => async dispatch => {
     return null;
@@ -52,7 +52,6 @@ export const getBusiness = (googleId, id) => async dispatch => {
 
         }
         const data = await res.json();
-        console.log(data.email);
         dispatch({
             type: LOAD_BUSINESS,
             payload: data
@@ -195,10 +194,9 @@ export const getNomatimNearby = (name, coords) => async dispatch => {
     try {
         console.log('getting nomatim nearby');
         let url = `photon.komoot.de/api/?q=${name}&lat=${coords.latitude}&lon=${coords.longitude}&limit=20`;
-        console.log(url);
+
         const res = await fetch(url);
         const json = await res.json();
-        console.log(json);
     } catch (err) {
         console.log(err);
     }
@@ -297,10 +295,8 @@ export const reloadFavorites = () => dispatch => {
     });
 };
 export const checkIn = (id) => async (dispatch, getState) => {
-    console.log(id);
-    const token = getState().auth.token;
     const user = getState().user.user;
-    console.log("Token " + token);
+    const token = getState().auth.token;
     try {
         const res = await fetch(`${BASE_URL}/api/business/addPerson/${id}`, {
             method: 'POST',
@@ -312,14 +308,21 @@ export const checkIn = (id) => async (dispatch, getState) => {
             })
         });
         const json = await res.json();
-        console.log(json);
         dispatch({
             type: UPDATE_BUSINESS,
             payload: json
         });
+        let newHistory = user.history;
+        newHistory.push({ business: json._id, name: json.name, publicId: json.googleId, date: Date.now() });
+        let newUser = { occupying: { id: json._id, name: json.name, date: Date.now() }, history: newHistory };
+        dispatch({
+            type: UPDATE_USER,
+            payload: newUser
+        });
+        updateUser(newUser, token);
         return json;
     } catch (error) {
-
+        console.log(error);
     }
 };
 export const updateBusinessReservations = (id, reservations) => async dispatch => {

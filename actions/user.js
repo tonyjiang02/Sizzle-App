@@ -18,7 +18,6 @@ export const updateUser = async (user, token) => {
             console.log(text);
         }
         const json = await res.json();
-        console.log(json);
         return json;
     } catch (err) {
         console.log(err);
@@ -26,31 +25,13 @@ export const updateUser = async (user, token) => {
 };
 //Updates redux and database without syncing
 export const updateUserWithoutReturn = (user) => async (dispatch, getState) => {
-    console.log("updating userwithoutreturn");
     const token = getState().auth.token;
-    console.log('token: ' + token);
     dispatch({
         type: UPDATE_USER,
         payload: user
     });
-    // try {
-    //     const res = await fetch(`${BASE_URL}/api/users/user`, {
-    //         method: 'GET',
-    //         headers: {
-    //             'Content-Type': 'application/json',
-    //             'x-auth-token': token
-    //         },
-    //     });
-    //     if (!res.ok) {
-    //         const text = await res.text();
-    //         console.log(text);
-    //     }
-    //     const json = await res.json();
-    //     return json;
-    // } catch (err) {
-    //     console.log(err);
-    // }
     updateUser(user, token);
+    return;
 };
 //Updates the redux with the return from the database
 export const updateUserWithReturn = (user) => async dispatch => {
@@ -65,7 +46,6 @@ export const updateUserRedux = () => async (dispatch, getState) => {
     console.log("updating user through redux state");
     const token = getState().auth.token;
     const user = getState().user.user;
-    console.log(user);
     try {
         const res = await fetch(`${BASE_URL}/api/users/update`, {
             method: 'POST',
@@ -78,7 +58,6 @@ export const updateUserRedux = () => async (dispatch, getState) => {
             })
         });
         const json = await res.json();
-        console.log(json);
     } catch (err) {
         console.log(err);
     }

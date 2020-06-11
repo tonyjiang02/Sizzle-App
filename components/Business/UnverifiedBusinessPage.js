@@ -55,7 +55,6 @@ const UnverifiedBusinessPage = ({ route: { params: { business, db } }, checkIn, 
     //backend
     const onPressCheckIn = async () => {
         const biz = await checkIn(_id);
-        await updateUserWithoutReturn({ occupying: { id: _id, name: name } });
         setLivePopulation(biz.population);
     };
     const refresh = () => {

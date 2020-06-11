@@ -55,7 +55,6 @@ const DbBusinessPage = ({ route: { params: { db } }, checkIn, User, updateBusine
     //backend
     const onPressCheckIn = async () => {
         const biz = await checkIn(_id);
-        await updateUserWithoutReturn({ occupying: { id: _id, name: name } });
         setLivePopulation(biz.population);
     };
     function wait(timeout) {

@@ -51,7 +51,6 @@ export const loginGoogle = (id) => async (dispatch) => {
             throw Error(err);
         }
         const json = await res.json();
-        console.log(json);
         dispatch({
             type: LOGIN_SUCCESS,
             payload: json
