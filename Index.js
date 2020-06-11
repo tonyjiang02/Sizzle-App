@@ -34,7 +34,7 @@ const Index = ({ auth }) => {
             if (token) {
                 store.dispatch(loadUser());
                 setAuth(2);
-                console.log("Is Authenticated");
+                console.log("Is Authenticated ");
             } else {
                 console.log("Not Authenticated");
                 setAuth(1);
