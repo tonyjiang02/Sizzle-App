@@ -36,7 +36,6 @@ export const login = (email, password) => async (dispatch, getState) => {
 };
 export const loginGoogle = (id) => async (dispatch) => {
     try {
-        console.log("logging in with google");
         const res = await fetch(`${BASE_URL}/api/users/google`, {
             method: "POST",
             headers: {

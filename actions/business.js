@@ -325,6 +325,21 @@ export const checkIn = (id) => async (dispatch, getState) => {
         console.log(error);
     }
 };
+export const getBusinessField = (id, field) => async dispatch => {
+    try {
+        const res = await fetch(`${BASE_URL}/api/business/getField/${id}/${field}`, {
+            method: 'GET'
+        });
+        if (!res.ok) {
+            const text = await res.text();
+            console.log(text);
+        }
+        const json = await res.json();
+        return json;
+    } catch (err) {
+        console.log(err);
+    }
+};
 export const updateBusinessReservations = (id, reservations) => async dispatch => {
     console.log("Updating business reservations");
     try {

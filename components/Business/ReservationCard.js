@@ -7,18 +7,28 @@ import Outlines from '../../assets/Outlines';
 import { textTruncateBySpace } from '../../utils/TextTruncate';
 import { getFontSize, getIconSize } from '../../utils/fontsizes';
 import { updateUserWithoutReturn } from '../../actions/user';
+import { updateBusinessReservations, getBusinessField } from '../../actions/business';
 import user from '../../reducers/user';
 
-export const ReservationCard = ({ date, time, name, address, key, reservations, updateUserWithoutReturn }) => {
+export const ReservationCard = ({ index, date, id, time, name, address, key, reservations, updateUserWithoutReturn, updateBusinessReservations, getBusinessField }) => {
     const splitDate = date.split(' ');
-
-    const cancelReservation = () => {
+    const monthArr = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+    const weekMap = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
+    const compareDate = new Date(splitDate[3], monthArr.indexOf(splitDate[1]), splitDate[2], 23, 59, 59);
+    console.log(compareDate);
+    let d = Date.now();
+    const cancelReservation = async () => {
         let changedReservations = reservations;
         changedReservations.splice(key, 1);
         let user = {
             reservations: changedReservations
         };
         updateUserWithoutReturn(user);
+        let response = await getBusinessField(id, "reservations");
+        console.log(response);
+        let businessReservations = response.reservations;
+        businessReservations[weekMap[index.day].toLowerCase()][index.index].users -= 1;
+        updateBusinessReservations(id, businessReservations);
     };
     const createCancelAlert = () =>
         Alert.alert(
@@ -40,12 +50,19 @@ export const ReservationCard = ({ date, time, name, address, key, reservations, 
                     <Text style={{ fontSize: getFontSize(18), color: 'white' }}>{time}</Text>
                     <Text style={{ fontFamily: 'Avenir-Light', color: 'white', fontSize: getFontSize(19) }}>{date}</Text>
                 </View>
-                <TouchableOpacity onPress={() => createCancelAlert()} style={{ flex: 1, justifyContent: 'center', alignContent: 'center', backgroundColor: 'red', borderTopRightRadius: 10, borderBottomRightRadius: 10 }}>
-                    {}
-                    <View>
-                        <Text style={{ alignSelf: 'center', color: 'white', fontWeight: 'bold' }}>Cancel </Text>
+                {d < compareDate ?
+                    <TouchableOpacity onPress={() => createCancelAlert()} style={{ flex: 1, justifyContent: 'center', alignContent: 'center', backgroundColor: 'red', borderTopRightRadius: 10, borderBottomRightRadius: 10 }}>
+                        <View>
+                            <Text style={{ alignSelf: 'center', color: 'white', fontWeight: 'bold' }}>Cancel </Text>
+                        </View>
+                    </TouchableOpacity>
+                    :
+                    <View style={{ flex: 1, justifyContent: 'center', alignContent: 'center', backgroundColor: 'white', borderTopRightRadius: 10, borderBottomRightRadius: 10 }}>
+                        <View>
+                            <Text style={{ alignSelf: 'center', color: 'black', fontWeight: 'bold' }}>Completed </Text>
+                        </View>
                     </View>
-                </TouchableOpacity>
+                }
                 <View style={{ borderBottomWidth: 0.5, borderBottomColor: 'gainsboro' }}></View>
             </View>
         </View>
@@ -56,4 +73,4 @@ const mapStateToProps = state => ({
     reservations: state.user.user.reservations
 });
 
-export default connect(mapStateToProps, { updateUserWithoutReturn })(ReservationCard);
+export default connect(mapStateToProps, { updateUserWithoutReturn, updateBusinessReservations, getBusinessField })(ReservationCard);
