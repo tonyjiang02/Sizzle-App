@@ -1,6 +1,6 @@
 import React, { useEffect } from 'react';
 import { connect } from 'react-redux';
-import { View, Text, FlatList, ScrollView, Dimensions, TouchableOpacity, Alert } from 'react-native';
+import { View, Text, FlatList, ScrollView, Dimensions, TouchableOpacity, Alert, ImageBackground } from 'react-native';
 import ExampleBusinessCard from './ExampleBusinessCard';
 import { styles } from '../Styles';
 import Outlines from '../../assets/Outlines';
@@ -9,7 +9,7 @@ import { getFontSize, getIconSize } from '../../utils/fontsizes';
 import { updateUserWithoutReturn } from '../../actions/user';
 import user from '../../reducers/user';
 
-export const ReservationCard = ({ date, time, name, address, key, reservations, updateUserWithoutReturn }) => {
+export const ReservationCard = ({ date, time, name, address, key, reservations, updateUserWithoutReturn, image }) => {
     const splitDate = date.split(' ');
 
     const cancelReservation = () => {
@@ -41,13 +41,11 @@ export const ReservationCard = ({ date, time, name, address, key, reservations, 
                     <Text style={{ fontFamily: 'Avenir-Light', color: 'white', fontSize: getFontSize(19) }}>{date}</Text>
                 </View>
                 <TouchableOpacity onPress={() => createCancelAlert()} style={{ flex: 1, justifyContent: 'center', alignContent: 'center', backgroundColor: 'red', borderTopRightRadius: 10, borderBottomRightRadius: 10 }}>
-                    {}
                     <View>
                         <Text style={{ alignSelf: 'center', color: 'white', fontWeight: 'bold' }}>Cancel </Text>
                     </View>
                 </TouchableOpacity>
-                <View style={{ borderBottomWidth: 0.5, borderBottomColor: 'gainsboro' }}></View>
-            </View>
+            </View> 
         </View>
     );
 };

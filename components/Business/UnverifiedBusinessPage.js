@@ -216,26 +216,30 @@ const UnverifiedBusinessPage = ({ route: { params: { business, db } }, checkIn, 
                     shadowRadius: 9.51,
                     elevation: 15,
                 }}>
-                    <ImageBackground source={require('../../assets/backgroundhue.png')} style={{ width: '100%', height: 210 }}>
-                        <View style={{ position: 'absolute', bottom: 40, alignItems: 'baseline' }}>
-                            <Text style={{ color: 'white', fontSize: getFontSize(30), fontWeight: 'bold', paddingLeft: 20, paddingRight: 10 }}>{business.name.length > 50 ? textTruncateBySpaceTwo(50, business.name) : business.name}</Text>
-                            <View style={{ paddingLeft: 20, paddingTop: 10, flexDirection: 'row', alignItems: 'center' }}>
-                                <Text style={{ borderRadius: 5, borderColor: 'white', color: 'white', borderWidth: 1, padding: 3, fontSize: getFontSize(16) }}>
-                                    {lineDistance}
-                                </Text>
-                                <View style={{ flexDirection: 'row', alignItems: 'center', paddingLeft: 20 }}>
-                                    <Ionicons name='md-person' color='white' size={getIconSize(19)} />
-                                    {popDisplay}
-                                </View>
-                                <View style={{ paddingLeft: 20, flexDirection: 'row', alignItems: 'center' }}>
-                                    {openDisplay}
-                                </View>
-                                <View style={{ paddingLeft: 20, flexDirection: 'row', alignItems: 'center' }}>
-                                    {verified}
+                    <View>
+                        <LinearGradient
+                            colors={['#ff9900','#ff5f6d']} style={{height: 210}}
+                        >
+                            <View style={{ position: 'absolute', bottom: 40, alignItems: 'baseline' }}>
+                                <Text style={{ color: 'white', fontSize: getFontSize(30), fontWeight: 'bold', paddingLeft: 20, paddingRight: 10 }}>{business.name.length > 50 ? textTruncateBySpaceTwo(50, business.name) : business.name}</Text>
+                                <View style={{ paddingLeft: 20, paddingTop: 10, flexDirection: 'row', alignItems: 'center' }}>
+                                    <Text style={{ borderRadius: 5, borderColor: 'white', color: 'white', borderWidth: 1, padding: 3, fontSize: getFontSize(16) }}>
+                                        {lineDistance}
+                                    </Text>
+                                    <View style={{ flexDirection: 'row', alignItems: 'center', paddingLeft: 20 }}>
+                                        <Ionicons name='md-person' color='white' size={getIconSize(19)} />
+                                        {popDisplay}
+                                    </View>
+                                    <View style={{ paddingLeft: 20, flexDirection: 'row', alignItems: 'center' }}>
+                                        {openDisplay}
+                                    </View>
+                                    <View style={{ paddingLeft: 20, flexDirection: 'row', alignItems: 'center' }}>
+                                        {verified}
+                                    </View>
                                 </View>
                             </View>
-                        </View>
-                    </ImageBackground>
+                        </LinearGradient>
+                    </View>
 
                     <View style={{
                         flexDirection: 'row', alignItems: 'flex-end', backgroundColor: '#EEFBFC',

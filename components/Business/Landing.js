@@ -20,6 +20,7 @@ import BusinessCard from './BusinessCard';
 import { Dimensions } from 'react-native';
 import Outlines from '../../assets/Outlines';
 import { getFontSize, getIconSize } from '../../utils/fontsizes';
+import { LinearGradient} from 'expo-linear-gradient';
 
 export const Landing = ({ getRegisteredBusinesses, getAll, newSearch, navigation, businesses, loadingAll, dbBusinesses, newLocation, oldLocation, firstTime, User, updateUserRedux, updateReduxUser, locPermissionChange }) => {
     const [location, setLocation] = useState(null);
@@ -288,7 +289,7 @@ export const Landing = ({ getRegisteredBusinesses, getAll, newSearch, navigation
                     </View>
                 </View>
             </Modal>
-            {User.loadingUser ? <View><Outlines type="Header"></Outlines><View style={{ height: 12 }}></View><View style={{ alignSelf: 'center' }}><Outlines type="Search"></Outlines></View><View style={{ height: 12 }}></View></View> :
+            {User.loadingUser ? <View style={{backgroundColor: '#ff9900'}}><Outlines type="Header"></Outlines><View style={{ height: 12 }}></View><View style={{ alignSelf: 'center' }}><Outlines type="Search"></Outlines></View><View style={{ height: 12 }}></View></View> :
                 <View>
                     <Header navigation={navigation}></Header>
                     <View style={{ alignItems: 'center', backgroundColor: '#ff9900' }}>
@@ -319,32 +320,37 @@ export const Landing = ({ getRegisteredBusinesses, getAll, newSearch, navigation
                     </View>
                 </View>
             }
-            <View style={{ borderBottomColor: 'gainsboro', borderBottomWidth: 0.7 }}></View>
-            {noLocation ? <View style={{ height: Dimensions.get('window').height, paddingHorizontal: 10 }}><Text style={{ fontFamily: 'Avenir-Light', paddingTop: 20 }}>No location found. Set your location through
-            the Account page or allow Sizzle to access your location by changing your device's settings.</Text></View> : <View>
-                    {loadingAll || sorting ? <LandingLoading /> :
+            <View>
+                <LinearGradient
+                    colors={['#ff9900', '#ff5f6d', '#ff5f6d']}
+                >
+                    {noLocation ? <View style={{ height: Dimensions.get('window').height, paddingHorizontal: 10 }}><Text style={{ fontFamily: 'Avenir-Light', paddingTop: 20 }}>No location found. Set your location through
+                    the Account page or allow Sizzle to access your location by changing your device's settings.</Text></View> : 
                         <View>
-                            <ScrollView showsVerticalScrollIndicator={false}>
-                                <RefreshControl refreshing={refreshing} onRefresh={refresh} />
-                                <BusinessSideScroll key={2} businesses={sorted.grocery} category={'Groceries'} navigation={navigation}></BusinessSideScroll>
-                                <BusinessSideScroll key={3} businesses={sorted.supply} category={'Supplies'} navigation={navigation}></BusinessSideScroll>
-                                <BusinessSideScroll key={4} businesses={sorted.store} category={'Stores'} navigation={navigation}></BusinessSideScroll>
-                                <BusinessSideScroll key={1} businesses={sorted.food} category={'Restaurants, Cafes, and Bars'} navigation={navigation}></BusinessSideScroll>
-                                <BusinessSideScroll key={6} businesses={sorted.public} category={'Public'} navigation={navigation}></BusinessSideScroll>
-                                <BusinessSideScroll key={5} businesses={sorted.services} category={'Services'} navigation={navigation}></BusinessSideScroll>
-                                <BusinessSideScroll key={7} businesses={sorted.attraction} category={'Attractions'} navigation={navigation}></BusinessSideScroll>
-                                <BusinessSideScroll key={8} businesses={sorted.entertainment} category={'Entertainment'} navigation={navigation}></BusinessSideScroll>
-                                <BusinessSideScroll key={9} businesses={sorted.recreation} category={'Recreation'} navigation={navigation}></BusinessSideScroll>
-                                <BusinessSideScroll key={10} businesses={sorted.travel} category={'Travel'} navigation={navigation}></BusinessSideScroll>
-                                <BusinessSideScroll key={11} businesses={sorted.place_of_worship} category={'Places of Worship'} navigation={navigation}></BusinessSideScroll>
-                                <BusinessSideScroll key={12} businesses={sorted.health} category={'Health'} navigation={navigation}></BusinessSideScroll>
-                                <BusinessSideScroll key={13} businesses={sorted.other} category={'Other'} navigation={navigation}></BusinessSideScroll>
-                                <Text style={{ padding: 85, backgroundColor: '#f2f2f2' }}></Text>
-                                <View style={{ height: 50 }}></View>
-                            </ScrollView>
-                        </View>
-                    }
-                </View>}
+                            {loadingAll || sorting ? <LandingLoading /> :
+                                <View>
+                                    <ScrollView showsVerticalScrollIndicator={false}>
+                                        <RefreshControl refreshing={refreshing} onRefresh={refresh} />
+                                        <BusinessSideScroll key={2} businesses={sorted.grocery} category={'Groceries'} navigation={navigation}></BusinessSideScroll>
+                                        <BusinessSideScroll key={3} businesses={sorted.supply} category={'Supplies'} navigation={navigation}></BusinessSideScroll>
+                                        <BusinessSideScroll key={4} businesses={sorted.store} category={'Stores'} navigation={navigation}></BusinessSideScroll>
+                                        <BusinessSideScroll key={1} businesses={sorted.food} category={'Restaurants, Cafes, and Bars'} navigation={navigation}></BusinessSideScroll>
+                                        <BusinessSideScroll key={6} businesses={sorted.public} category={'Public'} navigation={navigation}></BusinessSideScroll>
+                                        <BusinessSideScroll key={5} businesses={sorted.services} category={'Services'} navigation={navigation}></BusinessSideScroll>
+                                        <BusinessSideScroll key={7} businesses={sorted.attraction} category={'Attractions'} navigation={navigation}></BusinessSideScroll>
+                                        <BusinessSideScroll key={8} businesses={sorted.entertainment} category={'Entertainment'} navigation={navigation}></BusinessSideScroll>
+                                        <BusinessSideScroll key={9} businesses={sorted.recreation} category={'Recreation'} navigation={navigation}></BusinessSideScroll>
+                                        <BusinessSideScroll key={10} businesses={sorted.travel} category={'Travel'} navigation={navigation}></BusinessSideScroll>
+                                        <BusinessSideScroll key={11} businesses={sorted.place_of_worship} category={'Places of Worship'} navigation={navigation}></BusinessSideScroll>
+                                        <BusinessSideScroll key={12} businesses={sorted.health} category={'Health'} navigation={navigation}></BusinessSideScroll>
+                                        <BusinessSideScroll key={13} businesses={sorted.other} category={'Other'} navigation={navigation}></BusinessSideScroll>
+                                        <Text style={{ padding: 85, backgroundColor: 'transparent' }}></Text>
+                                    </ScrollView>
+                                </View>
+                            }
+                        </View>}
+                </LinearGradient>
+            </View>
         </View>
     );
 };

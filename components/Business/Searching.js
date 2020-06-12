@@ -15,6 +15,7 @@ import { TouchableOpacity, TouchableWithoutFeedback } from 'react-native-gesture
 import { Ionicons, MaterialCommunityIcons, AntDesign, FontAwesome5, MaterialIcons } from '@expo/vector-icons';
 import { getFontSize, getIconSize } from '../../utils/fontsizes';
 import { set } from 'react-native-reanimated';
+import { LinearGradient } from 'expo-linear-gradient';
 
 const Searching = ({ getNearby, newSearch, newFilter, loadFilter, route: { params: { query, location } }, navigation, business }) => {
     const [distance, setDistance] = useState(3);
@@ -63,8 +64,8 @@ const Searching = ({ getNearby, newSearch, newFilter, loadFilter, route: { param
 
     useEffect(() => {
         if (filterPressed){
-            console.log('filter pressed');
-            console.log('after useeffect: within: ' + checkWithinFiveMiles + ' lowpop: ' + checkLowPopulation + ' open: ' + checkCurrentlyOpen + ' verified: ' + checkVerified );
+            //console.log('filter pressed');
+            //console.log('after useeffect: within: ' + checkWithinFiveMiles + ' lowpop: ' + checkLowPopulation + ' open: ' + checkCurrentlyOpen + ' verified: ' + checkVerified );
             getNewFilter();
             setFilterPressed(false);
         }
@@ -97,50 +98,50 @@ const Searching = ({ getNearby, newSearch, newFilter, loadFilter, route: { param
     //filter buttons
     let withinFiveMilesDisplay = <Text></Text>;
     if (checkWithinFiveMiles === false) {
-        withinFiveMilesDisplay = <Text style={{ borderRadius: 14, borderColor: 'gray', color: 'gray', fontWeight: 'bold', borderWidth: 0.7, padding: 9, fontSize: getFontSize(11) }}>Within 5 mi.</Text>;
+        withinFiveMilesDisplay = <Text style={{ borderRadius: 14, borderColor: 'white', color: 'white', fontWeight: 'bold', borderWidth: 0.7, padding: 9, fontSize: getFontSize(11) }}>Within 5 mi.</Text>;
     }
     else if (checkWithinFiveMiles === true) {
         withinFiveMilesDisplay =
-            <View style={{ borderRadius: 14, borderColor: '#ff9900', backgroundColor: '#ff9900', padding: 10 }}>
-                <Text style={{ color: 'white', fontWeight: 'bold', fontSize: getFontSize(11) }}>Within 5 mi.</Text>
+            <View style={{ borderRadius: 14, borderColor: 'white', backgroundColor: 'white', padding: 10 }}>
+                <Text style={{ color: '#ff9900', fontWeight: 'bold', fontSize: getFontSize(11) }}>Within 5 mi.</Text>
             </View>;
     }
 
     let lowPopulationDisplay = <Text></Text>;
     if (checkLowPopulation === false) {
-        lowPopulationDisplay = <Text style={{ borderRadius: 14, borderColor: 'gray', color: 'gray', fontWeight: 'bold', borderWidth: 0.7, padding: 9, fontSize: getFontSize(11) }}>Low Population</Text>;
+        lowPopulationDisplay = <Text style={{ borderRadius: 14, borderColor: 'white', color: 'white', fontWeight: 'bold', borderWidth: 0.7, padding: 9, fontSize: getFontSize(11) }}>Low Population</Text>;
     }
     else if (checkLowPopulation === true) {
         lowPopulationDisplay =
-            <View style={{ borderRadius: 14, borderColor: '#ff9900', backgroundColor: '#ff9900', padding: 10 }}>
-                <Text style={{ color: 'white', fontWeight: 'bold', fontSize: getFontSize(11) }}>Low Population</Text>
+            <View style={{ borderRadius: 14, borderColor: 'white', backgroundColor: 'white', padding: 10 }}>
+                <Text style={{ color: '#ff9900', fontWeight: 'bold', fontSize: getFontSize(11) }}>Low Population</Text>
             </View>;
     }
 
     let currentlyOpenDisplay = <Text></Text>;
     if (checkCurrentlyOpen === false) {
-        currentlyOpenDisplay = <Text style={{ borderRadius: 14, borderColor: 'gray', color: 'gray', fontWeight: 'bold', borderWidth: 0.7, padding: 9, fontSize: getFontSize(11) }}>Open</Text>;
+        currentlyOpenDisplay = <Text style={{ borderRadius: 14, borderColor: 'white', color: 'white', fontWeight: 'bold', borderWidth: 0.7, padding: 9, fontSize: getFontSize(11) }}>Open</Text>;
     }
     else if (checkCurrentlyOpen === true) {
         currentlyOpenDisplay =
-            <View style={{ borderRadius: 14, borderColor: '#ff9900', backgroundColor: '#ff9900', padding: 10 }}>
-                <Text style={{ color: 'white', fontWeight: 'bold', fontSize: getFontSize(11) }}>Open</Text>
+            <View style={{ borderRadius: 14, borderColor: 'white', backgroundColor: 'white', padding: 10 }}>
+                <Text style={{ color: '#ff9900', fontWeight: 'bold', fontSize: getFontSize(11) }}>Open</Text>
             </View>;
     }
 
     let checkVerifiedDisplay = <Text></Text>;
     if (checkVerified === false) {
-        checkVerifiedDisplay = <Text style={{ borderRadius: 14, borderColor: 'gray', color: 'gray', fontWeight: 'bold', borderWidth: 0.7, padding: 9, fontSize: getFontSize(11) }}>Verified Only</Text>;
+        checkVerifiedDisplay = <Text style={{ borderRadius: 14, borderColor: 'white', color: 'white', fontWeight: 'bold', borderWidth: 0.7, padding: 9, fontSize: getFontSize(11) }}>Verified Only</Text>;
     }
     else if (checkVerified === true) {
         checkVerifiedDisplay =
-            <View style={{ borderRadius: 14, borderColor: '#ff9900', backgroundColor: '#ff9900', padding: 10 }}>
-                <Text style={{ color: 'white', fontWeight: 'bold', fontSize: getFontSize(11) }}>Verified Only</Text>
+            <View style={{ borderRadius: 14, borderColor: 'white', backgroundColor: 'white', padding: 10 }}>
+                <Text style={{ color: '#ff9900', fontWeight: 'bold', fontSize: getFontSize(11) }}>Verified Only</Text>
             </View>;
     }
 
     return (
-        <View style={styles.landing}>
+        <View style={{backgroundColor: '#ff9900', flex: 1}}>
             <Header navigation={navigation}></Header>
             <SearchBar
                 onChangeText={(text) => updateSearch(text)}
@@ -165,7 +166,7 @@ const Searching = ({ getNearby, newSearch, newFilter, loadFilter, route: { param
                 returnKeyType="search"
                 onSubmitEditing={(e) => newQuery(e.nativeEvent.text)}
             />
-            {!business.loadingSearch ? <View style={{ paddingTop: 5}}>
+            {!business.loadingSearch ? <View style={{ paddingTop: 5, backgroundColor: '#ff9900'}}>
                 <View flexDirection='row' style={{ height: 40, justifyContent: 'center'}}>
                     <TouchableOpacity onPress={() => { setWithinFiveMiles(!checkWithinFiveMiles); setFilterPressed(true)}} style={{ paddingHorizontal: 3, flex: 1 }}>
                         {withinFiveMilesDisplay}
@@ -181,7 +182,7 @@ const Searching = ({ getNearby, newSearch, newFilter, loadFilter, route: { param
                     </TouchableOpacity>
                 </View>
             </View> : 
-            <View style={{ paddingTop: 5 }}>
+            <View style={{ paddingTop: 5, backgroundColor: '#ff9900' }}>
                 <Animated.View onLayout={fadeIn} flexDirection='row' style={{ height: 40, justifyContent: 'center', opacity: fadeAnim }}>
                     <TouchableWithoutFeedback style={{ paddingHorizontal: 3, flex: 1 }}>
                         <View style={{ borderRadius: 14, borderColor: 'gray', backgroundColor: 'gainsboro', padding: 10 }}>
@@ -205,8 +206,13 @@ const Searching = ({ getNearby, newSearch, newFilter, loadFilter, route: { param
                     </TouchableWithoutFeedback>
                 </Animated.View>
             </View> }
-            <View style={{ borderTopWidth: 0.7, borderTopColor: 'gainsboro' }}></View>
-            {results}
+            <View style={{flex: 20}}>
+                <LinearGradient
+                    colors={['#ff9900', '#ff5f6d', '#ff5f6d']} style={{flex: 1}}
+                >
+                    {results}
+                </LinearGradient>
+            </View>
         </View>
     );
 };

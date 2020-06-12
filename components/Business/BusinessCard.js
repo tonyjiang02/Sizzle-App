@@ -41,7 +41,10 @@ const BusinessCard = ({ business, navigation, db, openBusinessPage, User }) => {
     }
     const onPress = () => {
         openBusinessPage(business, db);
-        if (db.isVerified) {
+        if (!business){
+            navigation.navigate('DbBusinessPage', { db: db});
+        }
+        else if (db.isVerified) {
             navigation.navigate('BusinessPage', { business: business, db: db });
         } else {
             navigation.navigate('UnverifiedBusinessPage', { business: business, db: db });
@@ -77,7 +80,7 @@ const BusinessCard = ({ business, navigation, db, openBusinessPage, User }) => {
 
     //open status
     let openDisplay = <Text></Text>;
-    let openPicture = <Image source={coverImageUrl ? { uri: coverImageUrl } : require('../../assets/logos/image_unavailable.png')} style={{ height: 115, width: 115 }}></Image>;
+    let openPicture = <Image source={coverImageUrl ? { uri: coverImageUrl } : require('../../assets/logos/image_unavailable.png')} style={{ height: 115, width: 115, borderTopLeftRadius: 10, borderBottomLeftRadius: 10 }}></Image>;
     if (db.isVerified === true) {
         if (openStatus === true) {
             openDisplay = <Text style={{

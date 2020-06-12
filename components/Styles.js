@@ -13,10 +13,13 @@ const styles = StyleSheet.create({
         paddingLeft: 20,
         paddingTop: 6,
         paddingBottom: 2,
+        color: 'white'
     },
     openPictureStyle: {
         height: 125,
         width: 235,
+        borderTopLeftRadius: 10,
+        borderTopRightRadius: 10
     },
     closedPictureStyle: {
         height: 125,
@@ -29,7 +32,8 @@ const styles = StyleSheet.create({
         flex: 1,
         paddingRight: 15,
         paddingBottom: 10,
-        backgroundColor: '#f2f2f2',
+        borderRadius: 10,
+        backgroundColor: 'transparent',
     },
     businessSquareInner: {
         flex: 6,
@@ -44,11 +48,13 @@ const styles = StyleSheet.create({
         shadowOpacity: 0.22,
         shadowRadius: 2.22,
         elevation: 3,
+        borderRadius: 10,
     },
     businessCardOuter: {
         paddingHorizontal: 10,
         paddingVertical: 5,
         backgroundColor: 'transparent',
+        borderRadius: 10,
     },
     businessCardInner: {
         flexDirection: 'row',
@@ -62,6 +68,7 @@ const styles = StyleSheet.create({
         shadowOpacity: 0.22,
         shadowRadius: 2.22,
         elevation: 3,
+        borderRadius: 10,
     },
     infoOuterBlock: {
         paddingBottom: 15,

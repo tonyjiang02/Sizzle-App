@@ -4,6 +4,7 @@ import { styles } from '../Styles';
 import { textTruncateBySpace } from '../../utils/TextTruncate';
 import { Ionicons, MaterialCommunityIcons, AntDesign, FontAwesome5, MaterialIcons } from '@expo/vector-icons';
 import Outlines from '../../assets/Outlines';
+import {LinearGradient} from 'expo-linear-gradient';
 
 export const SearchLoading = ({}) => {
 
@@ -32,39 +33,45 @@ export const SearchLoading = ({}) => {
 
 
     return (
-        <Animated.View onLayout={fadeIn} style={{opacity: fadeAnim}}>
-            <View style={{height: 5}}></View>
-            <View style={{paddingLeft: 15, paddingTop: 5, borderBottomWidth: 0.5, borderBottomColor: 'gainsboro'}}>
-                <Outlines type='CategoryHeader'></Outlines>
-                <View style={{height: 10}}></View>
-                <View style={{flexDirection: 'row'}}>
-                    <Outlines type='BusinessSquare'></Outlines>
-                    <Outlines type='BusinessSquare'></Outlines>
-                    <Outlines type='BusinessSquare'></Outlines>
-                </View>
-            </View>
-            <View style={{height: 5}}></View>
-            <View style={{paddingLeft: 15, paddingTop: 5, borderBottomWidth: 0.5, borderBottomColor: 'gainsboro'}}>
-                <Outlines type='CategoryHeader'></Outlines>
-                <View style={{height: 10}}></View>
-                <View style={{flexDirection: 'row'}}>
-                    <Outlines type='BusinessSquare'></Outlines>
-                    <Outlines type='BusinessSquare'></Outlines>
-                    <Outlines type='BusinessSquare'></Outlines>
-                </View>
-            </View>
-            <View style={{height: 5}}></View>
-            <View style={{paddingLeft: 15, paddingTop: 5, borderBottomWidth: 0.5, borderBottomColor: 'gainsboro'}}>
-                <Outlines type='CategoryHeader'></Outlines>
-                <View style={{height: 10}}></View>
-                <View style={{flexDirection: 'row'}}>
-                    <Outlines type='BusinessSquare'></Outlines>
-                    <Outlines type='BusinessSquare'></Outlines>
-                    <Outlines type='BusinessSquare'></Outlines>
-                </View>
-            </View>
-            <View style={{height: 5}}></View>
-        </Animated.View>
+        <View>
+            <LinearGradient
+                            colors={['#ff9900', '#ff5f6d', '#ff5f6d']}
+            >
+                <Animated.View onLayout={fadeIn} style={{opacity: fadeAnim}}>
+                    <View style={{height: 5}}></View>
+                    <View style={{paddingLeft: 15, paddingTop: 5}}>
+                        <Outlines type='CategoryHeader'></Outlines>
+                        <View style={{height: 10}}></View>
+                        <View style={{flexDirection: 'row'}}>
+                            <Outlines type='BusinessSquare'></Outlines>
+                            <Outlines type='BusinessSquare'></Outlines>
+                            <Outlines type='BusinessSquare'></Outlines>
+                        </View>
+                    </View>
+                    <View style={{height: 5}}></View>
+                    <View style={{paddingLeft: 15, paddingTop: 5}}>
+                        <Outlines type='CategoryHeader'></Outlines>
+                        <View style={{height: 10}}></View>
+                        <View style={{flexDirection: 'row'}}>
+                            <Outlines type='BusinessSquare'></Outlines>
+                            <Outlines type='BusinessSquare'></Outlines>
+                            <Outlines type='BusinessSquare'></Outlines>
+                        </View>
+                    </View>
+                    <View style={{height: 5}}></View>
+                    <View style={{paddingLeft: 15, paddingTop: 5}}>
+                        <Outlines type='CategoryHeader'></Outlines>
+                        <View style={{height: 10}}></View>
+                        <View style={{flexDirection: 'row'}}>
+                            <Outlines type='BusinessSquare'></Outlines>
+                            <Outlines type='BusinessSquare'></Outlines>
+                            <Outlines type='BusinessSquare'></Outlines>
+                        </View>
+                    </View>
+                    <View style={{height: 5}}></View>
+                </Animated.View>
+            </LinearGradient>
+        </View>
     );
 };
 

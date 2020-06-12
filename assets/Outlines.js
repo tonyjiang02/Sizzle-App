@@ -8,13 +8,13 @@ const Outlines = ({ type }) => {
     if (type==='BusinessCard'){
         return (
             <View style={styles.businessCardOuter}>
-                <View style={{height: 115, width: Dimensions.get('window').width-20, backgroundColor: 'gainsboro'}}></View>
+                <View style={{height: 115, width: Dimensions.get('window').width-20, backgroundColor: 'gainsboro', borderRadius: 10}}></View>
             </View>
         )
     }
     if (type==='Header'){
         return (
-            <View style={{height: 85, backgroundColor: 'gainsboro'}}></View>
+            <View style={{height: 85, backgroundColor: '#ff9900'}}></View>
         )
     }
     if (type==='Search'){
@@ -32,7 +32,7 @@ const Outlines = ({ type }) => {
     if (type==='BusinessSquare'){
         return (
             <View style={{paddingRight: 15, paddingBottom: 10,}}>
-                <View style={{height: 175, width: 235, backgroundColor: 'gainsboro'}}></View>
+                <View style={{height: 175, width: 235, backgroundColor: 'gainsboro', borderRadius: 10}}></View>
             </View>
         )
     }

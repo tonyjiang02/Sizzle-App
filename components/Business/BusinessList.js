@@ -3,6 +3,7 @@ import { connect } from 'react-redux';
 import { View, Text, FlatList, ScrollView } from 'react-native';
 import BusinessCard from './BusinessCard';
 import { styles } from '../Styles';
+import { LinearGradient } from 'expo-linear-gradient';
 export const BusinessList = ({ type, business, navigation }) => {
     let businessList=null;
     if (type==='search'){
@@ -30,15 +31,16 @@ export const BusinessList = ({ type, business, navigation }) => {
     else if (type==='favorites'){
         var favoritesdb = business.dbFavoriteBusinesses;
         businessList = favoritesdb.map((biz, i) => (
-            <BusinessCard key={i} business={null} navigation={navigation} db={biz}></BusinessCard>
+            <BusinessCard key={i} navigation={navigation} db={biz}></BusinessCard>
         ));        
     }
 
     return (
-        <View style={{ flex: 20 }}>
+        <View style={{ backgroundColor: 'transparent', flex: 20}}>
             <ScrollView showsVerticalScrollIndicator={false}>
                 <View style={{ height: 5 }}></View>
-                {(businessList.length != 0) ? businessList : <Text style={{fontSize: 16, textAlign: 'center', paddingTop: 5}}>No Results</Text>}
+                {(businessList.length != 0) ? businessList : <Text style={{fontSize: 16, textAlign: 'center', paddingTop: 5, color: 'white'}}>No Results</Text>}
+                <View style={{height: 50, backgroundColor: 'transparent'}}></View>
             </ScrollView>
         </View>
     );
