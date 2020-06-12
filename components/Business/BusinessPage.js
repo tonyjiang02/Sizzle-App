@@ -164,8 +164,14 @@ const BusinessPage = ({ route: { params: { business, db } }, checkIn, auth, upda
             alreadyReserved[i].push(false);
         }
     }
+    let now = new Date();
+    const beginning = new Date(now.getFullYear(), now.getMonth(), now.getDate(), 0, 0, 0);
+    console.log("Beginning of the day");
+    console.log(beginning);
     for (let i = 0; i < user.reservations.length; i++) {
-        if (user.reservations[i].business === _id && user.reservations[i].timestamp > Date.now()) {
+        if (user.reservations[i].business === _id) {
+            console.log("reservation time: " + user.reservations[i].timestamp);
+            console.log(user.reservations[i].timestamp > beginning);
             alreadyReserved[user.reservations[i].index.day][user.reservations[i].index.index] = true;
         }
     }

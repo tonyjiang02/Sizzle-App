@@ -15,8 +15,8 @@ export const UserReservations = ({ user, navigation }) => {
     const [reservationDisplay, updateDisplay] = useState([]);
     console.log(user.reservations);
     useEffect(() => {
-        let res = user.reservations.map((res, i) =>
-            <ReservationCard key={i} timestamp={res.timestamp} date={res.date} name={res.businessName} address={res.address} time={res.time}></ReservationCard>
+        let res = user.reservations.reverse().map((res, i) =>
+            <ReservationCard key={i} index={res.index} id={res.business} timestamp={res.timestamp} date={res.date} name={res.businessName} address={res.address} time={res.time}></ReservationCard>
         );
         updateDisplay(res);
     }, [user]);

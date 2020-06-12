@@ -84,10 +84,9 @@ export const Checkin = ({ navigation, getNearest, loadingNearest, updateUserWith
 
     const handleBarCodeScanned = async ({ type, data }) => {
         console.log("Scanning data");
-        if (data.indexOf('http://sizzleco.herokuapp.com/api/business/addPerson') > -1) {
+        if (data.indexOf('szzl.app') > -1) {
             setScanned(true);
-            console.log(data);
-            const id = data.substring(56);
+            const id = data.substring(28);
             console.log(id);
             if (user.occupying) {
                 if (user.occupying.id === id && timeDifferenceInMin(Date.now(), user.occupying.date) < 60) {
