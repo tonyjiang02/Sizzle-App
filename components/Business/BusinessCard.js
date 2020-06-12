@@ -40,13 +40,17 @@ const BusinessCard = ({ business, navigation, db, openBusinessPage, User }) => {
         cardAddress = business.vicinity;
     }
     const onPress = () => {
-        openBusinessPage(business, db);
         if (!business){
-            navigation.navigate('DbBusinessPage', { db: db});
+            console.log('running bc no business');
+            openBusinessPage(null, db);
+            navigation.replace('DbBusinessPage', { db: db });
         }
         else if (db.isVerified) {
+            console.log('running bc verified and not just db');
+            openBusinessPage(business, db);
             navigation.navigate('BusinessPage', { business: business, db: db });
         } else {
+            openBusinessPage(business, db);
             navigation.navigate('UnverifiedBusinessPage', { business: business, db: db });
         }
     };

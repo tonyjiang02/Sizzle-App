@@ -28,7 +28,7 @@ import LiveUpdate from '../Business/LiveUpdate';
 import ReservationScroll from './ReservationScroll';
 import ReservationScrollModal from './ReservationScrollModal';
 import { Linking } from 'expo';
-import { straightLineDistance, kmToMi } from '../../utils/businessUtils';
+import { straightLineDistance, kmToMi, getCoords } from '../../utils/businessUtils';
 import MapView, { Marker } from 'react-native-maps';
 import openMap from 'react-native-open-maps';
 import { getFontSize, getIconSize } from '../../utils/fontsizes';
@@ -40,10 +40,19 @@ const DbBusinessPage = ({ route: { params: { db } }, checkIn, User, updateBusine
     //destructuring
     const [data, setData] = useState(dbBusiness);
     let { _id, name, owner, googleId, publicId, isVerified, images, coverImageUrl, website, phone, address, openStatus, hours, description, population, reservations, announcements, reservationLimit, covid19Information } = data;
-    console.log(data);
+    console.log(getCoords(address));
     let user = User.user;
     let updated = false;
     let businessUpdated = false;
+    let latitude = 0;
+    let longitude = 0;
+    try{
+        latitude = getCoords(address).latitude;
+        longitude = getCoords(address).longitude;
+    }
+    catch(err){
+
+    }
     //modals
     const [liveUpdatesModalVisible, setLiveUpdatesVisible] = useState(false);
     const [reservationsModalVisible, setReservationsVisible] = useState(false);
@@ -68,7 +77,6 @@ const DbBusinessPage = ({ route: { params: { db } }, checkIn, User, updateBusine
         wait(2000).then(() => { setRefreshing(false); setStartRefresh(true); });
     };*/
     useEffect(() => {
-        console.log("dbBusiness changed");
         setData(dbBusiness);
     }, [dbBusiness]);
     useEffect(() => {
@@ -89,10 +97,8 @@ const DbBusinessPage = ({ route: { params: { db } }, checkIn, User, updateBusine
     }, [startRefresh]);*/
 
     useEffect(() => {
-        console.log('running useEffect');
         let thisAnnouncements = [...announcements];
         thisAnnouncements.reverse();
-        console.log(thisAnnouncements);
         setUpdates(thisAnnouncements.map((a, i) => (
             <LiveUpdate title={a.title} content={a.content} time={a.date} key={i}></LiveUpdate>
         )));
@@ -191,7 +197,6 @@ const DbBusinessPage = ({ route: { params: { db } }, checkIn, User, updateBusine
                 date: date.toDateString(),
                 timestamp: date
             });
-            console.log(`Finding already reserved of ${indexDay} , ${i}`);
             //console.log(alreadyReserved);
             alreadyReserved[indexDay][i] = true;
             //TODO : add reservation to users array 
@@ -218,6 +223,14 @@ const DbBusinessPage = ({ route: { params: { db } }, checkIn, User, updateBusine
             { cancelable: false }
         );
 
+    };
+
+    //distance
+    let [lineDistance, setLineDistance] = useState("N/A");
+    const getDistance = () => {
+        var mi = kmToMi(straightLineDistance(User.location, { latitude: parseFloat(getCoords(address).latitude), longitude: parseFloat(getCoords(address).longitude) }));
+        var rounded = Math.round(mi * 10) / 10;
+        setLineDistance(rounded + 'mi');
     };
 
     //population display
@@ -492,10 +505,24 @@ const DbBusinessPage = ({ route: { params: { db } }, checkIn, User, updateBusine
                     </View>
 
                     <View style={styles.mapOuterStyle}>
+                        <MapView style={styles.mapStyle} showsUserLocation={true} initialRegion={{
+                            latitude: User.location.latitude,
+                            longitude: User.location.longitude,
+                            latitudeDelta: 0.002,
+                            longitudeDelta: 0.001,
+                        }}>
+                            {latitude === 0 && longitude === 0 ? <Marker
+                                coordinate={{latitude: latitude, longitude: longitude }}
+                                title={name}
+                            /> : <></>}
+                        </MapView>
                         <View style={{ paddingHorizontal: 15, alignSelf: 'flex-start' }}>
                             <Text style={{ fontFamily: 'Avenir-Light', fontSize: getFontSize(17), fontWeight: 'bold', paddingTop: 10 }}>Address: {address} </Text>
                         </View>
                         <View style={{ flexDirection: 'row' }}>
+                            <View style={{ flexDirection: 'column', flex: 1, paddingLeft: 15, paddingVertical: 20 }}>
+                                <Text style={{ fontFamily: 'Avenir-Light', fontSize: getFontSize(17), fontWeight: 'bold' }}>Distance: {lineDistance} </Text>
+                            </View>
                             <View style={{ flex: 1.2, justifyContent: 'center', alignItems: 'center' }}>
                                 <TouchableOpacity onPress={openMapToBusiness}>
                                     <View style={{ borderWidth: 1, borderRadius: 5, borderColor: '#ff9900', backgroundColor: '#ff9900', paddingVertical: 12, paddingHorizontal: 8 }}>

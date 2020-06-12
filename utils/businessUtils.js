@@ -37,15 +37,13 @@ export const getCoords = async (name) => {
             }
         }
         newName = nameArray.join(" ");
-        console.log('newName: '+ newName);
         let url = `https://nominatim.openstreetmap.org/search?q=${newName}&format=geojson`;
-        console.log(url);
         const res = await fetch(url);
         const json = await res.json();
-        const location = {longitude: json.features[0].geometry.coordinates[0], latitude: json.features[0].geometry.coordinates[1]}
+        const location = {longitude: json.features[0].geometry.coordinates[0], latitude: json.features[0].geometry.coordinates[1]};
         return location;
     } catch (err) {
-        console.log(err);
+        console.log('error with getCoords');
     }
 }
 

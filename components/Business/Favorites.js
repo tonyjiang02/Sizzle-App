@@ -25,7 +25,6 @@ export const Favorites = ({navigation, User, reloadFavorites, getFavorites, load
        async function loadFavorites () {
            await reloadFavorites();
            const returned = await getFavorites();
-           console.log(returned);
        }
        loadFavorites();
    }, [])
@@ -42,7 +41,7 @@ export const Favorites = ({navigation, User, reloadFavorites, getFavorites, load
                            <Ionicons name="md-heart" color='red' size={35} style={{ paddingLeft: 8, paddingRight: 10, paddingLeft: 2 }} />
                            <Text style={{ color: 'white', fontSize: 24, fontFamily: 'AvenirNext-Bold' }}>Favorites</Text>
                        </View>
-                       {loadingFavorites ? <SearchLoading></SearchLoading> : <BusinessList type="favorites"></BusinessList>}
+                       {loadingFavorites ? <SearchLoading></SearchLoading> : <BusinessList type="favorites" navigation={navigation}></BusinessList>}
                    </View>
                </LinearGradient>
            </View>
