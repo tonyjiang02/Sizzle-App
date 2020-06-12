@@ -138,7 +138,7 @@ const BusinessCard = ({ business, navigation, db, openBusinessPage, User }) => {
                 let coords = loc.coords;
                 currentloc = coords;
             }
-        if (db.isVerified === true && (typeof business.geometry === 'undefined')){
+        if (!business){
             var mi = kmToMi(straightLineDistance(currentloc, { latitude: parseFloat((await getCoords(db.address)).latitude), longitude: parseFloat((await getCoords(db.address)).longitude) }));
             rounded = Math.round(mi * 10) / 10;
         }

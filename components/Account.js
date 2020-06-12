@@ -17,6 +17,7 @@ import { newLocation } from '../actions/business';
 import * as Location from 'expo-location';
 import {getCoords, reverseCoords } from '../utils/businessUtils';
 import { getFontSize, getIconSize } from '../utils/fontsizes';
+import { LinearGradient } from 'expo-linear-gradient';
 export const Account = ({ navigation, logout, User, newLocation, updateUser, updateUserRedux }) => {
     const [FAQModalVisible, setFAQVisible] = useState(false);
     const [contactModalVisible, setContactVisible] = useState(false);
@@ -224,7 +225,7 @@ export const Account = ({ navigation, logout, User, newLocation, updateUser, upd
                     </TouchableOpacity>
                     <View style={{flexDirection: 'row', paddingHorizontal: 10, paddingVertical: 10, justifyContent: 'center', alignItems: 'center'}}>
                         <Entypo name='info-with-circle' color='black' size={22} style={{ paddingRight: 10 }} />
-                        <Text style={{ color: '#323131', fontSize: getFontSize(24), fontFamily: 'AvenirNext-Bold' }}>Info: Set Location</Text>
+                        <Text style={{ color: 'black', fontSize: getFontSize(24), fontFamily: 'AvenirNext-Bold' }}>Info: Set Location</Text>
                     </View>
                     <View>
                         <View style={{padding: 10}}>
@@ -252,29 +253,32 @@ export const Account = ({ navigation, logout, User, newLocation, updateUser, upd
                 </View>
             </Modal>
 
-            <View style={{ backgroundColor: '#f2f2f2' }}>
+            <View>
                 <Header navigation={navigation}></Header>
+                <LinearGradient
+                    colors={['#ff9900', '#ff5f6d', '#ff5f6d']}
+                >
                 <ScrollView style={{ paddingHorizontal: 15, paddingTop: 15 }}>
                     <View style={{flexDirection: 'row', alignSelf: 'center'}}>
                         <View style={{flex: 1}}>
-                            <Text style={{fontFamily: "Avenir-Light", fontWeight: 'bold'}}>Current login: </Text>
+                            <Text style={{fontFamily: "Avenir-Light", fontWeight: 'bold', color: 'white'}}>Current login: </Text>
                         </View>
                         <View style={{flex: 2, alignItems: 'flex-start', paddingLeft: 10}}>
-                            <Text style={{fontFamily: 'Avenir-Light'}}>{emailDisplay()}</Text>
+                            <Text style={{fontFamily: 'Avenir-Light', color: 'white'}}>{emailDisplay()}</Text>
                         </View>
                     </View>
                     <View style={{height: 5}}></View>
                     <View style={{flexDirection: 'row', alignSelf: 'center'}}>
                         <View style={{flex: 1}}>
-                            <Text style={{fontFamily: "Avenir-Light", fontWeight: 'bold'}}>Current location: </Text>
+                            <Text style={{fontFamily: "Avenir-Light", fontWeight: 'bold', color: 'white'}}>Current location: </Text>
                         </View>
                         <View style={{flex: 2, alignItems: 'flex-start', paddingLeft: 10}}>
-                            <Text style={{fontFamily: 'Avenir-Light'}}>{locDisplay}</Text>
+                            <Text style={{fontFamily: 'Avenir-Light', color: 'white'}}>{locDisplay}</Text>
                         </View>
                     </View>
                     <View style={{flexDirection: 'row', alignItems: 'center'}}>
                         <TouchableOpacity onPress={() => setLocationInfoVisible(true)}>
-                            <Entypo name="info-with-circle" color='black' size={getIconSize(18)}></Entypo>
+                            <Entypo name="info-with-circle" color='white' size={getIconSize(18)}></Entypo>
                         </TouchableOpacity>
                         <SearchBar
                             placeholder="Set Location"
@@ -308,13 +312,13 @@ export const Account = ({ navigation, logout, User, newLocation, updateUser, upd
                         </View>
                     </View>
 
-                    <View style={{ height: 30, backgroundColor: '#f2f2f2' }}></View>
+                    <View style={{ height: 30, backgroundColor: 'transparent' }}></View>
 
                     <TouchableOpacity onPress={openCheckInHistory} style={{ padding: 10 }}>
                         <View style={{
                             flexDirection: 'row', paddingHorizontal: 20, paddingVertical: 10, backgroundColor: 'white',
                             shadowColor: "#000", shadowOffset: { width: 0, height: 1 }, shadowOpacity: 0.22, shadowRadius: 2.22,
-                            elevation: 3, alignItems: 'center'
+                            elevation: 3, alignItems: 'center', borderRadius: 10
                         }}>
                             <MaterialCommunityIcons name='map-marker-check' color='#ff9900' size={35} style={{ paddingRight: 5 }} />
                             <Text style={{ color: '#323131', fontSize: 24, fontFamily: 'AvenirNext-Bold' }}>Check-in History</Text>
@@ -324,7 +328,7 @@ export const Account = ({ navigation, logout, User, newLocation, updateUser, upd
                         <View style={{
                             flexDirection: 'row', paddingHorizontal: 20, paddingVertical: 10, backgroundColor: 'white',
                             shadowColor: "#000", shadowOffset: { width: 0, height: 1 }, shadowOpacity: 0.22, shadowRadius: 2.22,
-                            elevation: 3, alignItems: 'center'
+                            elevation: 3, alignItems: 'center', borderRadius: 10
                         }}>
                             <Ionicons name="md-heart" color='red' size={35} style={{ paddingLeft: 5, paddingRight: 10, paddingLeft: 2 }} />
                             <Text style={{ color: '#323131', fontSize: 24, fontFamily: 'AvenirNext-Bold' }}>Favorites</Text>
@@ -334,20 +338,20 @@ export const Account = ({ navigation, logout, User, newLocation, updateUser, upd
                         <View style={{
                             flexDirection: 'row', paddingHorizontal: 20, paddingVertical: 10, backgroundColor: 'white',
                             shadowColor: "#000", shadowOffset: { width: 0, height: 1 }, shadowOpacity: 0.22, shadowRadius: 2.22,
-                            elevation: 3, alignItems: 'center'
+                            elevation: 3, alignItems: 'center', borderRadius: 10
                         }}>
                             <MaterialCommunityIcons name="clock" size={35} color='green' style={{ paddingRight: 5 }}></MaterialCommunityIcons>
                             <Text style={{ color: '#323131', fontSize: 24, fontFamily: 'AvenirNext-Bold' }}>Reservations</Text>
                         </View>
                     </TouchableOpacity>
 
-                    <View style={{ height: 30, backgroundColor: '#f2f2f2' }}></View>
+                    <View style={{ height: 30, backgroundColor: 'transparent' }}></View>
 
                     <TouchableOpacity onPress={()=> Linking.openURL('https://www.szzl.app/privacy-policy')} style={{ padding: 10 }}>
                         <View style={{
                             flexDirection: 'row', paddingHorizontal: 20, paddingVertical: 10, backgroundColor: 'white',
                             shadowColor: "#000", shadowOffset: { width: 0, height: 1 }, shadowOpacity: 0.22, shadowRadius: 2.22,
-                            elevation: 3, alignItems: 'center'
+                            elevation: 3, alignItems: 'center', borderRadius: 10
                         }}>
                             <FontAwesome name='legal' color='black' size={30} style={{ paddingLeft: 5, paddingRight: 10 }} />
                             <Text style={{ color: '#323131', fontSize: 24, fontFamily: 'AvenirNext-Bold' }}>Privacy Policy</Text>
@@ -357,7 +361,7 @@ export const Account = ({ navigation, logout, User, newLocation, updateUser, upd
                         <View style={{
                             flexDirection: 'row', paddingHorizontal: 20, paddingVertical: 10, backgroundColor: 'white',
                             shadowColor: "#000", shadowOffset: { width: 0, height: 1 }, shadowOpacity: 0.22, shadowRadius: 2.22,
-                            elevation: 3, alignItems: 'center'
+                            elevation: 3, alignItems: 'center', borderRadius: 10
                         }}>
                             <FontAwesome name='question-circle' color='black' size={35} style={{ paddingLeft: 5, paddingRight: 10 }} />
                             <Text style={{ color: '#323131', fontSize: 24, fontFamily: 'AvenirNext-Bold' }}>FAQ</Text>
@@ -367,28 +371,29 @@ export const Account = ({ navigation, logout, User, newLocation, updateUser, upd
                         <View style={{
                             flexDirection: 'row', paddingHorizontal: 20, paddingVertical: 10, backgroundColor: 'white',
                             shadowColor: "#000", shadowOffset: { width: 0, height: 1 }, shadowOpacity: 0.22, shadowRadius: 2.22,
-                            elevation: 3, alignItems: 'center'
+                            elevation: 3, alignItems: 'center', borderRadius: 10
                         }}>
                             <MaterialCommunityIcons name='email' color='black' size={35} style={{ paddingLeft: 5, paddingRight: 11 }} />
                             <Text style={{ color: '#323131', fontSize: 24, fontFamily: 'AvenirNext-Bold' }}>Contact</Text>
                         </View>
                     </TouchableOpacity>
 
-                    <View style={{ height: 30, backgroundColor: '#f2f2f2' }}></View>
+                    <View style={{ height: 30, backgroundColor: 'transparent' }}></View>
 
                     <TouchableOpacity style={{ padding: 10 }} onPress={logout}>
                         <View style={{
-                            flexDirection: 'row', paddingHorizontal: 30, paddingVertical: 5, backgroundColor: '#FDDFDF',
+                            flexDirection: 'row', paddingHorizontal: 30, paddingVertical: 5, backgroundColor: 'white',
                             shadowColor: "#000", shadowOffset: { width: 0, height: 1 }, shadowOpacity: 0.22, shadowRadius: 2.22,
-                            elevation: 3, alignItems: 'center'
+                            elevation: 3, alignItems: 'center', borderRadius: 10
                         }}>
-                            <Octicons name='sign-out' color='black' size={35} style={{ alignSelf: 'center', paddingRight: 10, paddingTop: 10 }} />
-                            <Text style={{ color: '#323131', fontSize: 24, fontFamily: 'AvenirNext-Bold' }}>Sign Out</Text>
+                            <Octicons name='sign-out' color='red' size={35} style={{ alignSelf: 'center', paddingRight: 10, paddingTop: 10 }} />
+                            <Text style={{ color: 'red', fontSize: 24, fontFamily: 'AvenirNext-Bold' }}>Sign Out</Text>
                         </View>
                     </TouchableOpacity>
 
-                    <View style={{ height: 300, backgroundColor: '#f2f2f2' }}></View>
+                    <View style={{ height: 350, backgroundColor: 'transparent' }}></View>
                 </ScrollView>
+            </LinearGradient>
             </View>
         </View>
     );

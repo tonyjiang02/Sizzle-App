@@ -16,7 +16,6 @@ export const UserReservations = ({ user, navigation }) => {
     console.log(user.reservations);
     useEffect(() => {
         let reservations = [...user.reservations];
-        reservations.reverse();
         let res = reservations.reverse().map((res, i) =>
             <ReservationCard key={i} index={res.index} id={res.business} timestamp={res.timestamp} date={res.date} name={res.businessName} address={res.address} time={res.time}></ReservationCard>
         );
