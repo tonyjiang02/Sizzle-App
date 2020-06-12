@@ -30,6 +30,7 @@ export const ReservationCard = ({ index, date, id, time, name, address, key, res
         businessReservations[weekMap[index.day].toLowerCase()][index.index].users -= 1;
         updateBusinessReservations(id, businessReservations);
     };
+    const past = d < compareDate;
     const createCancelAlert = () =>
         Alert.alert(
             'Do you want to cancel this reservation?',
@@ -42,7 +43,7 @@ export const ReservationCard = ({ index, date, id, time, name, address, key, res
         );
     return (
         <View style={{ paddingTop: 15 }}>
-            <View style={{ height: (Dimensions.get('window').width / 2.5), width: Dimensions.get('window').width - 20, alignSelf: 'center', backgroundColor: 'green', flex: 1, flexDirection: "row", borderRadius: 10 }}>
+            <View style={{ height: (Dimensions.get('window').width / 2.5), width: Dimensions.get('window').width - 20, alignSelf: 'center', backgroundColor: past ? 'green' : 'gray', flex: 1, flexDirection: "row", borderRadius: 10 }}>
                 <View style={{ paddingLeft: 15, flex: 3.5, alignSelf: 'center' }}>
                     <Text style={{ fontSize: getFontSize(22), flexWrap: 'wrap', fontFamily: 'AvenirNext-Bold', color: 'white' }}>{name > 25 ? textTruncateBySpace(25, name) : name}</Text>
                     <Text style={{ fontSize: getFontSize(12), color: 'white' }}>{address}</Text>
@@ -50,16 +51,16 @@ export const ReservationCard = ({ index, date, id, time, name, address, key, res
                     <Text style={{ fontSize: getFontSize(18), color: 'white' }}>{time}</Text>
                     <Text style={{ fontFamily: 'Avenir-Light', color: 'white', fontSize: getFontSize(19) }}>{date}</Text>
                 </View>
-                {d < compareDate ?
+                {past ?
                     <TouchableOpacity onPress={() => createCancelAlert()} style={{ flex: 1, justifyContent: 'center', alignContent: 'center', backgroundColor: 'red', borderTopRightRadius: 10, borderBottomRightRadius: 10 }}>
                         <View>
                             <Text style={{ alignSelf: 'center', color: 'white', fontWeight: 'bold' }}>Cancel </Text>
                         </View>
                     </TouchableOpacity>
                     :
-                    <View style={{ flex: 1, justifyContent: 'center', alignContent: 'center', backgroundColor: 'white', borderTopRightRadius: 10, borderBottomRightRadius: 10 }}>
+                    <View style={{ flex: 1, justifyContent: 'center', alignContent: 'center', backgroundColor: 'gray', borderTopRightRadius: 10, borderBottomRightRadius: 10 }}>
                         <View>
-                            <Text style={{ alignSelf: 'center', color: 'black', fontWeight: 'bold' }}>Completed </Text>
+                            <Text style={{ alignSelf: 'center', color: 'white', fontWeight: 'bold' }}>Past </Text>
                         </View>
                     </View>
                 }
