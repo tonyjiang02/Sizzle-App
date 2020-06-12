@@ -1,7 +1,7 @@
 import 'react-native-gesture-handler';
 import React, { useState, useEffect, Fragment, useRef } from 'react';
 import { connect } from 'react-redux';
-import { AsyncStorage } from 'react-native';
+import { AsyncStorage, AppState } from 'react-native';
 import { loadUser, loadToken, notAuthenticated } from './actions/auth';
 import Login from './components/Login';
 import { NavigationContainer } from '@react-navigation/native';
@@ -28,19 +28,8 @@ const Stack = createStackNavigator();
 const Index = ({ auth }) => {
     const [isAuth, setAuth] = useState(0);
     const initialMount = useRef(true);
+    const [currentAppState, changeAppState] = useState(AppState.currentState);
     useEffect(() => {
-        const isAuthenticated = async () => {
-            const token = await AsyncStorage.getItem('token');
-            if (token) {
-                store.dispatch(loadUser());
-                setAuth(2);
-                console.log("Is Authenticated ");
-            } else {
-                console.log("Not Authenticated");
-                setAuth(1);
-            }
-
-        };
         if (initialMount.current) {
             initialMount.current = false;
         } else {
@@ -57,7 +46,14 @@ const Index = ({ auth }) => {
         }
 
     }, [auth]);
+
     useEffect(() => {
+        AppState.addEventListener('change', (nextAppState) => {
+            if (nextAppState === 'active') {
+                console.log("returning to active");
+                isAuthenticated();
+            }
+        });
         AsyncStorage.getItem('token', function (err, res) {
             if (res) {
                 store.dispatch(loadToken(res));
@@ -66,6 +62,21 @@ const Index = ({ auth }) => {
             }
         });
     }, [null]);
+    const isAuthenticated = async () => {
+        const token = await AsyncStorage.getItem('token');
+        if (token) {
+            store.dispatch(loadUser());
+            setAuth(2);
+            console.log("Is Authenticated ");
+        } else {
+            console.log("Not Authenticated");
+            setAuth(1);
+        }
+
+    };
+    const handleAppStateChange = nextAppState => {
+
+    };
     const authController = () => {
         if (isAuth === 1) {
             return (
