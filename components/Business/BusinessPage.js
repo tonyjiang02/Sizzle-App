@@ -106,6 +106,9 @@ const BusinessPage = ({ route: { params: { business, db } }, checkIn, auth, upda
 
     //business hours
     const hoursToString = (day) => {
+        if (!day.open.hour) {
+            return "Not available";
+        }
         let open = `${day.open.hour}:${day.open.minutes === '0' ? '00' : day.open.minutes}${day.open.am ? ' A.M' : ' P.M'}`;
         open += " - ";
         let close = `${day.close.hour}:${day.close.minutes === '0' ? '00' : day.close.minutes}${day.close.am ? ' A.M' : ' P.M'}`;
@@ -168,9 +171,7 @@ const BusinessPage = ({ route: { params: { business, db } }, checkIn, auth, upda
     console.log("Beginning of the day");
     console.log(beginning);
     for (let i = 0; i < user.reservations.length; i++) {
-        if (user.reservations[i].business === _id) {
-            console.log("reservation time: " + user.reservations[i].timestamp);
-            console.log(user.reservations[i].timestamp > beginning);
+        if (user.reservations[i].business === _id && user.reservations[i].timestamp > beginning) {
             alreadyReserved[user.reservations[i].index.day][user.reservations[i].index.index] = true;
         }
     }
