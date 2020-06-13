@@ -23,11 +23,11 @@
     ],
     "ios": {
       "supportsTablet": false,
-      "bundleIdentifier": "com.sizzle.sizzle",
+      "bundleIdentifier": "com.jasyzhang.sizzle",
       "buildNumber": "1.0.0"
     },
     "android": {
-      "package": "com.sizzle.sizzle",
+      "package": "com.jasyzhang.sizzle",
       "versionCode": 1
     }
   }
