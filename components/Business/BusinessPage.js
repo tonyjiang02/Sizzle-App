@@ -171,7 +171,10 @@ const BusinessPage = ({ route: { params: { business, db } }, checkIn, auth, upda
     console.log("Beginning of the day");
     console.log(beginning);
     for (let i = 0; i < user.reservations.length; i++) {
-        if (user.reservations[i].business === _id && user.reservations[i].timestamp > beginning) {
+        let dateArr = user.reservations[i].timestamp.split('-');
+        let newDate = new Date(dateArr[0], dateArr[1], dateArr[2].substring(0, 2), 1, 1, 1);
+        if (user.reservations[i].business === _id && newDate > beginning) {
+
             alreadyReserved[user.reservations[i].index.day][user.reservations[i].index.index] = true;
         }
     }
