@@ -15,7 +15,7 @@ const initialState = {
     dbSearchBusinesses: [],
     nearestBusinesses: [],
     filterBusinesses: [],
-    dbFilterBusinesses: [], 
+    dbFilterBusinesses: [],
     dbNearestBusinesses: [],
     dbFavoriteBusinesses: [],
     query: null,
@@ -58,32 +58,32 @@ export default function (state = initialState, action) {
                 ...state,
                 loadingSearch: true,
                 searchBusinesses: []
-            }
+            };
         case NEW_FILTER:
             return {
                 ...state,
                 filterBusinesses: [],
                 dbFilterBusinesses: [],
-                loadingFilter: true        
-            }
+                loadingFilter: true
+            };
         case LOAD_FILTER:
             return {
                 ...state,
                 filterBusinesses: payload.results,
                 dbFilterBusinesses: payload.local,
                 loadingFilter: false
-            }
+            };
         case LOAD_FAVORITES:
             return {
                 ...state,
                 dbFavoriteBusinesses: payload,
                 loadingFavorites: false
-            }
+            };
         case RELOAD_FAVORITES:
             return {
                 ...state,
                 loadingFavorites: true
-            }
+            };
         case LOAD_LANDING:
             return {
                 ...state,
@@ -97,15 +97,16 @@ export default function (state = initialState, action) {
                 nearestBusinesses: payload.results,
                 dbNearestBusinesses: payload.local,
                 loadingNearest: false,
-            }
+            };
         case NEW_LOCATION:
             return {
                 ...state,
                 businesses: [],
                 dbBusinesses: [],
                 loadingAll: true
-            }
+            };
         case UPDATE_BUSINESS:
+            console.log("update business dispatched");
             const indexSearch = state.dbSearchBusinesses.findIndex(b => b._id === payload._id);
             const indexLanding = state.dbBusinesses.findIndex(b => b._id === payload._id);
             let searchUpdate = state.dbSearchBusinesses;
@@ -139,7 +140,7 @@ export default function (state = initialState, action) {
                 loadingOne: true,
                 loadingSearch: true,
                 loadingNearest: true,
-            }
+            };
         default:
             return state;
     }

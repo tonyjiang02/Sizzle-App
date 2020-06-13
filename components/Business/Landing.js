@@ -20,9 +20,10 @@ import BusinessCard from './BusinessCard';
 import { Dimensions } from 'react-native';
 import Outlines from '../../assets/Outlines';
 import { getFontSize, getIconSize } from '../../utils/fontsizes';
-import { LinearGradient} from 'expo-linear-gradient';
+import { LinearGradient } from 'expo-linear-gradient';
 
-export const Landing = ({ getRegisteredBusinesses, getAll, newSearch, navigation, businesses, loadingAll, dbBusinesses, newLocation, oldLocation, firstTime, User, updateUserRedux, updateReduxUser, locPermissionChange }) => {
+export const Landing = ({ getRegisteredBusinesses, getAll, business, newSearch, navigation, loadingAll, newLocation, oldLocation, firstTime, User, updateUserRedux, updateReduxUser, locPermissionChange }) => {
+    let { dbBusinesses, businesses } = business;
     const [location, setLocation] = useState(null);
     const [locPermission, setLocPermission] = useState(false);
     const [userCoords, setUserCoords] = useState(null);
@@ -71,7 +72,7 @@ export const Landing = ({ getRegisteredBusinesses, getAll, newSearch, navigation
         if (!loadingAll) {
             sort();
         }
-    }, [loadingAll]);
+    }, [business]);
 
     useEffect(() => {
         if (User.newLocationSet === true && User.loadingUser === false) {
@@ -111,7 +112,7 @@ export const Landing = ({ getRegisteredBusinesses, getAll, newSearch, navigation
             }
             else {
                 console.log('getting all with manual location');
-                getAll({ radius: 5000 }, {latitude: User.latitude, longitude: User.longitude});
+                getAll({ radius: 5000 }, { latitude: User.latitude, longitude: User.longitude });
             }
         }
         wait(2000).then(() => setRefreshing(false));
@@ -198,7 +199,7 @@ export const Landing = ({ getRegisteredBusinesses, getAll, newSearch, navigation
         if (User.location.latitude !== 0 && User.location.longitude !== 0) {
             navigation.navigate('Searching', { query: input, location: User.location });
         }
-        else{
+        else {
             Alert.alert("Please set your location to search.");
         }
     };
@@ -289,7 +290,7 @@ export const Landing = ({ getRegisteredBusinesses, getAll, newSearch, navigation
                     </View>
                 </View>
             </Modal>
-            {User.loadingUser ? <View style={{backgroundColor: '#ff9900'}}><Outlines type="Header"></Outlines><View style={{ height: 12 }}></View><View style={{ alignSelf: 'center' }}><Outlines type="Search"></Outlines></View><View style={{ height: 12 }}></View></View> :
+            {User.loadingUser ? <View style={{ backgroundColor: '#ff9900' }}><Outlines type="Header"></Outlines><View style={{ height: 12 }}></View><View style={{ alignSelf: 'center' }}><Outlines type="Search"></Outlines></View><View style={{ height: 12 }}></View></View> :
                 <View>
                     <Header navigation={navigation}></Header>
                     <View style={{ alignItems: 'center', backgroundColor: '#ff9900' }}>
@@ -325,7 +326,7 @@ export const Landing = ({ getRegisteredBusinesses, getAll, newSearch, navigation
                     colors={['#ff9900', '#ff5f6d', '#ff5f6d']}
                 >
                     {noLocation ? <View style={{ height: Dimensions.get('window').height, paddingHorizontal: 10 }}><Text style={{ fontFamily: 'Avenir-Light', paddingTop: 20 }}>No location found. Set your location through
-                    the Account page or allow Sizzle to access your location by changing your device's settings.</Text></View> : 
+                    the Account page or allow Sizzle to access your location by changing your device's settings.</Text></View> :
                         <View>
                             {loadingAll || sorting ? <LandingLoading /> :
                                 <View>
@@ -355,8 +356,7 @@ export const Landing = ({ getRegisteredBusinesses, getAll, newSearch, navigation
     );
 };
 const mapStateToProps = state => ({
-    dbBusinesses: state.business.dbBusinesses,
-    businesses: state.business.businesses,
+    business: state.business,
     loadingAll: state.business.loadingAll,
     firstTime: state.auth.firstTime,
     User: state.user

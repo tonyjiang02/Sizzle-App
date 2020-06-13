@@ -56,7 +56,6 @@ const BusinessPage = ({ route: { params: { business, db } }, checkIn, auth, upda
     //backend
     const onPressCheckIn = async () => {
         const biz = await checkIn(_id);
-        console.log(biz);
         setLivePopulation(biz.population);
     };
     function wait(timeout) {

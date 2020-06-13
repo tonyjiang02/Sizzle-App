@@ -218,7 +218,7 @@ const UnverifiedBusinessPage = ({ route: { params: { business, db } }, checkIn, 
                 }}>
                     <View>
                         <LinearGradient
-                            colors={['#ff9900','#ff5f6d']} style={{height: 210}}
+                            colors={['#ff9900', '#ff5f6d']} style={{ height: 210 }}
                         >
                             <View style={{ position: 'absolute', bottom: 40, alignItems: 'baseline' }}>
                                 <Text style={{ color: 'white', fontSize: getFontSize(30), fontWeight: 'bold', paddingLeft: 20, paddingRight: 10 }}>{business.name.length > 50 ? textTruncateBySpaceTwo(50, business.name) : business.name}</Text>
