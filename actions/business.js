@@ -308,7 +308,6 @@ export const checkIn = (id) => async (dispatch, getState) => {
             })
         });
         const json = await res.json();
-        console.log(json);
         dispatch({
             type: UPDATE_BUSINESS,
             payload: json
@@ -374,3 +373,4 @@ export const getAdditionalData = async (googleId) => {
         console.log(err);
     }
 };
+

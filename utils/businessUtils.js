@@ -17,15 +17,33 @@ export const kmToMi = (km) => {
 
 export const getCoords = async (name) => {
     try {
-        let url = `https://nominatim.openstreetmap.org/search?q=${name}&format=geojson`;
-        console.log(url);
+        let newName = "";
+        let nameArray = name.split(" ");
+        const iChars = "~`!#$%^&*+=-[]\\\';/{}|\":<>?";
+        let counter = 0;
+        while (counter < nameArray.length){
+            let remove = false;
+            for (var i = 0; i < nameArray[counter].length; i++){
+                if (iChars.indexOf(nameArray[counter].charAt(i)) != -1)
+                {
+                    remove = true;
+                }
+            }
+            if (remove === true){
+                nameArray.splice(counter, 1);
+            }
+            else{
+                counter++;
+            }
+        }
+        newName = nameArray.join(" ");
+        let url = `https://nominatim.openstreetmap.org/search?q=${newName}&format=geojson`;
         const res = await fetch(url);
         const json = await res.json();
-        console.log(json);
-        const location = {longitude: json.features[0].geometry.coordinates[0], latitude: json.features[0].geometry.coordinates[1]}
+        const location = {longitude: json.features[0].geometry.coordinates[0], latitude: json.features[0].geometry.coordinates[1]};
         return location;
     } catch (err) {
-        console.log(err);
+        console.log('error with getCoords');
     }
 }
 

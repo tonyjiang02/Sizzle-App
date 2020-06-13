@@ -1,39 +1,44 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { connect } from 'react-redux';
-import { View, Text, FlatList, ScrollView } from 'react-native';
+import { View, Text, FlatList, ScrollView, Dimensions} from 'react-native';
 import BusinessHistoryCard from './BusinessHistoryCard';
 import { getFontSize, getIconSize } from '../../utils/fontsizes';
 import { styles } from '../Styles';
 import Header from '../layout/Header';
 import { Octicons, Ionicons, MaterialCommunityIcons, AntDesign, FontAwesome5, MaterialIcons, FontAwesome } from '@expo/vector-icons';
-
-export const BusinessHistoryList = ({navigation, User}) => {
-        /*const businessList = businesses.map((biz, i) => (
-        <BusinessCard key={biz._id ? biz_.id : biz.id} business={biz} navigation={navigation} db={dbBusinesses[i]}></BusinessCard>
-    ));*/
-    console.log(User.user.history);
-    return (
-        <View style={{ flex: 20, backgroundColor: 'white'}}>
-            <Header navigation={navigation}></Header>
-            <View style={{flexDirection: 'row', paddingVertical: 10, backgroundColor: 'white', alignItems: 'center', justifyContent: 'center', borderBottomColor: 'gainsboro', borderBottomWidth: 0.5}}>
-                    <MaterialCommunityIcons name='map-marker-check' color='#ff9900' size={35} />
-                    <Text style={{ color: '#323131', fontSize: 24, fontFamily: 'AvenirNext-Bold' }}>Check-in History</Text>
-            </View> 
-            <ScrollView showsVerticalScrollIndicator={false} style-={{backgroundColor: 'white'}}>
-                <BusinessHistoryCard/>
-                <BusinessHistoryCard/>
-                <BusinessHistoryCard/>
-                <BusinessHistoryCard/>
-                <BusinessHistoryCard/>
-                <BusinessHistoryCard/>
-                <BusinessHistoryCard/>
-                <BusinessHistoryCard/>
-                <BusinessHistoryCard/>
-            </ScrollView>
-        </View>
-    );
+import { LinearGradient } from 'expo-linear-gradient';
+ 
+export const BusinessHistoryList = ({navigation, user}) => {
+   const [historyDisplay, updateDisplay] = useState([]);
+   useEffect(() => {
+       let history = [...user.history];
+       let res = history.reverse().map((res, i) =>
+           <BusinessHistoryCard key={i} id={res._id} date={res.date} name={res.name} address={res.address}></BusinessHistoryCard>
+       );
+       updateDisplay(res);
+   }, [user]);
+   return (
+       <View style={{ flex: 20, backgroundColor: 'white'}}>
+           <Header navigation={navigation}></Header>
+           <View style={{ borderBottomWidth: 0.5, borderBottomColor: 'white' }}></View>
+           <LinearGradient
+                   colors={['#ff9900', '#ff5f6d', '#ff5f6d']}
+               >
+               <View style={{height: Dimensions.get('window').height}}>
+                   <View style={{flexDirection: 'row', paddingTop: 10, backgroundColor: 'transparent', justifyContent: 'center'}}>
+                       <MaterialCommunityIcons name='map-marker-check' color='white' size={35} />
+                       <Text style={{ color: 'white', fontSize: 24, fontFamily: 'AvenirNext-Bold' }}>Check-in History</Text>
+                   </View>
+                   <ScrollView showsVerticalScrollIndicator={false}>
+                       {historyDisplay}
+                   </ScrollView>
+               </View>
+           </LinearGradient>
+       </View>
+   );
 };
 const mapStateToProps = state => ({
-    User: state.user
+   user: state.user.user
 });
 export default connect(mapStateToProps, {})(BusinessHistoryList);
+
