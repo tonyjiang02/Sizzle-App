@@ -46,11 +46,11 @@ const DbBusinessPage = ({ route: { params: { db } }, checkIn, User, updateBusine
     let businessUpdated = false;
     let latitude = 0;
     let longitude = 0;
-    try{
+    try {
         latitude = getCoords(address).latitude;
         longitude = getCoords(address).longitude;
     }
-    catch(err){
+    catch (err) {
 
     }
     //modals
@@ -161,8 +161,15 @@ const DbBusinessPage = ({ route: { params: { db } }, checkIn, User, updateBusine
             alreadyReserved[i].push(false);
         }
     }
+    let now = new Date();
+    const beginning = new Date(now.getFullYear(), now.getMonth(), now.getDate(), 0, 0, 0);
+    console.log("Beginning of the day");
+    console.log(beginning);
     for (let i = 0; i < user.reservations.length; i++) {
-        if (user.reservations[i].business === _id && user.reservations[i].timestamp > Date.now()) {
+        let dateArr = user.reservations[i].timestamp.split('-');
+        let newDate = new Date(dateArr[0], dateArr[1], dateArr[2].substring(0, 2), 1, 1, 1);
+        if (user.reservations[i].business === _id && newDate > beginning) {
+
             alreadyReserved[user.reservations[i].index.day][user.reservations[i].index.index] = true;
         }
     }
@@ -477,7 +484,7 @@ const DbBusinessPage = ({ route: { params: { db } }, checkIn, User, updateBusine
                             </TouchableOpacity>
                             <View style={{ flex: 4 }}>
                                 <View>
-                                    <ReservationScroll day={currentDay} reserve={reserveSpot} reservations={reservations[currentDay.toLowerCase()]} checkReserved={checkReserved} style={{ alignItems: 'flex-start' }}></ReservationScroll>
+                                    <ReservationScroll day={currentDay} reserve={reserveSpot} reservations={reservations[currentDay.toLowerCase()]} checkReserved={checkReserved} reservationLimit={reservationLimit} style={{ alignItems: 'flex-start' }}></ReservationScroll>
                                 </View>
                             </View>
                         </View>
@@ -512,7 +519,7 @@ const DbBusinessPage = ({ route: { params: { db } }, checkIn, User, updateBusine
                             longitudeDelta: 0.001,
                         }}>
                             {latitude === 0 && longitude === 0 ? <Marker
-                                coordinate={{latitude: latitude, longitude: longitude }}
+                                coordinate={{ latitude: latitude, longitude: longitude }}
                                 title={name}
                             /> : <></>}
                         </MapView>
