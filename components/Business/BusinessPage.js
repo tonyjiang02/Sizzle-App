@@ -511,10 +511,10 @@ const BusinessPage = ({ route: { params: { business, db } }, checkIn, auth, upda
 
                     <View style={styles.mapOuterStyle}>
                         <MapView style={styles.mapStyle} showsUserLocation={true} initialRegion={{
-                            latitude: location.lat,
-                            longitude: location.lng,
-                            latitudeDelta: 0.002,
-                            longitudeDelta: 0.001,
+                            latitude: (location.lat + User.location.latitude)/2 ,
+                            longitude: (location.lng + User.location.longitude)/2,
+                            latitudeDelta: Math.abs(location.lat - User.location.latitude) * 1.5,
+                            longitudeDelta: Math.abs(location.lng - User.location.longitude) * 1.5,
                         }}>
                             <Marker
                                 coordinate={{ latitude: parseFloat(location.lat), longitude: parseFloat(location.lng) }}

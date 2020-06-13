@@ -40,18 +40,20 @@ const DbBusinessPage = ({ route: { params: { db } }, checkIn, User, updateBusine
     //destructuring
     const [data, setData] = useState(dbBusiness);
     let { _id, name, owner, googleId, publicId, isVerified, images, coverImageUrl, website, phone, address, openStatus, hours, description, population, reservations, announcements, reservationLimit, covid19Information } = data;
-    console.log(getCoords(address));
     let user = User.user;
     let updated = false;
     let businessUpdated = false;
-    let latitude = 0;
-    let longitude = 0;
-    try{
-        latitude = getCoords(address).latitude;
-        longitude = getCoords(address).longitude;
-    }
-    catch(err){
-
+    const [businessLatitude, setLatitude] = useState(0);
+    const [businessLongitude, setLongitude] = useState(0);
+    const [coordsLoading, setCoordsLoading] = useState(true);
+    async function getDbCoords() {
+        try{
+            const businessCoords = await getCoords(address);
+            setLatitude(businessCoords.latitude);
+            setLongitude(businessCoords.longitude);
+            setCoordsLoading(false);
+        }
+        catch(err){}
     }
     //modals
     const [liveUpdatesModalVisible, setLiveUpdatesVisible] = useState(false);
@@ -78,6 +80,7 @@ const DbBusinessPage = ({ route: { params: { db } }, checkIn, User, updateBusine
     };*/
     useEffect(() => {
         setData(dbBusiness);
+        getDbCoords();
     }, [dbBusiness]);
     useEffect(() => {
         return function cleanup() {
@@ -505,17 +508,21 @@ const DbBusinessPage = ({ route: { params: { db } }, checkIn, User, updateBusine
                     </View>
 
                     <View style={styles.mapOuterStyle}>
+                        {!coordsLoading ? 
                         <MapView style={styles.mapStyle} showsUserLocation={true} initialRegion={{
-                            latitude: User.location.latitude,
-                            longitude: User.location.longitude,
-                            latitudeDelta: 0.002,
-                            longitudeDelta: 0.001,
+                            latitude: (businessLatitude + User.location.latitude)/2 ,
+                            longitude: (businessLongitude + User.location.longitude)/2,
+                            latitudeDelta: Math.abs(businessLatitude - User.location.latitude) * 1.5,
+                            longitudeDelta: Math.abs(businessLongitude - User.location.longitude) * 1.5,
                         }}>
-                            {latitude === 0 && longitude === 0 ? <Marker
-                                coordinate={{latitude: latitude, longitude: longitude }}
+                            {console.log('coordsLoading turned false')}
+                            <Marker
+                                coordinate={{ latitude: businessLatitude, longitude: businessLongitude }}
                                 title={name}
-                            /> : <></>}
+                            />
                         </MapView>
+                             :
+                        <View style={{height: 200, width: 150, justifyContent: 'center'}}><Text style={{textAlign: 'center', fontSize: getFontSize(30)}}>Loading Map...</Text></View> }
                         <View style={{ paddingHorizontal: 15, alignSelf: 'flex-start' }}>
                             <Text style={{ fontFamily: 'Avenir-Light', fontSize: getFontSize(17), fontWeight: 'bold', paddingTop: 10 }}>Address: {address} </Text>
                         </View>
