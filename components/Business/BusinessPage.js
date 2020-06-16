@@ -62,14 +62,15 @@ const BusinessPage = ({ route: { params: { business, db } }, checkIn, auth, upda
             var mi = kmToMi(straightLineDistance(location.coords, { latitude: parseFloat(business.geometry.location.lat), longitude: parseFloat(business.geometry.location.lng) }));
             if (mi < 0.2){
                 const biz = await checkIn(_id);
+                //console.log(biz);
                 setLivePopulation(biz.population);
             }
             else{
-                Alert.alert("Your current location is too far from this location.");
+                createError("Your current location is too far from this location.", "error");
             }
         }
         else{
-            Alert.alert("You must share your location to check-in through a business page. If this location is verified, please find and scan its respective QR Code.");
+            createError("You must share your location to check-in through a business page. Otherwise, please check in through QR code", 'warn');
         }
     };
     function wait(timeout) {
@@ -526,8 +527,8 @@ const BusinessPage = ({ route: { params: { business, db } }, checkIn, auth, upda
                         <MapView style={styles.mapStyle} showsUserLocation={true} initialRegion={{
                             latitude: (location.lat + User.location.latitude) / 2,
                             longitude: (location.lng + User.location.longitude) / 2,
-                            latitudeDelta: Math.abs(location.lat - User.location.latitude) * 1.5,
-                            longitudeDelta: Math.abs(location.lng - User.location.longitude) * 1.5,
+                            latitudeDelta: Math.abs(location.lat - User.location.latitude) * 1.75,
+                            longitudeDelta: Math.abs(location.lng - User.location.longitude) * 1.75,
                         }}>
                             <Marker
                                 coordinate={{ latitude: parseFloat(location.lat), longitude: parseFloat(location.lng) }}

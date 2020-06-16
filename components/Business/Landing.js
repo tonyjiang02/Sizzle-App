@@ -37,6 +37,7 @@ export const Landing = ({ getRegisteredBusinesses, getAll, business, newSearch, 
 
     let searchRef = React.createRef();
     let user = User.user;
+
     useEffect(() => {
         async function getLocation() {
             console.log("Asking Location Permissions");
@@ -328,9 +329,9 @@ export const Landing = ({ getRegisteredBusinesses, getAll, business, newSearch, 
                     {noLocation ? <View style={{ height: Dimensions.get('window').height, paddingHorizontal: 10 }}><Text style={{ fontFamily: 'Avenir-Light', paddingTop: 20 }}>No location found. Set your location through
                     the Account page or allow Sizzle to access your location by changing your device's settings.</Text></View> :
                         <View style={{height: Dimensions.get('window').height}}>
-                            {loadingAll || sorting ? <LandingLoading /> :
+                            {loadingAll || sorting ? <LandingLoading/> :
                                 <View>
-                                    <ScrollView showsVerticalScrollIndicator={false}>
+                                    <Animated.ScrollView showsVerticalScrollIndicator={false}>
                                         <RefreshControl refreshing={refreshing} onRefresh={refresh} tintColor={'white'} />
                                         <BusinessSideScroll key={2} businesses={sorted.grocery} category={'Groceries'} navigation={navigation}></BusinessSideScroll>
                                         <BusinessSideScroll key={3} businesses={sorted.supply} category={'Supplies'} navigation={navigation}></BusinessSideScroll>
@@ -346,7 +347,7 @@ export const Landing = ({ getRegisteredBusinesses, getAll, business, newSearch, 
                                         <BusinessSideScroll key={12} businesses={sorted.health} category={'Health'} navigation={navigation}></BusinessSideScroll>
                                         <BusinessSideScroll key={13} businesses={sorted.other} category={'Other'} navigation={navigation}></BusinessSideScroll>
                                         <Text style={{ padding: 85, backgroundColor: 'transparent' }}></Text>
-                                    </ScrollView>
+                                    </Animated.ScrollView>
                                 </View>
                             }
                         </View>}

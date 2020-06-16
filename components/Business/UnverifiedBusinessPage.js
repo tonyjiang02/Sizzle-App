@@ -38,7 +38,7 @@ import { updateUser, updateUserWithoutReturn } from '../../actions/user';
 import { updateBusinessReservations, getAdditionalData } from '../../actions/business';
 import * as Location from 'expo-location';
 
-const UnverifiedBusinessPage = ({ route: { params: { business, db } }, checkIn, updateUser, updateUserWithoutReturn, User, updateBusinessReservations, dbBusiness, checkInWithName }) => {
+const UnverifiedBusinessPage = ({ route: { params: { business, db } }, checkIn, updateUser, updateUserWithoutReturn, User, updateBusinessReservations, dbBusiness, checkInWithName, createError }) => {
     //destructuring
     let { name, vicinity, geometry, place_id } = business;
     let { _id, googleId, isVerified, population } = dbBusiness;
@@ -62,10 +62,11 @@ const UnverifiedBusinessPage = ({ route: { params: { business, db } }, checkIn, 
             console.log(mi);
             if (mi < 0.2) {
                 const biz = await checkInWithName(_id);
+                console.log(biz);
                 setLivePopulation(biz.population);
             }
             else {
-                createError("Your current location is too far from this business", "error");
+                createError("Your current location is too far from this location.", "error");
 
             }
         }
@@ -316,8 +317,8 @@ const UnverifiedBusinessPage = ({ route: { params: { business, db } }, checkIn, 
                         <MapView style={styles.mapStyle} showsUserLocation={true} initialRegion={{
                             latitude: (location.lat + User.location.latitude) / 2,
                             longitude: (location.lng + User.location.longitude) / 2,
-                            latitudeDelta: Math.abs(location.lat - User.location.latitude) * 1.5,
-                            longitudeDelta: Math.abs(location.lng - User.location.longitude) * 1.5,
+                            latitudeDelta: Math.abs(location.lat - User.location.latitude) * 1.75,
+                            longitudeDelta: Math.abs(location.lng - User.location.longitude) * 1.75,
                         }}>
                             <Marker
                                 coordinate={{ latitude: parseFloat(location.lat), longitude: parseFloat(location.lng) }}
@@ -365,4 +366,4 @@ const mapStateToProps = state => ({
     auth: state.auth,
     User: state.user
 });
-export default connect(mapStateToProps, { checkIn, updateUser, updateBusinessReservations, updateUserWithoutReturn, checkInWithName })(UnverifiedBusinessPage);
+export default connect(mapStateToProps, { checkIn, updateUser, updateBusinessReservations, updateUserWithoutReturn, checkInWithName, createError })(UnverifiedBusinessPage);

@@ -347,11 +347,12 @@ export const checkIn = (id) => async (dispatch, getState) => {
         dispatch(createError("You have checked in at this place recently. Please wait before checking in again.", 'warn'));
     }
 };
-export const checkInWithName = (id, name) => async dispatch => {
+export const checkInWithName = (id, name) => async (dispatch, getState) => {
     const user = getState().user.user;
     const token = getState().auth.token;
     if (checkInValid(id, user.history)) {
         try {
+            console.log('checkin valid');
             const res = await fetch(`${BASE_URL}/api/business/addPerson/${id}`, {
                 method: 'POST',
                 headers: {

@@ -35,8 +35,9 @@ import { getFontSize, getIconSize } from '../../utils/fontsizes';
 import { updateUser, updateUserWithoutReturn } from '../../actions/user';
 import { updateBusinessReservations } from '../../actions/business';
 import * as Location from 'expo-location';
+import { createError } from '../../actions/auth';
 
-const DbBusinessPage = ({ route: { params: { db } }, checkIn, User, updateBusinessReservations, dbBusiness, updateUserWithoutReturn }) => {
+const DbBusinessPage = ({ route: { params: { db } }, checkIn, User, updateBusinessReservations, dbBusiness, updateUserWithoutReturn, createError }) => {
     //destructuring
     const [data, setData] = useState(dbBusiness);
     let { _id, name, owner, googleId, publicId, isVerified, images, coverImageUrl, website, phone, address, openStatus, hours, description, population, reservations, announcements, reservationLimit, covid19Information } = data;
@@ -79,11 +80,11 @@ const DbBusinessPage = ({ route: { params: { db } }, checkIn, User, updateBusine
                 setLivePopulation(biz.population);
             }
             else{
-                Alert.alert("Your current location is too far from this location.");
+                createError("Your current location is too far from this location.", "error");
             }
         }
         else{
-            Alert.alert("You must share your location to check-in through a business page. If this location is verified, please find and scan its respective QR Code.");
+            createError("You must share your location to check-in through a business page. Otherwise, please check in through QR code", 'warn');
         }
     };
     function wait(timeout) {
@@ -451,7 +452,7 @@ const DbBusinessPage = ({ route: { params: { db } }, checkIn, User, updateBusine
                         {coordsLoading ? 
                         <View style={{ alignItems: 'center', flex: 1 }}>
                             <MaterialCommunityIcons name='map-marker-check' color='gray' size={getIconSize(22)} />
-                            <Text style={{ color: 'gray', fontFamily: 'Avenir-Light', fontWeight: 'bold' }}>Check In</Text>
+                            <Text style={{ color: 'gray', fontFamily: 'Avenir-Light', fontWeight: 'bold' }}>Loading</Text>
                         </View> : 
                         <View style={{ alignItems: 'center', flex: 1 }}>{user.occupying.id !== _id ?
                             <TouchableOpacity onPress={onPressCheckIn} style={{ alignItems: 'center', flex: 1 }}>
@@ -539,8 +540,8 @@ const DbBusinessPage = ({ route: { params: { db } }, checkIn, User, updateBusine
                             <MapView style={styles.mapStyle} showsUserLocation={true} initialRegion={{
                                 latitude: (businessLatitude + User.location.latitude) / 2,
                                 longitude: (businessLongitude + User.location.longitude) / 2,
-                                latitudeDelta: Math.abs(businessLatitude - User.location.latitude) * 1.5,
-                                longitudeDelta: Math.abs(businessLongitude - User.location.longitude) * 1.5,
+                                latitudeDelta: Math.abs(businessLatitude - User.location.latitude) * 1.75,
+                                longitudeDelta: Math.abs(businessLongitude - User.location.longitude) * 1.75,
                             }}>
                                 {console.log('coordsLoading turned false')}
                                 <Marker
@@ -604,4 +605,4 @@ const mapStateToProps = state => ({
     auth: state.auth,
     User: state.user
 });
-export default connect(mapStateToProps, { checkIn, updateUser, updateBusinessReservations, getBusiness, updateUserWithoutReturn })(DbBusinessPage);
+export default connect(mapStateToProps, { checkIn, updateUser, updateBusinessReservations, getBusiness, updateUserWithoutReturn, createError })(DbBusinessPage);
