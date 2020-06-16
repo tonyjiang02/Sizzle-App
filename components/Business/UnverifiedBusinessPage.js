@@ -22,7 +22,7 @@ import { View, ScrollView, Image, Text, ImageBackground, TouchableOpacity, Touch
 import Modal from 'react-native-modal';
 import { styles } from '../Styles';
 import { Button } from 'react-native-elements';
-import { checkIn, getBusiness } from '../../actions/business';
+import { checkIn, getBusiness, checkInWithName } from '../../actions/business';
 import { LinearGradient } from 'expo-linear-gradient';
 import { Ionicons, MaterialCommunityIcons, AntDesign, FontAwesome5, MaterialIcons, Entypo } from '@expo/vector-icons';
 import LiveUpdate from '../Business/LiveUpdate';
@@ -37,7 +37,7 @@ import { updateUser, updateUserWithoutReturn } from '../../actions/user';
 import { updateBusinessReservations, getAdditionalData } from '../../actions/business';
 import * as Location from 'expo-location';
 
-const UnverifiedBusinessPage = ({ route: { params: { business, db } }, checkIn, updateUser, updateUserWithoutReturn, User, updateBusinessReservations, dbBusiness }) => {
+const UnverifiedBusinessPage = ({ route: { params: { business, db } }, checkIn, updateUser, updateUserWithoutReturn, User, updateBusinessReservations, dbBusiness, checkInWithName }) => {
     //destructuring
     let { name, vicinity, geometry, place_id } = business;
     let { _id, googleId, isVerified, population } = dbBusiness;
@@ -54,7 +54,7 @@ const UnverifiedBusinessPage = ({ route: { params: { business, db } }, checkIn, 
     const [livePopulation, setLivePopulation] = useState(population);
     //backend
     const onPressCheckIn = async () => {
-        const biz = await checkIn(_id);
+        const biz = await checkInWithName(_id, name);
         setLivePopulation(biz.population);
     };
     const refresh = () => {
@@ -298,8 +298,8 @@ const UnverifiedBusinessPage = ({ route: { params: { business, db } }, checkIn, 
 
                     <View style={styles.mapOuterStyle}>
                         <MapView style={styles.mapStyle} showsUserLocation={true} initialRegion={{
-                            latitude: (location.lat + User.location.latitude)/2 ,
-                            longitude: (location.lng + User.location.longitude)/2,
+                            latitude: (location.lat + User.location.latitude) / 2,
+                            longitude: (location.lng + User.location.longitude) / 2,
                             latitudeDelta: Math.abs(location.lat - User.location.latitude) * 1.5,
                             longitudeDelta: Math.abs(location.lng - User.location.longitude) * 1.5,
                         }}>
@@ -349,4 +349,4 @@ const mapStateToProps = state => ({
     auth: state.auth,
     User: state.user
 });
-export default connect(mapStateToProps, { checkIn, updateUser, updateBusinessReservations, updateUserWithoutReturn })(UnverifiedBusinessPage);
+export default connect(mapStateToProps, { checkIn, updateUser, updateBusinessReservations, updateUserWithoutReturn, checkInWithName })(UnverifiedBusinessPage);

@@ -6,6 +6,7 @@ import { loadUser, loadToken, notAuthenticated } from './actions/auth';
 import Login from './components/Login';
 import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
+import DropdownAlert from 'react-native-dropdownalert';
 import Home from './components/Home';
 import Loading from './components/layout/Loading';
 import Landing from './components/Business/Landing';
@@ -24,12 +25,15 @@ import BusinessHistoryList from './components/Business/BusinessHistoryList';
 import Favorites from './components/Business/Favorites';
 import UserReservations from './components/Business/UserReservations';
 import DbBusinessPage from './components/Business/DbBusinessPage';
+import ErrorDisplay from './components/layout/ErrorDisplay';
+
 const Stack = createStackNavigator();
 const Index = ({ auth }) => {
     const [isAuth, setAuth] = useState(0);
     const initialMount = useRef(true);
     const [currentAppState, changeAppState] = useState(AppState.currentState);
     useEffect(() => {
+
         if (initialMount.current) {
             initialMount.current = false;
         } else {
@@ -109,11 +113,15 @@ const Index = ({ auth }) => {
     return (
 
         <NavigationContainer>
+
             {isAuth === 0 ? <Loading /> :
+
                 <Stack.Navigator screenOptions={{ headerShown: false }}>
                     {authController()}
                 </Stack.Navigator>
+
             }
+            <ErrorDisplay />
         </NavigationContainer>
     );
 };

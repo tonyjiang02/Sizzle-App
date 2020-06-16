@@ -17,7 +17,7 @@ export const UserReservations = ({ user, navigation }) => {
     useEffect(() => {
         let reservations = [...user.reservations];
         let res = reservations.reverse().map((res, i) =>
-            <ReservationCard key={i} index={res.index} id={res.business} timestamp={res.timestamp} date={res.date} name={res.businessName} address={res.address} time={res.time}></ReservationCard>
+            <ReservationCard key={i} index={res.index} id={res.business} timestamp={res.timestamp} date={res.date} name={res.businessName} address={res.address} time={res.time} deleteIndex={reservations.length - 1 - i}></ReservationCard>
         );
         updateDisplay(res);
     }, [user]);

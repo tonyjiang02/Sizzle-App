@@ -1,7 +1,13 @@
-import { SIGNUP_SUCCESS, LOGIN_SUCCESS, LOGIN_FAIL, ERROR, LOAD_USER, LOGOUT_USER, SET_TOKEN, NOT_AUTHENTICATED } from './types';
+import { SIGNUP_SUCCESS, LOGIN_SUCCESS, LOGIN_FAIL, ERROR, LOAD_USER, LOGOUT_USER, SET_TOKEN, NOT_AUTHENTICATED, ERROR_MESSAGE } from './types';
 import { BASE_URL } from '../config';
 import { AsyncStorage, Alert } from 'react-native';
 //saves user token into local storage (only handles localstorage of token)
+export const createError = (msg, type) => dispatch => {
+    dispatch({
+        type: ERROR_MESSAGE,
+        payload: { msg: msg, type: type }
+    });
+};
 export const login = (email, password) => async (dispatch, getState) => {
     //login user using fetch
     //save token to async storage
@@ -18,8 +24,9 @@ export const login = (email, password) => async (dispatch, getState) => {
             })
         });
         if (!res.ok) {
-            const err = await res.text();
-            throw Error(err);
+            const err = await res.json();
+            console.log(err);
+            throw err;
         }
         const data = await res.json();
         dispatch({
@@ -27,11 +34,7 @@ export const login = (email, password) => async (dispatch, getState) => {
             payload: data
         });
     } catch (err) {
-        console.log(err);
-        dispatch({
-            type: ERROR,
-            payload: err
-        });
+        dispatch(createError(err.msg, 'error'));
     }
 };
 export const loginGoogle = (id) => async (dispatch) => {
@@ -46,8 +49,8 @@ export const loginGoogle = (id) => async (dispatch) => {
             })
         });
         if (!res.ok) {
-            const err = await res.text();
-            throw Error(err);
+            const err = await res.json();
+            throw err;
         }
         const json = await res.json();
         dispatch({
@@ -55,7 +58,7 @@ export const loginGoogle = (id) => async (dispatch) => {
             payload: json
         });
     } catch (err) {
-        console.log(err);
+        dispatch(createError(err.msg, 'error'));
     }
 };
 export const signupGoogle = (id) => async (dispatch) => {
@@ -71,8 +74,8 @@ export const signupGoogle = (id) => async (dispatch) => {
             })
         });
         if (!res.ok) {
-            const err = await res.text();
-            throw Error(err);
+            const err = await res.json();
+            throw err;
         }
         const json = await res.json();
         dispatch({
@@ -80,7 +83,7 @@ export const signupGoogle = (id) => async (dispatch) => {
             payload: json.token
         });
     } catch (err) {
-        console.log(err);
+        dispatch(createError(err.msg, 'error'));
     }
 };
 export const logout = () => async dispatch => {
@@ -104,8 +107,8 @@ export const signup = (email, password) => async dispatch => {
             })
         });
         if (!res.ok) {
-            const err = await res.text();
-            throw Error(err);
+            const err = await res.json();
+            throw err;
         }
         const data = await res.json();
         dispatch({
@@ -113,7 +116,7 @@ export const signup = (email, password) => async dispatch => {
             payload: data
         });
     } catch (err) {
-        console.log(err);
+        dispatch(createError(err.msg, 'error'));
         //Alert.alert(err);
     }
 };
@@ -129,8 +132,8 @@ export const loadUser = () => async dispatch => {
                 }
             });
             if (!res.ok) {
-                const err = await res.text();
-                throw Error(err);
+                const err = await res.json();
+                throw err;
             }
             const json = await res.json();
             console.log('dispatching');
@@ -139,17 +142,10 @@ export const loadUser = () => async dispatch => {
                 payload: json
             });
         } catch (err) {
-            console.log(err);
-            dispatch({
-                type: ERROR,
-                payload: err
-            });
+            dispatch(createError(err.msg, 'error'));
         }
     } else {
-        dispatch({
-            type: ERROR,
-            payload: { msg: 'No user found' }
-        });
+        dispatch(createError("User does not exist", 'error'));
     }
 };
 //sets redux token on app launch

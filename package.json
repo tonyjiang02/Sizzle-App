@@ -27,6 +27,7 @@
     "react-dom": "~16.9.0",
     "react-native": "https://github.com/expo/react-native/archive/sdk-37.0.0.tar.gz",
     "react-native-camera": "^3.24.1",
+    "react-native-dropdownalert": "^4.2.1",
     "react-native-elements": "^1.2.7",
     "react-native-gesture-handler": "~1.6.0",
     "react-native-linear-gradient": "^2.5.6",

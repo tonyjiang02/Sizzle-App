@@ -27,3 +27,4 @@ export const ALLOW_LOC = "ALLOW_LOC";
 export const SET_TOKEN = "SET_TOKEN";
 export const LOAD_FAVORITES = "LOAD_FAVORITES";
 export const RELOAD_FAVORITES = "RELOAD_FAVORITES";
+export const ERROR_MESSAGE = "ERROR_MESSAGE";

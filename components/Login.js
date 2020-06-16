@@ -20,6 +20,7 @@ const Login = ({ login, auth1, business, navigation, loginGoogle }) => {
     const loginWithGoogle = async () => {
         const { type, idToken, accessToken, user } = await Google.logInAsync({
             iosClientId: "359251985246-li6db3gevpfh6sde3iukm1hrp85jqb0e.apps.googleusercontent.com",
+            iosStandaloneAppClientId: "359251985246-e15i2bibrv8dqo01dj89a6r9e9o5g96h.apps.googleusercontent.com",
             scopes: ['profile', 'email']
         });
         if (type === 'success') {
@@ -69,11 +70,13 @@ const Login = ({ login, auth1, business, navigation, loginGoogle }) => {
                             }}>
                                 <Text style={{ color: 'white', alignSelf: 'center', fontFamily: 'AvenirNext-Bold', fontSize: 16 }}>Log In</Text>
                             </TouchableOpacity>
-                            <TouchableOpacity onPress={() => loginWithGoogle()} style={{ flexDirection: "row", height: 50, backgroundColor: '#4285f4', width: 300, borderRadius: 5, marginBottom: 20, shadowColor: "#000",
-                                shadowOffset: { width: 0, height: 2 }, shadowOpacity: 0.25, shadowRadius: 3.84, elevation: 5, alignSelf: 'center', alignItems: 'center'}}>
+                            <TouchableOpacity onPress={() => loginWithGoogle()} style={{
+                                flexDirection: "row", height: 50, backgroundColor: '#4285f4', width: 300, borderRadius: 5, marginBottom: 20, shadowColor: "#000",
+                                shadowOffset: { width: 0, height: 2 }, shadowOpacity: 0.25, shadowRadius: 3.84, elevation: 5, alignSelf: 'center', alignItems: 'center'
+                            }}>
                                 <Image source={require('../assets/logos/google-light-signin-logo.png')} style={{ height: 50, width: 50 }}></Image>
-                                <View style={{width: 24}}></View>
-                                <Image source={require('../assets/logos/googletext.png')} style={{height: 40, width: 160}}></Image>
+                                <View style={{ width: 24 }}></View>
+                                <Image source={require('../assets/logos/googletext.png')} style={{ height: 40, width: 160 }}></Image>
                             </TouchableOpacity>
                             <View style={{ height: 115, borderBottomColor: 'gainsboro', borderBottomWidth: 0.7 }}></View>
                             <View style={{ height: 20 }}></View>
@@ -90,8 +93,8 @@ const Login = ({ login, auth1, business, navigation, loginGoogle }) => {
                         </View>
                     </View>
                 </TouchableWithoutFeedback>
-            </KeyboardAvoidingView> 
-        </LinearGradient> 
+            </KeyboardAvoidingView>
+        </LinearGradient>
     );
 };
 const mapStateToProps = state => ({

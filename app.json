@@ -24,7 +24,12 @@
     "ios": {
       "supportsTablet": false,
       "bundleIdentifier": "com.jasyzhang.sizzle",
-      "buildNumber": "1.0.0"
+      "buildNumber": "1.0.0",
+      "config": {
+        "googleSignIn": {
+          "reservedClientId": "359251985246-e15i2bibrv8dqo01dj89a6r9e9o5g96h.apps.googleusercontent.com"
+        }
+      }
     },
     "android": {
       "package": "com.jasyzhang.sizzle",

@@ -32,11 +32,12 @@ import { straightLineDistance, kmToMi } from '../../utils/businessUtils';
 import MapView, { Marker } from 'react-native-maps';
 import openMap from 'react-native-open-maps';
 import { getFontSize, getIconSize } from '../../utils/fontsizes';
+import { createError } from '../../actions/auth';
 import { updateUser, updateUserWithoutReturn } from '../../actions/user';
 import { updateBusinessReservations } from '../../actions/business';
 import * as Location from 'expo-location';
 
-const BusinessPage = ({ route: { params: { business, db } }, checkIn, auth, updateUser, User, getBusiness, updateBusinessReservations, dbBusiness, updateUserWithoutReturn }) => {
+const BusinessPage = ({ route: { params: { business, db } }, checkIn, auth, updateUser, User, getBusiness, updateBusinessReservations, dbBusiness, updateUserWithoutReturn, createError }) => {
     //destructuring
     let { vicinity, geometry } = business;
     const [data, setData] = useState(dbBusiness);
@@ -168,13 +169,9 @@ const BusinessPage = ({ route: { params: { business, db } }, checkIn, auth, upda
     }
     let now = new Date();
     const beginning = new Date(now.getFullYear(), now.getMonth(), now.getDate(), 0, 0, 0);
-    console.log("Beginning of the day");
-    console.log(beginning);
     for (let i = 0; i < user.reservations.length; i++) {
-        let dateArr = user.reservations[i].timestamp.split('-');
-        let newDate = new Date(dateArr[0], dateArr[1], dateArr[2].substring(0, 2), 1, 1, 1);
+        let newDate = new Date(user.reservations[i].timestamp);
         if (user.reservations[i].business === _id && newDate > beginning) {
-
             alreadyReserved[user.reservations[i].index.day][user.reservations[i].index.index] = true;
         }
     }
@@ -218,7 +215,7 @@ const BusinessPage = ({ route: { params: { business, db } }, checkIn, auth, upda
             updated = true;
             setReservations({ ...reservations });
         } else {
-            console.log("Cannot reserve more than once per day");
+            createError('Cannot reserve more than once per day', 'warn');
         }
     };
     //map
@@ -514,8 +511,8 @@ const BusinessPage = ({ route: { params: { business, db } }, checkIn, auth, upda
 
                     <View style={styles.mapOuterStyle}>
                         <MapView style={styles.mapStyle} showsUserLocation={true} initialRegion={{
-                            latitude: (location.lat + User.location.latitude)/2 ,
-                            longitude: (location.lng + User.location.longitude)/2,
+                            latitude: (location.lat + User.location.latitude) / 2,
+                            longitude: (location.lng + User.location.longitude) / 2,
                             latitudeDelta: Math.abs(location.lat - User.location.latitude) * 1.5,
                             longitudeDelta: Math.abs(location.lng - User.location.longitude) * 1.5,
                         }}>
@@ -578,4 +575,4 @@ const mapStateToProps = state => ({
     auth: state.auth,
     User: state.user
 });
-export default connect(mapStateToProps, { checkIn, updateUser, updateBusinessReservations, getBusiness, updateUserWithoutReturn })(BusinessPage);
+export default connect(mapStateToProps, { createError, checkIn, updateUser, updateBusinessReservations, getBusiness, updateUserWithoutReturn })(BusinessPage);

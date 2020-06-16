@@ -3,7 +3,7 @@ import { BASE_URL, PLACES_API_KEY, ADD_API_KEY } from '../config';
 import { straightLineDistance, kmToMi } from '../utils/businessUtils';
 import toQueryString from '../utils/QueryString';
 import { updateUser } from './user';
-
+import { createError } from './auth';
 export const getBusinesses = (params) => async dispatch => {
     return null;
 };
@@ -294,35 +294,93 @@ export const reloadFavorites = () => dispatch => {
         type: RELOAD_FAVORITES,
     });
 };
+const checkInValid = (id, history) => {
+    let prevHour = new Date();
+    prevHour.setHours(prevHour.getHours() - 1);
+    console.log("checking checkin valid");
+    for (let i = history.length - 1; i >= 0; i--) {
+        let newDate = new Date(history[i].date);
+        if (history[i].business === id) {
+            if (newDate > prevHour) {
+                return false;
+            }
+        }
+        if (newDate < prevHour) {
+            break;
+        }
+    }
+    return true;
+};
 export const checkIn = (id) => async (dispatch, getState) => {
     const user = getState().user.user;
     const token = getState().auth.token;
-    try {
-        const res = await fetch(`${BASE_URL}/api/business/addPerson/${id}`, {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify({
-                id: id
-            })
-        });
-        const json = await res.json();
-        dispatch({
-            type: UPDATE_BUSINESS,
-            payload: json
-        });
-        let newHistory = user.history;
-        newHistory.push({ business: json._id, name: json.name, publicId: json.googleId, date: Date.now() });
-        let newUser = { occupying: { id: json._id, name: json.name, date: Date.now() }, history: newHistory };
-        dispatch({
-            type: UPDATE_USER,
-            payload: newUser
-        });
-        updateUser(newUser, token);
-        return json;
-    } catch (error) {
-        console.log(error);
+    if (checkInValid(id, user.history)) {
+        try {
+            const res = await fetch(`${BASE_URL}/api/business/addPerson/${id}`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                    id: id
+                })
+            });
+            const json = await res.json();
+            dispatch({
+                type: UPDATE_BUSINESS,
+                payload: json
+            });
+            let newHistory = user.history;
+            let D = new Date();
+            newHistory.push({ business: json._id, name: json.name, publicId: json.googleId, date: D });
+            let newUser = { occupying: { id: json._id, name: json.name, date: D }, history: newHistory };
+            dispatch({
+                type: UPDATE_USER,
+                payload: newUser
+            });
+            updateUser(newUser, token);
+            return json;
+        } catch (error) {
+            console.log(error);
+        }
+    } else {
+        dispatch(createError("You have checked in at this place recently. Please wait before checking in again.", 'warn'));
+    }
+};
+export const checkInWithName = (id, name) => async dispatch => {
+    const user = getState().user.user;
+    const token = getState().auth.token;
+    if (checkInValid(id, user.history)) {
+        try {
+            const res = await fetch(`${BASE_URL}/api/business/addPerson/${id}`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                    id: id
+                })
+            });
+            const json = await res.json();
+            dispatch({
+                type: UPDATE_BUSINESS,
+                payload: json
+            });
+            let newHistory = user.history;
+            let D = new Date();
+            newHistory.push({ business: json._id, name: name, publicId: json.googleId, date: D });
+            let newUser = { occupying: { id: json._id, name: json.name, date: D }, history: newHistory };
+            dispatch({
+                type: UPDATE_USER,
+                payload: newUser
+            });
+            updateUser(newUser, token);
+            return json;
+        } catch (error) {
+            console.log(error);
+        }
+    } else {
+        dispatch(createError("You have checked in at this place recently. Please wait before checking in again.", 'warn'));
     }
 };
 export const getBusinessField = (id, field) => async dispatch => {

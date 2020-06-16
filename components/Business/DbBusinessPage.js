@@ -115,6 +115,9 @@ const DbBusinessPage = ({ route: { params: { db } }, checkIn, User, updateBusine
 
     //business hours
     const hoursToString = (day) => {
+        if (!day.open.hour) {
+            return "Not available";
+        }
         let open = `${day.open.hour}:${day.open.minutes === '0' ? '00' : day.open.minutes}${day.open.am ? ' A.M' : ' P.M'}`;
         open += " - ";
         let close = `${day.close.hour}:${day.close.minutes === '0' ? '00' : day.close.minutes}${day.close.am ? ' A.M' : ' P.M'}`;
@@ -169,8 +172,7 @@ const DbBusinessPage = ({ route: { params: { db } }, checkIn, User, updateBusine
     console.log("Beginning of the day");
     console.log(beginning);
     for (let i = 0; i < user.reservations.length; i++) {
-        let dateArr = user.reservations[i].timestamp.split('-');
-        let newDate = new Date(dateArr[0], dateArr[1], dateArr[2].substring(0, 2), 1, 1, 1);
+        let newDate = new Date(user.reservations[i].timestamp);
         if (user.reservations[i].business === _id && newDate > beginning) {
 
             alreadyReserved[user.reservations[i].index.day][user.reservations[i].index.index] = true;

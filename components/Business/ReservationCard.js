@@ -10,7 +10,7 @@ import { updateUserWithoutReturn } from '../../actions/user';
 import { updateBusinessReservations, getBusinessField } from '../../actions/business';
 import user from '../../reducers/user';
 
-export const ReservationCard = ({ index, date, id, time, name, address, key, reservations, updateUserWithoutReturn, updateBusinessReservations, getBusinessField }) => {
+export const ReservationCard = ({ index, date, id, time, name, address, key, reservations, deleteIndex, updateUserWithoutReturn, updateBusinessReservations, getBusinessField }) => {
     const splitDate = date.split(' ');
     const monthArr = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
     const weekMap = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
@@ -19,7 +19,8 @@ export const ReservationCard = ({ index, date, id, time, name, address, key, res
     let d = Date.now();
     const cancelReservation = async () => {
         let changedReservations = reservations;
-        changedReservations.splice(key, 1);
+        console.log("Deleted key " + deleteIndex);
+        changedReservations.splice(deleteIndex, 1);
         let user = {
             reservations: changedReservations
         };
