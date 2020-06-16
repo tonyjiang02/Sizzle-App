@@ -255,6 +255,7 @@ export const Account = ({ navigation, logout, User, newLocation, updateUser, upd
 
             <View>
                 <Header navigation={navigation}></Header>
+                <View style={{ borderBottomWidth: 0.5, borderBottomColor: 'white' }}></View>
                 <LinearGradient
                     colors={['#ff9900', '#ff5f6d', '#ff5f6d']}
                 >
