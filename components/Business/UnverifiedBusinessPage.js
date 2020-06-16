@@ -61,9 +61,10 @@ const UnverifiedBusinessPage = ({ route: { params: { business, db } }, checkIn, 
             var mi = kmToMi(straightLineDistance(location.coords, { latitude: parseFloat(business.geometry.location.lat), longitude: parseFloat(business.geometry.location.lng) }));
             console.log(mi);
             if (mi < 0.2) {
-                const biz = await checkInWithName(_id);
-                console.log(biz);
-                setLivePopulation(biz.population);
+                const biz = await checkInWithName(_id, name);
+                if (biz) {
+                    setLivePopulation(biz.population);
+                }
             }
             else {
                 createError("Your current location is too far from this location.", "error");

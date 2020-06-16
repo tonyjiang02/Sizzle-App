@@ -60,16 +60,18 @@ const BusinessPage = ({ route: { params: { business, db } }, checkIn, auth, upda
         if (response.granted) {
             let location = await Location.getLastKnownPositionAsync();
             var mi = kmToMi(straightLineDistance(location.coords, { latitude: parseFloat(business.geometry.location.lat), longitude: parseFloat(business.geometry.location.lng) }));
-            if (mi < 0.2){
+            if (mi < 0.2) {
                 const biz = await checkIn(_id);
-                //console.log(biz);
-                setLivePopulation(biz.population);
+                if (biz) {
+                    //console.log(biz);
+                    setLivePopulation(biz.population);
+                }
             }
-            else{
+            else {
                 createError("Your current location is too far from this location.", "error");
             }
         }
-        else{
+        else {
             createError("You must share your location to check-in through a business page. Otherwise, please check in through QR code", 'warn');
         }
     };
