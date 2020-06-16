@@ -31,6 +31,7 @@ export const BusinessHistoryList = ({navigation, user}) => {
                    </View>
                    <ScrollView showsVerticalScrollIndicator={false}>
                        {historyDisplay}
+                       <View style={{height: 200, backgroundColor: 'transparent'}}></View>
                    </ScrollView>
                </View>
            </LinearGradient>

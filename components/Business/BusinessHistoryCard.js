@@ -21,7 +21,6 @@ export const BusinessHistoryCard = ({ index, date, id, name, address }) => {
    let month = convert.getMonth() + 1;
    let year = convert.getFullYear();
    let ampm = "a.m";
-   console.log(address);
    //formatting
    if (hour < 12){
        ampm = "a.m";

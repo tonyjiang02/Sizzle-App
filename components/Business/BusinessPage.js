@@ -56,8 +56,21 @@ const BusinessPage = ({ route: { params: { business, db } }, checkIn, auth, upda
     //const [startRefresh, setStartRefresh] = useState(false);
     //backend
     const onPressCheckIn = async () => {
-        const biz = await checkIn(_id);
-        setLivePopulation(biz.population);
+        let response = await Location.requestPermissionsAsync();
+        if (response.granted) {
+            let location = await Location.getLastKnownPositionAsync();
+            var mi = kmToMi(straightLineDistance(location.coords, { latitude: parseFloat(business.geometry.location.lat), longitude: parseFloat(business.geometry.location.lng) }));
+            if (mi < 0.2){
+                const biz = await checkIn(_id);
+                setLivePopulation(biz.population);
+            }
+            else{
+                Alert.alert("Your current location is too far from this location.");
+            }
+        }
+        else{
+            Alert.alert("You must share your location to check-in through a business page. If this location is verified, please find and scan its respective QR Code.");
+        }
     };
     function wait(timeout) {
         return new Promise(resolve => {

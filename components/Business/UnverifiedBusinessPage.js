@@ -22,6 +22,7 @@ import { View, ScrollView, Image, Text, ImageBackground, TouchableOpacity, Touch
 import Modal from 'react-native-modal';
 import { styles } from '../Styles';
 import { Button } from 'react-native-elements';
+import { createError } from '../../actions/auth';
 import { checkIn, getBusiness, checkInWithName } from '../../actions/business';
 import { LinearGradient } from 'expo-linear-gradient';
 import { Ionicons, MaterialCommunityIcons, AntDesign, FontAwesome5, MaterialIcons, Entypo } from '@expo/vector-icons';
@@ -54,8 +55,23 @@ const UnverifiedBusinessPage = ({ route: { params: { business, db } }, checkIn, 
     const [livePopulation, setLivePopulation] = useState(population);
     //backend
     const onPressCheckIn = async () => {
-        const biz = await checkInWithName(_id, name);
-        setLivePopulation(biz.population);
+        let response = await Location.requestPermissionsAsync();
+        if (response.granted) {
+            let location = await Location.getLastKnownPositionAsync();
+            var mi = kmToMi(straightLineDistance(location.coords, { latitude: parseFloat(business.geometry.location.lat), longitude: parseFloat(business.geometry.location.lng) }));
+            console.log(mi);
+            if (mi < 0.2) {
+                const biz = await checkInWithName(_id);
+                setLivePopulation(biz.population);
+            }
+            else {
+                createError("Your current location is too far from this business", "error");
+
+            }
+        }
+        else {
+            createError("You must share your location to check-in through a business page. Otherwise, please check in through QR code", 'warn');
+        }
     };
     const refresh = () => {
         getBusiness(business.place_id, db._id);
