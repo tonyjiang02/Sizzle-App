@@ -134,12 +134,17 @@ export default function (state = initialState, action) {
                 searchBusinesses: [],
                 dbSearchBusinesses: [],
                 nearestBusinesses: [],
+                filterBusinesses: [],
+                dbFilterBusinesses: [],
                 dbNearestBusinesses: [],
+                dbFavoriteBusinesses: [],
                 query: null,
                 loadingAll: true,
                 loadingOne: true,
                 loadingSearch: true,
+                loadingFilter: false,
                 loadingNearest: true,
+                loadingFavorites: true
             };
         default:
             return state;

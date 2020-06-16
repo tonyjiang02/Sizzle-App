@@ -65,7 +65,7 @@ export const Checkin = ({ navigation, getNearest, loadingNearest, updateUserWith
                 setHasLocationPermission(true);
                 let location = await Location.getLastKnownPositionAsync();
                 if (loadingNearest === true) {
-                    getNearest({ radius: 500 }, location.coords);
+                    getNearest({ radius: 200 }, location.coords);
                 }
                 else {
                     if (User.locationChanged === false) {

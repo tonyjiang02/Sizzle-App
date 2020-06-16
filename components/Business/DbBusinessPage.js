@@ -46,11 +46,15 @@ const DbBusinessPage = ({ route: { params: { db } }, checkIn, User, updateBusine
     const [businessLatitude, setLatitude] = useState(0);
     const [businessLongitude, setLongitude] = useState(0);
     const [coordsLoading, setCoordsLoading] = useState(true);
+    const [distance, setDistance] = useState("N/A");
     async function getDbCoords() {
         try {
             const businessCoords = await getCoords(address);
             setLatitude(businessCoords.latitude);
             setLongitude(businessCoords.longitude);
+            var mi = kmToMi(straightLineDistance(User.location, { latitude: businessCoords.latitude, longitude: businessCoords.longitude }));
+            const rounded = Math.round(mi * 10) / 10;
+            setDistance(rounded + "mi");
             setCoordsLoading(false);
         }
         catch (err) { }
@@ -65,8 +69,22 @@ const DbBusinessPage = ({ route: { params: { db } }, checkIn, User, updateBusine
     //const [startRefresh, setStartRefresh] = useState(false);
     //backend
     const onPressCheckIn = async () => {
-        const biz = await checkIn(_id);
-        setLivePopulation(biz.population);
+        let response = await Location.requestPermissionsAsync();
+        if (response.granted) {
+            let location = await Location.getLastKnownPositionAsync();
+            var mi = kmToMi(straightLineDistance(location.coords, { latitude: businessLatitude, longitude: businessLongitude }));
+            console.log(mi);
+            if (mi < 0.2){
+                const biz = await checkIn(_id);
+                setLivePopulation(biz.population);
+            }
+            else{
+                Alert.alert("Your current location is too far from this location.");
+            }
+        }
+        else{
+            Alert.alert("You must share your location to check-in through a business page. If this location is verified, please find and scan its respective QR Code.");
+        }
     };
     function wait(timeout) {
         return new Promise(resolve => {
@@ -235,14 +253,6 @@ const DbBusinessPage = ({ route: { params: { db } }, checkIn, User, updateBusine
 
     };
 
-    //distance
-    let [lineDistance, setLineDistance] = useState("N/A");
-    const getDistance = () => {
-        var mi = kmToMi(straightLineDistance(User.location, { latitude: parseFloat(getCoords(address).latitude), longitude: parseFloat(getCoords(address).longitude) }));
-        var rounded = Math.round(mi * 10) / 10;
-        setLineDistance(rounded + 'mi');
-    };
-
     //population display
     let popDisplay = <Text></Text>;
     if (livePopulation < 10) {
@@ -408,6 +418,9 @@ const DbBusinessPage = ({ route: { params: { db } }, checkIn, User, updateBusine
                         <View style={{ position: 'absolute', bottom: 40, alignItems: 'baseline' }}>
                             <Text style={{ color: 'white', fontSize: getFontSize(30), fontWeight: 'bold', paddingLeft: 20 }}>{name}</Text>
                             <View style={{ paddingLeft: 20, paddingTop: 10, flexDirection: 'row', alignItems: 'center' }}>
+                                <Text style={{ borderRadius: 5, borderColor: 'white', color: 'white', borderWidth: 1, padding: 3, fontSize: getFontSize(16) }}>
+                                    {distance}
+                                </Text>            
                                 <View style={{ flexDirection: 'row', alignItems: 'center', paddingLeft: 20 }}>
                                     <Ionicons name='md-person' color='white' size={getIconSize(19)} />
                                     {popDisplay}
@@ -433,7 +446,12 @@ const DbBusinessPage = ({ route: { params: { db } }, checkIn, User, updateBusine
                             <MaterialCommunityIcons name='directions' color='royalblue' size={getIconSize(21)} />
                             <Text style={{ color: 'black', fontFamily: "Avenir-Light" }}>Directions</Text>
                         </TouchableOpacity>
-                        {user.occupying.id !== _id ?
+                        {coordsLoading ? 
+                        <View style={{ alignItems: 'center', flex: 1 }}>
+                            <MaterialCommunityIcons name='map-marker-check' color='gray' size={getIconSize(22)} />
+                            <Text style={{ color: 'gray', fontFamily: 'Avenir-Light', fontWeight: 'bold' }}>Check In</Text>
+                        </View> : 
+                        <View style={{ alignItems: 'center', flex: 1 }}>{user.occupying.id !== _id ?
                             <TouchableOpacity onPress={onPressCheckIn} style={{ alignItems: 'center', flex: 1 }}>
                                 <MaterialCommunityIcons name='map-marker-check' color='#ff9900' size={getIconSize(22)} />
                                 <Text style={{ color: '#ff9900', fontFamily: 'Avenir-Light', fontWeight: 'bold' }}>Check In</Text>
@@ -443,7 +461,7 @@ const DbBusinessPage = ({ route: { params: { db } }, checkIn, User, updateBusine
                                 <MaterialCommunityIcons name='map-marker-check' color='#00c707' size={getIconSize(22)} />
                                 <Text style={{ color: '#00c707', fontFamily: 'Avenir-Light', fontWeight: 'bold' }}>Checked In</Text>
                             </View>
-                        }
+                        }</View>}
                         <TouchableOpacity onPress={() => { Linking.openURL(phoneNumberURL); }} style={{ alignItems: 'center', flex: 1 }}>
                             <MaterialIcons name='phone' color='royalblue' size={getIconSize(20)} style={{ paddingBottom: 5 }} />
                             <Text style={{ color: 'black', fontFamily: 'Avenir-Light' }}>Call</Text>
@@ -535,7 +553,7 @@ const DbBusinessPage = ({ route: { params: { db } }, checkIn, User, updateBusine
                         </View>
                         <View style={{ flexDirection: 'row' }}>
                             <View style={{ flexDirection: 'column', flex: 1, paddingLeft: 15, paddingVertical: 20 }}>
-                                <Text style={{ fontFamily: 'Avenir-Light', fontSize: getFontSize(17), fontWeight: 'bold' }}>Distance: {lineDistance} </Text>
+                                <Text style={{ fontFamily: 'Avenir-Light', fontSize: getFontSize(17), fontWeight: 'bold' }}>Distance: {distance} </Text>
                             </View>
                             <View style={{ flex: 1.2, justifyContent: 'center', alignItems: 'center' }}>
                                 <TouchableOpacity onPress={openMapToBusiness}>

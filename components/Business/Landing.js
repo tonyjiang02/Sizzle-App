@@ -327,11 +327,11 @@ export const Landing = ({ getRegisteredBusinesses, getAll, business, newSearch, 
                 >
                     {noLocation ? <View style={{ height: Dimensions.get('window').height, paddingHorizontal: 10 }}><Text style={{ fontFamily: 'Avenir-Light', paddingTop: 20 }}>No location found. Set your location through
                     the Account page or allow Sizzle to access your location by changing your device's settings.</Text></View> :
-                        <View>
+                        <View style={{height: Dimensions.get('window').height}}>
                             {loadingAll || sorting ? <LandingLoading /> :
                                 <View>
                                     <ScrollView showsVerticalScrollIndicator={false}>
-                                        <RefreshControl refreshing={refreshing} onRefresh={refresh} />
+                                        <RefreshControl refreshing={refreshing} onRefresh={refresh} tintColor={'white'} />
                                         <BusinessSideScroll key={2} businesses={sorted.grocery} category={'Groceries'} navigation={navigation}></BusinessSideScroll>
                                         <BusinessSideScroll key={3} businesses={sorted.supply} category={'Supplies'} navigation={navigation}></BusinessSideScroll>
                                         <BusinessSideScroll key={4} businesses={sorted.store} category={'Stores'} navigation={navigation}></BusinessSideScroll>
