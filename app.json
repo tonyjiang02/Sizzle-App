@@ -7,7 +7,7 @@
       "android",
       "web"
     ],
-    "version": "1.0.1",
+    "version": "1.0.2",
     "orientation": "portrait",
     "icon": "./assets/logos/Sizzle_Icon.png",
     "splash": {
@@ -24,7 +24,7 @@
     "ios": {
       "supportsTablet": false,
       "bundleIdentifier": "com.jasyzhang.sizzle",
-      "buildNumber": "1.0.1",
+      "buildNumber": "1.0.2",
       "config": {
         "googleSignIn": {
           "reservedClientId": "com.googleusercontent.apps.359251985246-e15i2bibrv8dqo01dj89a6r9e9o5g96h"
