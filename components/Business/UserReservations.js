@@ -13,7 +13,6 @@ export const UserReservations = ({ user, navigation }) => {
     <BusinessCard key={biz._id ? biz_.id : biz.id} business={biz} navigation={navigation} db={dbBusinesses[i]}></BusinessCard>
 ));*/
     const [reservationDisplay, updateDisplay] = useState([]);
-    console.log(user.reservations);
     useEffect(() => {
         let reservations = [...user.reservations];
         let res = reservations.reverse().map((res, i) =>

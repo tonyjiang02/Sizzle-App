@@ -15,7 +15,6 @@ export const ReservationCard = ({ index, date, id, time, name, address, key, res
     const monthArr = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
     const weekMap = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
     const compareDate = new Date(splitDate[3], monthArr.indexOf(splitDate[1]), splitDate[2], 23, 59, 59);
-    console.log(compareDate);
     let d = Date.now();
     const cancelReservation = async () => {
         let changedReservations = reservations;
@@ -26,7 +25,6 @@ export const ReservationCard = ({ index, date, id, time, name, address, key, res
         };
         updateUserWithoutReturn(user);
         let response = await getBusinessField(id, "reservations");
-        console.log(response);
         let businessReservations = response.reservations;
         businessReservations[weekMap[index.day].toLowerCase()][index.index].users -= 1;
         updateBusinessReservations(id, businessReservations);
@@ -46,7 +44,7 @@ export const ReservationCard = ({ index, date, id, time, name, address, key, res
         <View style={{ paddingTop: 15 }}>
             <View style={{ height: (Dimensions.get('window').width / 2.5), width: Dimensions.get('window').width - 20, alignSelf: 'center', backgroundColor: past ? 'green' : 'gray', flex: 1, flexDirection: "row", borderRadius: 10 }}>
                 <View style={{ paddingLeft: 15, flex: 3.5, alignSelf: 'center' }}>
-                    <Text style={{ fontSize: getFontSize(22), flexWrap: 'wrap', fontFamily: 'AvenirNext-Bold', color: 'white' }}>{name > 25 ? textTruncateBySpace(25, name) : name}</Text>
+                    <Text style={{ fontSize: getFontSize(22), flexWrap: 'wrap', fontFamily: 'AvenirNext-Bold', color: 'white' }}>{name.length > 25 ? textTruncateBySpace(25, name) : name}</Text>
                     <Text style={{ fontSize: getFontSize(12), color: 'white' }}>{address}</Text>
                     <View style={{ height: 10 }}></View>
                     <Text style={{ fontSize: getFontSize(18), color: 'white' }}>{time}</Text>
