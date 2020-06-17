@@ -1,14 +1,16 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { Text, TextInput, View, StyleSheet, KeyboardAvoidingView, TouchableOpacity, Image, Animated, TouchableWithoutFeedback, Keyboard } from 'react-native';
 import { connect } from 'react-redux';
-import { login, loginGoogle } from '../actions/auth';
+import { login, loginGoogle, createError } from '../actions/auth';
 import { styles, input } from './Styles';
 import { LinearGradient } from 'expo-linear-gradient';
 import { Dimensions } from 'react-native';
 import * as Google from 'expo-google-app-auth';
+import * as GoogleSignIn from 'expo-google-sign-in';
+import Constants from 'expo-constants';
 import * as Font from 'expo-font';
 
-const Login = ({ login, auth1, business, navigation, loginGoogle }) => {
+const Login = ({ login, auth1, business, navigation, loginGoogle, createError }) => {
     const [fields, setFields] = useState({
         email: '',
         password: ''
@@ -25,6 +27,8 @@ const Login = ({ login, auth1, business, navigation, loginGoogle }) => {
         });
         if (type === 'success') {
             loginGoogle(idToken);
+        } else {
+            createError("Google Authentication failed", "error");
         }
     };
     const navigateSignup = () => {
@@ -101,4 +105,4 @@ const mapStateToProps = state => ({
     auth1: state.auth,
     business: state.business
 });
-export default connect(mapStateToProps, { login, loginGoogle })(Login);
+export default connect(mapStateToProps, { login, loginGoogle, createError })(Login);
