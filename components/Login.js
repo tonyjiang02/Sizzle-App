@@ -25,6 +25,7 @@ const Login = ({ login, auth1, business, navigation, loginGoogle, createError })
             iosStandaloneAppClientId: "359251985246-e15i2bibrv8dqo01dj89a6r9e9o5g96h.apps.googleusercontent.com",
             scopes: ['profile', 'email']
         });
+
         if (type === 'success') {
             loginGoogle(idToken);
         } else {
