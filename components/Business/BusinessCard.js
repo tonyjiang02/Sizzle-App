@@ -43,7 +43,7 @@ const BusinessCard = ({ business, navigation, db, openBusinessPage, User }) => {
         if (!business){
             console.log('running bc no business');
             openBusinessPage(null, db);
-            navigation.replace('DbBusinessPage', { db: db });
+            navigation.navigate('DbBusinessPage', { db: db });
         }
         else if (db.isVerified) {
             console.log('running bc verified and not just db');

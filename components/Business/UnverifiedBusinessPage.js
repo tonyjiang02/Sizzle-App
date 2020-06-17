@@ -59,7 +59,6 @@ const UnverifiedBusinessPage = ({ route: { params: { business, db } }, checkIn, 
         if (response.granted) {
             let location = await Location.getLastKnownPositionAsync();
             var mi = kmToMi(straightLineDistance(location.coords, { latitude: parseFloat(business.geometry.location.lat), longitude: parseFloat(business.geometry.location.lng) }));
-            console.log(mi);
             if (mi < 0.2) {
                 const biz = await checkInWithName(_id, name);
                 if (biz) {
@@ -68,7 +67,6 @@ const UnverifiedBusinessPage = ({ route: { params: { business, db } }, checkIn, 
             }
             else {
                 createError("Your current location is too far from this location.", "error");
-
             }
         }
         else {
@@ -283,18 +281,6 @@ const UnverifiedBusinessPage = ({ route: { params: { business, db } }, checkIn, 
                             <Text style={{ color: 'black', fontFamily: 'Avenir-Light' }}>Call</Text>
                         </TouchableOpacity>
                     </View>
-                    {/* <TouchableOpacity>
-                        <View style={{ paddingHorizontal: 15, height: 140, backgroundColor: '#FDDFDF', borderLeftWidth: 5, borderLeftColor: 'red' }}>
-                            <View style={{ flexDirection: 'row', paddingTop: 5 }}>
-                                <Ionicons name='md-warning' color='red' size={getIconSize(21)} style={{ paddingRight: 10, paddingLeft: 10 }} />
-                                <Text style={{ color: 'red', fontSize: getFontSize(24), fontFamily: 'Avenir-Heavy', paddingVertical: 5, paddingRight: 10 }}>COVID-19</Text>
-                                <AntDesign name='rightcircle' color='red' size={getIconSize(18)} style={{ paddingTop: 11 }}></AntDesign>
-                            </View>
-                            <Text style={{ fontFamily: 'AvenirNext-Bold', fontSize: getFontSize(17), paddingVertical: 3 }}>
-                                This business may have certain guidelines for its customers. Press on this card for more details.
-                            </Text>
-                        </View>
-                    </TouchableOpacity> */}
                 </View>
                 <View style={{ paddingHorizontal: 25, backgroundColor: 'azure' }}>
                     <View style={{ flex: 1, flexDirection: 'row', justifyContent: 'flex-start', alignItems: 'baseline' }}>

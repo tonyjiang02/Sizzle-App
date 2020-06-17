@@ -350,10 +350,9 @@ export const checkIn = (id) => async (dispatch, getState) => {
 export const checkInWithName = (id, name) => async (dispatch, getState) => {
     const user = getState().user.user;
     const token = getState().auth.token;
-    console.log(name);
     if (checkInValid(id, user.history)) {
         try {
-            console.log('checkin valid');
+            console.log('id: ' + id);
             const res = await fetch(`${BASE_URL}/api/business/addPerson/${id}`, {
                 method: 'POST',
                 headers: {

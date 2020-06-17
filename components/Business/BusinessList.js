@@ -15,7 +15,7 @@ export const BusinessList = ({ type, business, navigation }) => {
     }
     else if (type === 'nearest') {
         var nearestb = business.nearestBusinesses;
-        var nearestdb = business.nearestBusinesses;
+        var nearestdb = business.dbNearestBusinesses;
         businessList = nearestb.map((biz, i) => (
             <BusinessCard key={biz._id ? biz_.id : biz.id} business={biz} navigation={navigation} db={nearestdb[i]}></BusinessCard>
         ));

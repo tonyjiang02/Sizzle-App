@@ -5,6 +5,7 @@ import BusinessCard from './BusinessCard';
 import { styles } from '../Styles';
 import Outlines from '../../assets/Outlines';
 import { getFontSize, getIconSize } from '../../utils/fontsizes';
+import {textTruncateBySpaceTwo} from '../../utils/TextTruncate';
 
 export const BusinessHistoryCard = ({ index, date, id, name, address }) => {
     const [dateString, setDateString] = useState("");
@@ -14,13 +15,11 @@ export const BusinessHistoryCard = ({ index, date, id, name, address }) => {
         setDateString(D.getHours() % 12 + ":" + (D.getMinutes() < 10 ? ("0" + D.getMinutes()) : D.getMinutes()) + " " + ampm + " - " + (D.getMonth() + 1) + "/" + D.getDate() + "/" + D.getFullYear());
     }, [null]);
     return (
-        <View style={{ paddingTop: 15 }}>
-            <View style={{ height: (Dimensions.get('window').width / 4), width: Dimensions.get('window').width - 20, alignSelf: 'center', backgroundColor: 'white', flex: 1, flexDirection: "row", borderRadius: 10 }}>
-                <View style={{ paddingLeft: 15, flex: 3.5, alignSelf: 'center' }}>
-                    <Text style={{ fontSize: getFontSize(22), flexWrap: 'wrap', fontFamily: 'AvenirNext-Bold', color: 'black' }}>{name > 25 ? textTruncateBySpace(25, name) : name}</Text>
-                    <Text style={{ fontSize: getFontSize(12), color: 'black', fontFamily: 'Avenir-Light' }}>{address}</Text>
-                    <View style={{ height: 10 }}></View>
-                    <Text style={{ fontFamily: 'Avenir-Light', color: 'black', fontSize: getFontSize(19) }}>{dateString}</Text>
+        <View style={styles.businessCardOuter}>
+            <View style={ styles.businessCardInner }>
+                <View style={{ padding: 15, flex: 3.5, alignSelf: 'center' }}>
+                    <Text style={{ fontSize: getFontSize(20), flexWrap: 'wrap', fontFamily: 'AvenirNext-Bold', color: 'black', flex: 2 }}>{name.length > 54 ? textTruncateBySpaceTwo(54, name) : name}</Text>
+                    <Text style={{ fontFamily: 'Avenir-Light', color: 'black', fontSize: getFontSize(19), flex: 1 }}>{dateString}</Text>
                 </View>
             </View>
         </View>
