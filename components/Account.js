@@ -379,7 +379,7 @@ export const Account = ({ navigation, logout, User, newLocation, updateUser, upd
                         </View>
                     </TouchableOpacity>
 
-                    <View style={{ height: 30, backgroundColor: 'transparent' }}></View>
+                    <View style={{ height: 30, backgroundColor: 'transparent' }}></View> 
 
                     <TouchableOpacity style={{ padding: 10 }} onPress={logout}>
                         <View style={{
