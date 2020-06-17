@@ -19,20 +19,61 @@ const ReservationScrollModal = ({ reservations, reservationLimit, reserve, start
     let oncePerDay = false;
     let oncePerWeek = false;
     let unlimited = false;
-    // const reservationAllowed = (users, limit, dayCounter, time) => {
-    //     /*
-    //     Dont allow if:
-    //     1. Time has already passed
-    //     2. Reservation limit reached
-    //     3. Can't reserve same time twice
-    //     4. Can't reserve on same day twice (if oncePerDay === true)
-    //     5. Can't reserve on same week twice (if oncePerWeek === true)
-    //     */
-    //     //check user limit
-    //     if (users >= limit) {
-    //         return false;
-    //     }
-    // };
+    const checkTime = (now, timeString, day) => {
+        const rampm = timeString.substring(timeString.length-2, timeString.length);
+        const nowDate = new Date(now);
+        const endTime = timeString.split("-")[1];
+        const hour = endTime.split(":")[0];
+        const min = endTime.split(":")[1].substring(0, 2);
+        console.log(hour + ":" + min + " " + rampm);
+        if (day === 0){
+            if (rampm === 'am' && nowDate.getHours() >= 12){
+                return false;
+            }
+            else if (rampm === 'am' && nowDate.getHours() < 12){
+                let hourInt = Number(hour);
+                if (hourInt === 12){
+                    hourInt  = hourInt - 12;
+                }
+                if (nowDate.getHours() > hourInt){
+                    return false;
+                }
+                else if (nowDate.getHours()<hourInt){
+                    return true;
+                }
+                else{
+                    if (nowDate.getMinutes() > Number(min) ){
+                        return false;
+                    }
+                    else {
+                        return true;
+                    }
+                }
+            }
+            else if (rampm === 'pm' && nowDate.getHours() >= 12){
+                let nowHour = nowDate.getHours() - 12;
+                let rhour = Number(hour);
+                if (rhour === 12){
+                    rhour = rhour - 12;
+                }
+                if (nowHour > rhour){
+                    return false;
+                }
+                else if (nowHour < rhour){
+                    return true;
+                }
+                else{
+                    if (nowDate.getMinutes() > Number(min) ){
+                        return false;
+                    }
+                    else {
+                        return true;
+                    }
+                }
+            }
+        }
+        return true;
+    }
     for (let i = 0; i < 7; i++) {
         weekMapRelative.push(weekMap[(startingIndex + i) % 7]);
     }
@@ -46,8 +87,9 @@ const ReservationScrollModal = ({ reservations, reservationLimit, reserve, start
                         <Text style={{ fontFamily: 'AvenirNext-Bold' }}>{s.slot}</Text>
                         {reservationLimit > 0 ? <Text>{s.users} / {reservationLimit}</Text> : <Text>{s.users} reserved</Text>}
                     </View>
+                    {checkTime(Date.now(), s.slot, i) ? 
                     <View>
-                        {!checkReserved(j, weekMapRelative[i]) ?
+                        <View>{!checkReserved(j, weekMapRelative[i]) ?
                             <TouchableOpacity onPress={() => { reserve(j, weekMapRelative[i]); }}>
                                 <View style={{ borderRadius: 20, borderColor: 'transparent', borderWidth: 0.5, backgroundColor: (s.users < reservationLimit) ? '#ff9900' : '#B0AFAF', paddingHorizontal: 30 }}>
                                     <Text style={{ color: 'white', fontWeight: 'bold', padding: 8, fontSize: 12, textAlign: 'center' }}>
@@ -57,12 +99,18 @@ const ReservationScrollModal = ({ reservations, reservationLimit, reserve, start
                                 </View>
                             </TouchableOpacity> :
                             <View style={{ borderRadius: 20, borderColor: 'transparent', borderWidth: 0.5, backgroundColor: 'green', paddingHorizontal: 30 }}>
-                                <Text style={{ color: 'white', fontWeight: 'bold', padding: 8, fontSize: 12 }}>
+                                <Text style={{ color: 'white', fontWeight: 'bold', padding: 8, fontSize: 12, textAlign: 'center' }}>
                                     Reserved
                                 </Text>
                             </View>
-                        }
-                    </View>
+                        }</View>
+                    </View> 
+                    :
+                    <View style={{ borderRadius: 20, borderColor: 'transparent', borderWidth: 0.5, backgroundColor: 'gray', paddingHorizontal: 30 }}>
+                        <Text style={{ color: 'white', fontWeight: 'bold', padding: 8, fontSize: 12, textAlign: 'center' }}>
+                            Past
+                        </Text>
+                    </View> }
                 </View>
             </TouchableWithoutFeedback>
         ));
