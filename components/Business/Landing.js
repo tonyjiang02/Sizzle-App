@@ -56,7 +56,7 @@ export const Landing = ({ getRegisteredBusinesses, getAll, business, newSearch, 
                 console.log("Location permissions not granted.");
                 setLocPermission(false);
                 if (User.location.latitude === 0 && User.location.longitude === 0) {
-                    setNoLocation(true);
+                    setNoLocation(true);        
                     Alert.alert("Please set your location through the Account page or share your location with Sizzle to see nearby locations. ");
                 }
                 else {
@@ -270,7 +270,7 @@ export const Landing = ({ getRegisteredBusinesses, getAll, business, newSearch, 
                                         </View>
                                     </View>
 
-                                    <View style={{ paddingHorizontal: 15 }}>
+                                    {/*<View style={{ paddingHorizontal: 15 }}>
                                         <View style={{ borderBottomColor: 'gainsboro', borderBottomWidth: 0.7 }}></View>
                                     </View>
 
@@ -284,7 +284,7 @@ export const Landing = ({ getRegisteredBusinesses, getAll, business, newSearch, 
                                                 <Text style={{ fontFamily: 'Avenir-Light', fontSize: getFontSize(18) }}>Coming early June 2020. Read FAQ for more details.</Text>
                                             </View>
                                         </View>
-                                    </View>
+                                    </View>*/}
                                 </View>
                             </TouchableWithoutFeedback>
                         </ScrollView>

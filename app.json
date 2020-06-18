@@ -26,6 +26,10 @@
       "bundleIdentifier": "com.jasyzhang.sizzle",
       "buildNumber": "1.0.2",
       "usesAppleSignIn": true,
+      "infoPlist": {
+        "NSCamerUsageDescription": "Sizzle requests access to your camera to check-in to verified locations with QR Codes.",
+        "NSLocationWhenInUseUsageDescription": "Sizzle requests access to your location to provide nearby location results and verify your location upon check-in."
+      },
       "config": {
         "googleSignIn": {
           "reservedClientId": "com.googleusercontent.apps.359251985246-e15i2bibrv8dqo01dj89a6r9e9o5g96h"
