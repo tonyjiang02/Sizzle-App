@@ -147,7 +147,7 @@ const ExampleBusinessPage = () => {
         </View>
 
     return (
-        <View style={styles.landing}>
+        <View style={{flex: 1, backgroundColor: 'azure'}}>
             <Modal
                 propagateSwipe={true}
                 isVisible={liveUpdatesModalVisible}
@@ -178,15 +178,7 @@ const ExampleBusinessPage = () => {
 
             <ScrollView showsVerticalScrollIndicator={false}>
                 <View style={{
-                    borderBottomColor: 'transparent', borderTopColor: 'transparent',
-                    shadowColor: "#000",
-                    shadowOffset: {
-                        width: 0,
-                        height: 7,
-                    },
-                    shadowOpacity: 0.43,
-                    shadowRadius: 9.51,
-                    elevation: 15,
+                    borderBottomColor: 'transparent', borderTopColor: 'transparent'
                 }}>
                     <ImageBackground source={require('../../assets/exampleBPImage.jpg')} style={{ width: '100%', height: 250 }}>
                         <LinearGradient
@@ -204,7 +196,7 @@ const ExampleBusinessPage = () => {
                             <Text style={{ color: 'white', fontSize: getFontSize(30), fontWeight: 'bold', paddingLeft: 20 }}>The Great Market</Text>
                             <View style={{ paddingLeft: 20, paddingTop: 10, flexDirection: 'row', alignItems: 'center' }}>
                                 <Text style={{ borderRadius: 5, borderColor: 'white', color: 'white', borderWidth: 1, padding: 3, fontSize: getFontSize(16) }}>
-                                    1.0mi
+                                    1.2mi
                                 </Text>
                                 <View style={{ flexDirection: 'row', alignItems: 'center', paddingLeft: 20 }}>
                                     <Ionicons name='md-person' color='white' size={getIconSize(19)}/>
@@ -224,8 +216,8 @@ const ExampleBusinessPage = () => {
                     </ImageBackground>
 
                     <View style={{
-                        flexDirection: 'row', alignItems: 'flex-end', backgroundColor: '#EEFBFC',
-                        paddingVertical: 6,
+                        flexDirection: 'row', alignItems: 'flex-end', backgroundColor: 'azure',
+                        paddingTop: 6,
                     }}>
                         <TouchableOpacity onPress={openMapToBusiness} style={{ alignItems: 'center', flex: 1 }}>
                             <MaterialCommunityIcons name='directions' color='royalblue' size={getIconSize(21)} />
@@ -240,44 +232,91 @@ const ExampleBusinessPage = () => {
                             <Text style={{ color: 'black', fontFamily: 'Avenir-Light' }}>Call</Text>
                         </TouchableOpacity>
                     </View>
-                    <TouchableOpacity>
-                        <View style={{ paddingHorizontal: 15, height: 140, backgroundColor: '#FDDFDF', borderLeftWidth: 5, borderLeftColor: 'red' }}>
-                            <View style={{ flexDirection: 'row', paddingTop: 5 }}>
-                                <Ionicons name='md-warning' color='red' size={getIconSize(21)} style={{ paddingRight: 10, paddingLeft: 10 }} />
-                                <Text style={{ color: 'red', fontSize: getFontSize(24), fontFamily: 'Avenir-Heavy', paddingVertical: 5, paddingRight: 10 }}>COVID-19</Text>
-                                <AntDesign name='rightcircle' color='red' size={getIconSize(18)} style={{ paddingTop: 11 }}></AntDesign>
-                            </View>
-                            <Text style={{ fontFamily: 'AvenirNext-Bold', fontSize: getFontSize(17), paddingVertical: 3 }}>
-                                This business has certain guidelines for its customers. Press on this card for more details.
-                            </Text>
-                        </View>
-                    </TouchableOpacity>
                 </View>
 
-                <View style={{ paddingTop: 15, paddingBottom: 12, paddingHorizontal: 8 }}>
+                <View style={{ paddingTop: 15, paddingHorizontal: 8 }}>
                     <View style={styles.businessSquareInner}>
-                        <TouchableOpacity onPress={() => { setLiveUpdatesVisible(true); }} style={{ paddingHorizontal: 15, backgroundColor: '#fdeedc', height: 150 }}>
-                            <View style={{ flex: 2, flexDirection: 'row', justifyContent: 'flex-start', alignItems: 'baseline' }}>
-                                <Text style={{ color: '#ff9900', fontSize: getFontSize(24), fontFamily: 'Avenir-Heavy', paddingTop: 5, paddingRight: 10 }}>Live Updates</Text>
-                                <AntDesign name='rightcircle' color='#ff9900' size={getIconSize(18)} style={{ paddingTop: 12 }}></AntDesign>
-                            </View>
-                            <View style={{ flex: 5 }}>
-                                {updates}
+                        <TouchableOpacity onPress={() => setCovidModalVisible(true)}>
+                            <View style={{ paddingHorizontal: 15, height: 140, backgroundColor: '#FDDFDF', borderRadius: 10 }}>
+                                <View style={{ flexDirection: 'row', paddingTop: 5 }}>
+                                    <Text style={{ color: 'red', fontSize: getFontSize(24), fontFamily: 'Avenir-Heavy', paddingVertical: 5, paddingRight: 10 }}>Guidelines</Text>
+                                    <AntDesign name='rightcircle' color='red' size={getIconSize(18)} style={{ paddingTop: 11 }}></AntDesign>
+                                </View>
+                                <Text style={{ fontFamily: 'AvenirNext-Bold', fontSize: getFontSize(17), paddingVertical: 3 }}>
+                                    This business has certain guidelines for its customers. Press on this card for more details.
+                                </Text>
                             </View>
                         </TouchableOpacity>
                     </View>
                 </View>
 
-                <View style={{ paddingBottom: 12, paddingHorizontal: 8 }}>
+                <View style={{ paddingTop: 15, paddingHorizontal: 8 }}>
                     <View style={styles.businessSquareInner}>
-                        <View style={{ paddingHorizontal: 15, backgroundColor: '#E1FDE2', height: 165 }}>
-                            <TouchableOpacity onPress={() => { setReservationsVisible(true); }} style={{ flex: 1, flexDirection: 'row', justifyContent: 'flex-start' }}>
+                        <TouchableOpacity onPress={() => { setLiveUpdatesVisible(true); }} style={{ paddingHorizontal: 15, backgroundColor: '#fdeedc', borderRadius: 10 }}>
+                            <View style={{ flex: 2, flexDirection: 'row', justifyContent: 'flex-start', alignItems: 'baseline' }}>
+                                <Text style={{ color: '#ff9900', fontSize: getFontSize(24), fontFamily: 'Avenir-Heavy', paddingTop: 5, paddingRight: 10 }}>Live Updates</Text>
+                                <AntDesign name='rightcircle' color='#ff9900' size={getIconSize(18)} style={{ paddingTop: 12 }}></AntDesign>
+                            </View>
+                            <View style={{ flex: 5 }}>
+                                <LiveUpdate title={'Out of Stock'} content={'Eggplants, Organic Cherries, Grade AAA Eggs'} time={new Date(2020, 5, 17, 21, 25, 44, 2)} key={1}></LiveUpdate>
+                            </View>
+                        </TouchableOpacity>
+                    </View>
+                </View>
+
+                <View style={{ paddingVertical: 15, paddingHorizontal: 8 }}>
+                    <View style={styles.businessSquareInner}>
+                        <View style={{ paddingHorizontal: 15, backgroundColor: '#E1FDE2', borderRadius: 10 }}>
+                            <TouchableOpacity style={{ flex: 1, flexDirection: 'row', justifyContent: 'flex-start' }}>
                                 <Text style={{ color: 'green', fontSize: getFontSize(24), fontFamily: 'Avenir-Heavy', paddingTop: 5, paddingRight: 10 }}>Reservations</Text>
                                 <AntDesign name='rightcircle' color='green' size={getIconSize(18)} style={{ paddingTop: 11 }}></AntDesign>
                             </TouchableOpacity>
                             <View style={{ flex: 4 }}>
+                                <View style={{paddingBottom: 10}}>
                                 <View>
-                                    <ReservationScroll reservationLimit={50}></ReservationScroll>
+                                    <Text style={{ fontFamily: 'AvenirNext-Bold', fontSize: 24, color: 'darkslategrey', paddingTop: 5 }}>Today</Text>
+                                    <ScrollView horizontal={true} showsHorizontalScrollIndicator={false} style={{ paddingTop: 5 }}>
+                                        <View index={1} style={{ paddingRight: 10, flexDirection: 'column' }}>
+                                            <View style={{ alignItems: 'center', paddingBottom: 5 }}>
+                                                <Text style={{ fontFamily: 'AvenirNext-Bold' }}>8:00 am-10:00 am</Text>
+                                                <Text>35/50</Text>
+                                            </View>
+                                            <TouchableOpacity>
+                                                <View style={{ borderRadius: 20, borderColor: 'transparent', borderWidth: 0.5, backgroundColor: '#ff9900', paddingHorizontal: 30 }}>
+                                                    <Text style={{ color: 'white', fontWeight: 'bold', padding: 8, fontSize: 12, textAlign: 'center' }}>
+                                                        Reserve
+                                                    </Text>
+                                                </View>
+                                            </TouchableOpacity>
+                                        </View>
+                                        <View index={1} style={{ paddingRight: 10, flexDirection: 'column' }}>
+                                            <View style={{ alignItems: 'center', paddingBottom: 5 }}>
+                                                <Text style={{ fontFamily: 'AvenirNext-Bold' }}>10:00 am-12:00 pm</Text>
+                                                <Text>16/50</Text>
+                                            </View>
+                                            <TouchableOpacity>
+                                                <View style={{ borderRadius: 20, borderColor: 'transparent', borderWidth: 0.5, backgroundColor: '#ff9900', paddingHorizontal: 30 }}>
+                                                    <Text style={{ color: 'white', fontWeight: 'bold', padding: 8, fontSize: 12, textAlign: 'center' }}>
+                                                        Reserve
+                                                    </Text>
+                                                </View>
+                                            </TouchableOpacity>
+                                        </View>
+                                        <View index={1} style={{ paddingRight: 10, flexDirection: 'column' }}>
+                                            <View style={{ alignItems: 'center', paddingBottom: 5 }}>
+                                                <Text style={{ fontFamily: 'AvenirNext-Bold' }}>12:00 pm-2:00 pm</Text>
+                                                <Text>49/50</Text>
+                                            </View>
+                                            <TouchableOpacity>
+                                                <View style={{ borderRadius: 20, borderColor: 'transparent', borderWidth: 0.5, backgroundColor: '#ff9900', paddingHorizontal: 30 }}>
+                                                    <Text style={{ color: 'white', fontWeight: 'bold', padding: 8, fontSize: 12, textAlign: 'center' }}>
+                                                        Reserve
+                                                    </Text>
+                                                </View>
+                                            </TouchableOpacity>
+                                        </View>
+                                    </ScrollView>
+                                </View>
                                 </View>
                             </View>
                         </View>
@@ -309,7 +348,7 @@ const ExampleBusinessPage = () => {
                         </MapView>
                         <View style={{ flexDirection: 'row' }}>
                             <View style={{ flexDirection: 'column', flex: 1, paddingLeft: 15, paddingVertical: 20 }}>
-                                <Text style={{ fontFamily: 'Avenir-Light', fontSize: getFontSize(17), fontWeight: 'bold' }}>Distance: 1.0mi </Text>
+                                <Text style={{ fontFamily: 'Avenir-Light', fontSize: getFontSize(17), fontWeight: 'bold' }}>Distance: 1.2mi </Text>
                             </View>
                             <View style={{ flex: 1.2, justifyContent: 'center', alignItems: 'center' }}>
                                 <TouchableOpacity onPress={openMapToBusiness}>

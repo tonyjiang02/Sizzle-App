@@ -17,7 +17,7 @@ FUTURE INTEGRATIONS:
 
 import React, { useState, useEffect } from 'react';
 import { connect } from 'react-redux';
-import { View, ScrollView, Image, Text, ImageBackground, TouchableOpacity, TouchableHighlight, TouchableWithoutFeedback, Alert, RefreshControl } from 'react-native';
+import { View, ScrollView, Image, Text, ImageBackground, TouchableOpacity, TouchableHighlight, TouchableWithoutFeedback, Alert, RefreshControl, Dimensions } from 'react-native';
 import Modal from 'react-native-modal';
 import { styles } from '../Styles';
 import { Button } from 'react-native-elements';
@@ -29,6 +29,7 @@ import ReservationScroll from './ReservationScroll';
 import ReservationScrollModal from './ReservationScrollModal';
 import { Linking } from 'expo';
 import { straightLineDistance, kmToMi, getCoords } from '../../utils/businessUtils';
+import { textTruncateBySpaceTwo} from '../../utils/TextTruncate';
 import MapView, { Marker } from 'react-native-maps';
 import openMap from 'react-native-open-maps';
 import { getFontSize, getIconSize } from '../../utils/fontsizes';
@@ -310,7 +311,7 @@ const DbBusinessPage = ({ route: { params: { db } }, checkIn, User, updateBusine
     }
 
     return (
-        <View style={styles.landing}>
+        <View style={{flex: 1, backgroundColor: 'azure'}}>
             <Modal
                 propagateSwipe={true}
                 isVisible={liveUpdatesModalVisible}
@@ -354,7 +355,7 @@ const DbBusinessPage = ({ route: { params: { db } }, checkIn, User, updateBusine
                     <TouchableOpacity onPress={() => { setCovidModalVisible(false); }}>
                         <View style={{ height: 10 }}></View>
                         <AntDesign name='leftcircle' color='red' size={getIconSize(19)} style={{ alignSelf: 'center' }}></AntDesign>
-                        <Text style={{ color: 'red', fontSize: getFontSize(24), fontFamily: 'Avenir-Heavy', paddingBottom: 10 }}>Covid-19 Information</Text>
+                        <Text style={{ color: 'red', fontSize: getFontSize(24), fontFamily: 'Avenir-Heavy', paddingBottom: 10 }}>Guidelines</Text>
                     </TouchableOpacity>
                     <ScrollView showsVerticalScrollIndicator={false}>
                         <TouchableWithoutFeedback>
@@ -396,17 +397,9 @@ const DbBusinessPage = ({ route: { params: { db } }, checkIn, User, updateBusine
             <ScrollView showsVerticalScrollIndicator={false}>
                 {/*<RefreshControl refreshing={refreshing} onRefresh={refresh} />*/}
                 <View style={{
-                    borderBottomColor: 'transparent', borderTopColor: 'transparent',
-                    shadowColor: "#000",
-                    shadowOffset: {
-                        width: 0,
-                        height: 7,
-                    },
-                    shadowOpacity: 0.43,
-                    shadowRadius: 9.51,
-                    elevation: 15,
+                    borderBottomColor: 'transparent', borderTopColor: 'transparent'
                 }}>
-                    <ImageBackground source={coverImageUrl ? { uri: coverImageUrl } : require('../../assets/backgroundhue.png')} style={{ width: '100%', height: 250 }}>
+                    <ImageBackground source={coverImageUrl ? { uri: coverImageUrl } : require('../../assets/backgroundhue.png')} style={{ width: '100%', height: Dimensions.get('window').height / 3.3 }}>
                         <LinearGradient
                             colors={['transparent', 'rgba(0,0,0,0.8)']}
                             style={{
@@ -442,8 +435,8 @@ const DbBusinessPage = ({ route: { params: { db } }, checkIn, User, updateBusine
                     </ImageBackground>
 
                     <View style={{
-                        flexDirection: 'row', alignItems: 'flex-end', backgroundColor: '#EEFBFC',
-                        paddingVertical: 6,
+                        flexDirection: 'row', alignItems: 'flex-end', backgroundColor: 'azure',
+                        paddingTop: 6,
                     }}>
                         <TouchableOpacity onPress={openMapToBusiness} style={{ alignItems: 'center', flex: 1 }}>
                             <MaterialCommunityIcons name='directions' color='royalblue' size={getIconSize(21)} />
@@ -470,44 +463,48 @@ const DbBusinessPage = ({ route: { params: { db } }, checkIn, User, updateBusine
                             <Text style={{ color: 'black', fontFamily: 'Avenir-Light' }}>Call</Text>
                         </TouchableOpacity>
                     </View>
-                    {(covid19Information != '') && <TouchableOpacity onPress={() => setCovidModalVisible(true)}>
-                        <View style={{ paddingHorizontal: 15, height: 140, backgroundColor: '#FDDFDF', borderLeftWidth: 5, borderLeftColor: 'red' }}>
-                            <View style={{ flexDirection: 'row', paddingTop: 5 }}>
-                                <Ionicons name='md-warning' color='red' size={getIconSize(21)} style={{ paddingRight: 10, paddingLeft: 10 }} />
-                                <Text style={{ color: 'red', fontSize: getFontSize(24), fontFamily: 'Avenir-Heavy', paddingVertical: 5, paddingRight: 10 }}>COVID-19</Text>
-                                <AntDesign name='rightcircle' color='red' size={getIconSize(18)} style={{ paddingTop: 11 }}></AntDesign>
-                            </View>
-                            <Text style={{ fontFamily: 'AvenirNext-Bold', fontSize: getFontSize(17), paddingVertical: 3 }}>
-                                This business has certain guidelines for its customers. Press on this card for more details.
-                            </Text>
-                        </View>
-                    </TouchableOpacity>}
-
                 </View>
 
-                <View style={{ paddingTop: 15, paddingBottom: 12, paddingHorizontal: 8 }}>
+                {(covid19Information != '') && 
+                    <View style={{ paddingTop: 15, paddingHorizontal: 8 }}>
+                        <View style={styles.businessSquareInner}>
+                            <TouchableOpacity onPress={() => setCovidModalVisible(true)}>
+                                <View style={{ paddingHorizontal: 15, height: 140, backgroundColor: '#FDDFDF', borderRadius: 10 }}>
+                                    <View style={{ flexDirection: 'row', paddingTop: 5 }}>
+                                        <Text style={{ color: 'red', fontSize: getFontSize(24), fontFamily: 'Avenir-Heavy', paddingVertical: 5, paddingRight: 10 }}>Guidelines</Text>
+                                        <AntDesign name='rightcircle' color='red' size={getIconSize(18)} style={{ paddingTop: 11 }}></AntDesign>
+                                    </View>
+                                    <Text style={{ fontFamily: 'AvenirNext-Bold', fontSize: getFontSize(17), paddingVertical: 3 }}>
+                                        This business has certain guidelines for its customers. Press on this card for more details.
+                                    </Text>
+                                </View>
+                            </TouchableOpacity>
+                        </View>
+                    </View>}
+
+                <View style={{ paddingTop: 15, paddingHorizontal: 8 }}>
                     <View style={styles.businessSquareInner}>
-                        <TouchableOpacity onPress={() => { setLiveUpdatesVisible(true); }} style={{ paddingHorizontal: 15, backgroundColor: '#fdeedc', height: 150 }}>
+                        <TouchableOpacity onPress={() => { setLiveUpdatesVisible(true); }} style={{ paddingHorizontal: 15, backgroundColor: '#fdeedc', borderRadius: 10 }}>
                             <View style={{ flex: 2, flexDirection: 'row', justifyContent: 'flex-start', alignItems: 'baseline' }}>
                                 <Text style={{ color: '#ff9900', fontSize: getFontSize(24), fontFamily: 'Avenir-Heavy', paddingTop: 5, paddingRight: 10 }}>Live Updates</Text>
                                 <AntDesign name='rightcircle' color='#ff9900' size={getIconSize(18)} style={{ paddingTop: 12 }}></AntDesign>
                             </View>
                             <View style={{ flex: 5 }}>
-                                {(announcements[announcements.length - 1]) && <LiveUpdate title={announcements[announcements.length - 1].title ? announcements[announcements.length - 1].title : ""} content={announcements[announcements.length - 1].content ? announcements[announcements.length - 1].content : ""} time={announcements[announcements.length - 1].date ? announcements[announcements.length - 1].date : 0}></LiveUpdate>}
+                                {(announcements[announcements.length - 1]) && <LiveUpdate title={announcements[announcements.length - 1].title ? textTruncateBySpaceTwo(23, announcements[announcements.length - 1].title) : ""} content={announcements[announcements.length - 1].content ? textTruncateBySpaceTwo(130, announcements[announcements.length - 1].content) : ""} time={announcements[announcements.length - 1].date ? announcements[announcements.length - 1].date : 0}></LiveUpdate>}
                             </View>
                         </TouchableOpacity>
                     </View>
                 </View>
 
-                <View style={{ paddingBottom: 12, paddingHorizontal: 8 }}>
+                <View style={{ paddingVertical: 15, paddingHorizontal: 8 }}>
                     <View style={styles.businessSquareInner}>
-                        <View style={{ paddingHorizontal: 15, backgroundColor: '#E1FDE2', height: 165 }}>
+                        <View style={{ paddingHorizontal: 15, backgroundColor: '#E1FDE2', borderRadius: 10 }}>
                             <TouchableOpacity onPress={() => { setReservationsVisible(true); }} style={{ flex: 1, flexDirection: 'row', justifyContent: 'flex-start' }}>
                                 <Text style={{ color: 'green', fontSize: getFontSize(24), fontFamily: 'Avenir-Heavy', paddingTop: 5, paddingRight: 10 }}>Reservations</Text>
                                 <AntDesign name='rightcircle' color='green' size={getIconSize(18)} style={{ paddingTop: 11 }}></AntDesign>
                             </TouchableOpacity>
                             <View style={{ flex: 4 }}>
-                                <View>
+                                <View style={{paddingBottom: 10}}>
                                     <ReservationScroll day={currentDay} reserve={reserveSpot} reservations={reservations[currentDay.toLowerCase()]} checkReserved={checkReserved} reservationLimit={reservationLimit} style={{ alignItems: 'flex-start' }}></ReservationScroll>
                                 </View>
                             </View>
@@ -534,36 +531,37 @@ const DbBusinessPage = ({ route: { params: { db } }, checkIn, User, updateBusine
                             <Text style={{ paddingLeft: 10, fontFamily: 'Avenir-Light', fontSize: getFontSize(17), fontWeight: 'bold' }}>{website}</Text>
                         </TouchableOpacity>
                     </View>
-
-                    <View style={styles.mapOuterStyle}>
-                        {!coordsLoading ?
-                            <MapView style={styles.mapStyle} showsUserLocation={true} initialRegion={{
-                                latitude: (businessLatitude + User.location.latitude) / 2,
-                                longitude: (businessLongitude + User.location.longitude) / 2,
-                                latitudeDelta: Math.abs(businessLatitude - User.location.latitude) * 1.75,
-                                longitudeDelta: Math.abs(businessLongitude - User.location.longitude) * 1.75,
-                            }}>
-                                {console.log('coordsLoading turned false')}
-                                <Marker
-                                    coordinate={{ latitude: businessLatitude, longitude: businessLongitude }}
-                                    title={name}
-                                />
-                            </MapView>
-                            :
-                            <View style={{ height: 200, width: 150, justifyContent: 'center' }}><Text style={{ textAlign: 'center', fontSize: getFontSize(30) }}>Loading Map...</Text></View>}
-                        <View style={{ paddingHorizontal: 15, alignSelf: 'flex-start' }}>
-                            <Text style={{ fontFamily: 'Avenir-Light', fontSize: getFontSize(17), fontWeight: 'bold', paddingTop: 10 }}>Address: {address} </Text>
-                        </View>
-                        <View style={{ flexDirection: 'row' }}>
-                            <View style={{ flexDirection: 'column', flex: 1, paddingLeft: 15, paddingVertical: 20 }}>
-                                <Text style={{ fontFamily: 'Avenir-Light', fontSize: getFontSize(17), fontWeight: 'bold' }}>Distance: {distance} </Text>
+                    <View style={{shadowColor: "#000", shadowOffset: {width: 0,height: 2},shadowOpacity: 0.25,shadowRadius: 3.84,elevation: 5}}>
+                        <View style={styles.mapOuterStyle}>
+                            {!coordsLoading ?
+                                <MapView style={styles.mapStyle} showsUserLocation={true} initialRegion={{
+                                    latitude: (businessLatitude + User.location.latitude) / 2,
+                                    longitude: (businessLongitude + User.location.longitude) / 2,
+                                    latitudeDelta: Math.abs(businessLatitude - User.location.latitude) * 1.75,
+                                    longitudeDelta: Math.abs(businessLongitude - User.location.longitude) * 1.75,
+                                }}>
+                                    {console.log('coordsLoading turned false')}
+                                    <Marker
+                                        coordinate={{ latitude: businessLatitude, longitude: businessLongitude }}
+                                        title={name}
+                                    />
+                                </MapView>
+                                :
+                                <View style={{ height: 200, width: 150, justifyContent: 'center', alignSelf: 'center' }}><Text style={{ textAlign: 'center', fontSize: getFontSize(30) }}>Loading Map...</Text></View>}
+                            <View style={{ paddingHorizontal: 15, alignSelf: 'flex-start' }}>
+                                <Text style={{ fontFamily: 'Avenir-Light', fontSize: getFontSize(17), fontWeight: 'bold', paddingTop: 10 }}>Address: {address} </Text>
                             </View>
-                            <View style={{ flex: 1.2, justifyContent: 'center', alignItems: 'center' }}>
-                                <TouchableOpacity onPress={openMapToBusiness}>
-                                    <View style={{ borderWidth: 1, borderRadius: 5, borderColor: '#ff9900', backgroundColor: '#ff9900', paddingVertical: 12, paddingHorizontal: 8 }}>
-                                        <Text style={{ fontFamily: 'Avenir-Light', fontSize: getFontSize(17), fontWeight: 'bold', color: 'white' }}>Take Me There</Text>
-                                    </View>
-                                </TouchableOpacity>
+                            <View style={{ flexDirection: 'row' }}>
+                                <View style={{ flexDirection: 'column', flex: 1, paddingLeft: 15, paddingVertical: 20 }}>
+                                    <Text style={{ fontFamily: 'Avenir-Light', fontSize: getFontSize(17), fontWeight: 'bold' }}>Distance: {distance} </Text>
+                                </View>
+                                <View style={{ flex: 1.2, justifyContent: 'center', alignItems: 'center' }}>
+                                    <TouchableOpacity onPress={openMapToBusiness}>
+                                        <View style={{ borderWidth: 1, borderRadius: 5, borderColor: '#ff9900', backgroundColor: '#ff9900', paddingVertical: 12, paddingHorizontal: 8 }}>
+                                            <Text style={{ fontFamily: 'Avenir-Light', fontSize: getFontSize(17), fontWeight: 'bold', color: 'white' }}>Take Me There</Text>
+                                        </View>
+                                    </TouchableOpacity>
+                                </View>
                             </View>
                         </View>
                     </View>

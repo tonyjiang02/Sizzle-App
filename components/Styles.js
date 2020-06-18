@@ -73,6 +73,7 @@ const styles = StyleSheet.create({
     infoOuterBlock: {
         paddingBottom: 15,
         backgroundColor: 'azure',
+        borderRadius: 5
     },
     infoInnerBlock: {
         flexDirection: 'row',
@@ -86,7 +87,8 @@ const styles = StyleSheet.create({
         shadowOpacity: 0.22,
         shadowRadius: 2.22,
         elevation: 3,
-        alignItems: 'center'
+        alignItems: 'center',
+        borderRadius: 5
     },
     liveUpdatesModalView: {
         marginHorizontal: 10,
@@ -183,18 +185,12 @@ const styles = StyleSheet.create({
     mapStyle: {
         width: '100%',
         height: 200,
+        overflow: 'hidden'
     },
     mapOuterStyle: {
         backgroundColor: 'white',
-        shadowColor: "#000",
-        shadowOffset: {
-            width: 0,
-            height: 1,
-        },
-        shadowOpacity: 0.22,
-        shadowRadius: 2.22,
-        elevation: 3,
-        alignItems: 'center'
+        borderRadius: 10,
+        overflow: 'hidden'
     }
 });
 
