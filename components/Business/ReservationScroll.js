@@ -104,7 +104,6 @@ const ReservationScroll = ({ reservations, reservationLimit, reserve, day, check
                 <View style={{ width: 20 }}></View>
             </ScrollView>
         </View>
-
     );
 };
 

@@ -161,11 +161,11 @@ export const Account = ({ navigation, logout, User, newLocation, updateUser, upd
                                     <View style={{height: 5}}></View>
                                     <Text style={{ color: '#323131', fontSize: getFontSize(14), fontFamily: 'Avenir' }}>Checking in allows your community to get a more accurate live 
                                     population count, which can then help them with their decision of visiting a location. Sizzle also keeps your check-in history, which you can currently 
-                                    personally review. In the near future, checking in at every location you visit will also allow full functionality (and provide the most accurate results) 
+                                    personally review. {/*In the near future, checking in at every location you visit will also allow full functionality (and provide the most accurate results) 
                                     for the Voluntary Contact Tracing Program, which can then notify you of possible COVID-19 or illness exposure. Read "What is Voluntary Contact Tracing?" for 
-                                    more details. </Text>
+                                    more details. */}</Text>
                                 </View>
-                                <View style={{padding: 10}}>
+                                {/*<View style={{padding: 10}}>
                                     <Text style={{ color: '#323131', fontSize: getFontSize(18), fontFamily: 'AvenirNext-Bold' }}>What is Voluntary Contact Tracing?</Text>
                                     <View style={{height: 5}}></View>
                                     <Text style={{ color: '#323131', fontSize: getFontSize(14), fontFamily: 'Avenir' }}>The Sizzle Team is currently working on a Voluntary Contact Tracing
@@ -173,7 +173,7 @@ export const Account = ({ navigation, logout, User, newLocation, updateUser, upd
                                     in at the same location at the same time with a warning of potential COVID-19 exposure and an estimated percentage of contraction. Please be advised that
                                     Sizzle is not working as a health organization; we are providing you with information that we hope you can find useful. For medical issues and inquiries, 
                                     please contact your local medical provider.</Text>
-                                </View>
+                                </View>*/}
                                 <View style={{padding: 10}}>
                                     <Text style={{ color: '#323131', fontSize: getFontSize(18), fontFamily: 'AvenirNext-Bold', textAlign: 'center' }}>For any further questions, 
                                     please email support@szzl.app</Text>

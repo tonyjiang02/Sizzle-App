@@ -219,7 +219,7 @@ const UnverifiedBusinessPage = ({ route: { params: { business, db } }, checkIn, 
     }
 
     return (
-        <View style={styles.landing}>
+        <View style={{flex: 1, backgroundColor: 'azure'}}>
             <ScrollView showsVerticalScrollIndicator={false}>
                 <View style={{
                     borderBottomColor: 'transparent', borderTopColor: 'transparent',
@@ -258,7 +258,7 @@ const UnverifiedBusinessPage = ({ route: { params: { business, db } }, checkIn, 
                     </View>
 
                     <View style={{
-                        flexDirection: 'row', alignItems: 'flex-end', backgroundColor: '#EEFBFC',
+                        flexDirection: 'row', alignItems: 'flex-end', backgroundColor: 'azure',
                         paddingVertical: 6,
                     }}>
                         <TouchableOpacity onPress={openMapToBusiness} style={{ alignItems: 'center', flex: 1 }}>
@@ -299,32 +299,33 @@ const UnverifiedBusinessPage = ({ route: { params: { business, db } }, checkIn, 
                             <Text style={{ paddingLeft: 10, fontFamily: 'Avenir-Light', fontSize: getFontSize(17), fontWeight: 'bold' }}>{addData.websiteURL.length > 30 ? textTruncateBySpaceTwo(30, addData.websiteURL) : addData.websiteURL}</Text>
                         </TouchableOpacity>
                     </View>
-
-                    <View style={styles.mapOuterStyle}>
-                        <MapView style={styles.mapStyle} showsUserLocation={true} initialRegion={{
-                            latitude: (location.lat + User.location.latitude) / 2,
-                            longitude: (location.lng + User.location.longitude) / 2,
-                            latitudeDelta: Math.abs(location.lat - User.location.latitude) * 1.75,
-                            longitudeDelta: Math.abs(location.lng - User.location.longitude) * 1.75,
-                        }}>
-                            <Marker
-                                coordinate={{ latitude: parseFloat(location.lat), longitude: parseFloat(location.lng) }}
-                                title={name}
-                            />
-                        </MapView>
-                        <View style={{ paddingHorizontal: 15, alignSelf: 'flex-start' }}>
-                            <Text style={{ fontFamily: 'Avenir-Light', fontSize: getFontSize(17), fontWeight: 'bold', paddingTop: 10 }}>Address: {vicinity} </Text>
-                        </View>
-                        <View style={{ flexDirection: 'row' }}>
-                            <View style={{ flexDirection: 'column', flex: 1, paddingLeft: 15, paddingVertical: 20 }}>
-                                <Text style={{ fontFamily: 'Avenir-Light', fontSize: getFontSize(17), fontWeight: 'bold' }}>Distance: {lineDistance} </Text>
+                    <View style={{shadowColor: "#000", shadowOffset: {width: 0,height: 2},shadowOpacity: 0.25,shadowRadius: 3.84,elevation: 5}}>
+                        <View style={styles.mapOuterStyle}>
+                            <MapView style={styles.mapStyle} showsUserLocation={true} initialRegion={{
+                                latitude: (location.lat + User.location.latitude) / 2,
+                                longitude: (location.lng + User.location.longitude) / 2,
+                                latitudeDelta: Math.abs(location.lat - User.location.latitude) * 1.75,
+                                longitudeDelta: Math.abs(location.lng - User.location.longitude) * 1.75,
+                            }}>
+                                <Marker
+                                    coordinate={{ latitude: parseFloat(location.lat), longitude: parseFloat(location.lng) }}
+                                    title={name}
+                                />
+                            </MapView>
+                            <View style={{ paddingHorizontal: 15, alignSelf: 'flex-start' }}>
+                                <Text style={{ fontFamily: 'Avenir-Light', fontSize: getFontSize(17), fontWeight: 'bold', paddingTop: 10 }}>Address: {vicinity} </Text>
                             </View>
-                            <View style={{ flex: 1.2, justifyContent: 'center', alignItems: 'center' }}>
-                                <TouchableOpacity onPress={openMapToBusiness}>
-                                    <View style={{ borderWidth: 1, borderRadius: 5, borderColor: '#ff9900', backgroundColor: '#ff9900', paddingVertical: 12, paddingHorizontal: 8 }}>
-                                        <Text style={{ fontFamily: 'Avenir-Light', fontSize: getFontSize(17), fontWeight: 'bold', color: 'white' }}>Take Me There</Text>
-                                    </View>
-                                </TouchableOpacity>
+                            <View style={{ flexDirection: 'row' }}>
+                                <View style={{ flexDirection: 'column', flex: 1, paddingLeft: 15, paddingVertical: 20 }}>
+                                    <Text style={{ fontFamily: 'Avenir-Light', fontSize: getFontSize(17), fontWeight: 'bold' }}>Distance: {lineDistance} </Text>
+                                </View>
+                                <View style={{ flex: 1.2, justifyContent: 'center', alignItems: 'center' }}>
+                                    <TouchableOpacity onPress={openMapToBusiness}>
+                                        <View style={{ borderWidth: 1, borderRadius: 5, borderColor: '#ff9900', backgroundColor: '#ff9900', paddingVertical: 12, paddingHorizontal: 8 }}>
+                                            <Text style={{ fontFamily: 'Avenir-Light', fontSize: getFontSize(17), fontWeight: 'bold', color: 'white' }}>Take Me There</Text>
+                                        </View>
+                                    </TouchableOpacity>
+                                </View>
                             </View>
                         </View>
                     </View>
@@ -344,6 +345,7 @@ const UnverifiedBusinessPage = ({ route: { params: { business, db } }, checkIn, 
                         </View>
                     </View>
                 </View>
+                <View style={{height: 100}}></View>
             </ScrollView>
         </View>
     );
