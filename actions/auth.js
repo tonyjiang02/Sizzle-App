@@ -80,7 +80,7 @@ export const signupGoogle = (id) => async (dispatch) => {
         const json = await res.json();
         dispatch({
             type: SIGNUP_SUCCESS,
-            payload: json.token
+            payload: json
         });
     } catch (err) {
         dispatch(createError(err.msg, 'error'));

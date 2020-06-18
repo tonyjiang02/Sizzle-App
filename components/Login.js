@@ -6,8 +6,6 @@ import { styles, input } from './Styles';
 import { LinearGradient } from 'expo-linear-gradient';
 import { Dimensions } from 'react-native';
 import * as Google from 'expo-google-app-auth';
-import * as GoogleSignIn from 'expo-google-sign-in';
-import Constants from 'expo-constants';
 import * as Font from 'expo-font';
 
 const Login = ({ login, auth1, business, navigation, loginGoogle, createError }) => {

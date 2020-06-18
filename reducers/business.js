@@ -109,21 +109,25 @@ export default function (state = initialState, action) {
             console.log("update business dispatched");
             const indexSearch = state.dbSearchBusinesses.findIndex(b => b._id === payload._id);
             const indexLanding = state.dbBusinesses.findIndex(b => b._id === payload._id);
+            const indexNearest = state.dbNearestBusinesses.findIndex(b => b._id === payload._id);
             let searchUpdate = state.dbSearchBusinesses;
             let landingUpdate = state.dbBusinesses;
+            let nearestUpdate = state.dbNearestBusinesses;
             if (indexSearch >= 0) {
                 searchUpdate[indexSearch] = payload;
             }
             if (indexLanding >= 0) {
                 landingUpdate[indexLanding] = payload;
             }
-            console.log(indexSearch);
-            console.log(indexLanding);
+            if (nearestUpdate >= 0) {
+                nearestUpdate[indexNearest] = payload;
+            }
             return {
                 ...state,
                 dbBusiness: payload,
                 dbSearchBusinesses: [...searchUpdate],
-                dbBusinesses: [...landingUpdate]
+                dbBusinesses: [...landingUpdate],
+                dbNearestBusinesses: [...nearestUpdate]
             };
         case LOG_OUT:
             return {
