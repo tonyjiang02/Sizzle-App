@@ -7,7 +7,7 @@ import { LinearGradient } from 'expo-linear-gradient';
 import { Dimensions } from 'react-native';
 import * as Google from 'expo-google-app-auth';
 import * as Font from 'expo-font';
-
+import * as AppleAuthentication from 'expo-apple-authentication';
 const Login = ({ login, auth1, business, navigation, loginGoogle, createError }) => {
     const [fields, setFields] = useState({
         email: '',
@@ -81,6 +81,29 @@ const Login = ({ login, auth1, business, navigation, loginGoogle, createError })
                                 <View style={{ width: 24 }}></View>
                                 <Image source={require('../assets/logos/googletext.png')} style={{ height: 40, width: 160 }}></Image>
                             </TouchableOpacity>
+                            <AppleAuthentication.AppleAuthenticationButton
+                                buttonType={AppleAuthentication.AppleAuthenticationButtonType.SIGN_IN}
+                                buttonStyle={AppleAuthentication.AppleAuthenticationButtonStyle.BLACK}
+                                cornerRadius={5}
+                                style={{ width: 200, height: 44 }}
+                                onPress={async () => {
+                                    try {
+                                        const credential = await AppleAuthentication.signInAsync({
+                                            requestedScopes: [
+                                                AppleAuthentication.AppleAuthenticationScope.FULL_NAME,
+                                                AppleAuthentication.AppleAuthenticationScope.EMAIL,
+                                            ],
+                                        });
+                                        // signed in
+                                    } catch (e) {
+                                        if (e.code === 'ERR_CANCELED') {
+                                            // handle that the user canceled the sign-in flow
+                                        } else {
+                                            // handle other errors
+                                        }
+                                    }
+                                }}
+                            />
                             <View style={{ height: 115, borderBottomColor: 'gainsboro', borderBottomWidth: 0.7 }}></View>
                             <View style={{ height: 20 }}></View>
                             <View style={{ flexDirection: 'row', justifyContent: 'center', alignItems: 'center' }}>

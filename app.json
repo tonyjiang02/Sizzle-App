@@ -25,6 +25,7 @@
       "supportsTablet": false,
       "bundleIdentifier": "com.jasyzhang.sizzle",
       "buildNumber": "1.0.2",
+      "usesAppleSignIn": true,
       "config": {
         "googleSignIn": {
           "reservedClientId": "com.googleusercontent.apps.359251985246-e15i2bibrv8dqo01dj89a6r9e9o5g96h"

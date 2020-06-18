@@ -36,7 +36,6 @@ import { createError } from '../../actions/auth';
 import { updateUser, updateUserWithoutReturn } from '../../actions/user';
 import { updateBusinessReservations } from '../../actions/business';
 import * as Location from 'expo-location';
-
 const BusinessPage = ({ route: { params: { business, db } }, checkIn, auth, updateUser, User, getBusiness, updateBusinessReservations, dbBusiness, updateUserWithoutReturn, createError }) => {
     //destructuring
     let { vicinity, geometry } = business;
