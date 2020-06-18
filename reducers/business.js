@@ -119,7 +119,7 @@ export default function (state = initialState, action) {
             if (indexLanding >= 0) {
                 landingUpdate[indexLanding] = payload;
             }
-            if (nearestUpdate >= 0) {
+            if (indexNearest >= 0) {
                 nearestUpdate[indexNearest] = payload;
             }
             return {
