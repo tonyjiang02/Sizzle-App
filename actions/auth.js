@@ -61,6 +61,31 @@ export const loginGoogle = (id) => async (dispatch) => {
         dispatch(createError(err.msg, 'error'));
     }
 };
+export const loginApple = (credential) => async dispatch => {
+    try {
+        console.log(credential.authorizationCode);
+        const res = await fetch(`${BASE_URL}/api/users/appleTemp`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+                identityToken: credential.identityToken
+            })
+        });
+        if (!res.ok) {
+            const err = await res.json();
+            throw err;
+        }
+        const json = await res.json();
+        dispatch({
+            type: LOGIN_SUCCESS,
+            payload: json
+        });
+    } catch (err) {
+        dispatch(createError(err.msg, 'error'));
+    }
+};
 export const signupGoogle = (id) => async (dispatch) => {
     try {
         console.log("Signing up with with google");

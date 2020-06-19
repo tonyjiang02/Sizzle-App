@@ -1,14 +1,14 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { Text, TextInput, View, StyleSheet, KeyboardAvoidingView, TouchableOpacity, Image, Animated, TouchableWithoutFeedback, Keyboard } from 'react-native';
 import { connect } from 'react-redux';
-import { login, loginGoogle, createError } from '../actions/auth';
+import { login, loginGoogle, createError, loginApple } from '../actions/auth';
 import { styles, input } from './Styles';
 import { LinearGradient } from 'expo-linear-gradient';
 import { Dimensions } from 'react-native';
 import * as Google from 'expo-google-app-auth';
 import * as Font from 'expo-font';
 import * as AppleAuthentication from 'expo-apple-authentication';
-const Login = ({ login, auth1, business, navigation, loginGoogle, createError }) => {
+const Login = ({ login, auth1, business, navigation, loginGoogle, createError, loginApple }) => {
     const [fields, setFields] = useState({
         email: '',
         password: ''
@@ -90,10 +90,11 @@ const Login = ({ login, auth1, business, navigation, loginGoogle, createError })
                                     try {
                                         const credential = await AppleAuthentication.signInAsync({
                                             requestedScopes: [
-                                                AppleAuthentication.AppleAuthenticationScope.FULL_NAME,
                                                 AppleAuthentication.AppleAuthenticationScope.EMAIL,
                                             ],
                                         });
+                                        console.log(credential);
+                                        loginApple(credential);
                                         // signed in
                                     } catch (e) {
                                         if (e.code === 'ERR_CANCELED') {
@@ -127,4 +128,4 @@ const mapStateToProps = state => ({
     auth1: state.auth,
     business: state.business
 });
-export default connect(mapStateToProps, { login, loginGoogle, createError })(Login);
+export default connect(mapStateToProps, { login, loginGoogle, createError, loginApple })(Login);
