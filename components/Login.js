@@ -43,7 +43,7 @@ const Login = ({ login, auth1, business, navigation, loginGoogle, createError, l
                 <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
                     <View>
                         <View style={{ backgroundColor: 'transparent', alignItems: 'center', paddingTop: 30 }}>
-                            <Image source={require('../assets/logos/Sizzle_White_Transparent.png')} style={{ height: 150, width: 220 }} ></Image>
+                            <Image source={require('../assets/logos/Sizzle_White_Transparent.png')} style={{ height: Dimensions.get('window').height / 6, width: '100%' }} ></Image>
                         </View>
                         <View>
                             <TextInput
@@ -68,13 +68,13 @@ const Login = ({ login, auth1, business, navigation, loginGoogle, createError, l
                                 autoCorrect={false}
                             />
                             <TouchableOpacity onPress={auth} style={{
-                                height: 50, backgroundColor: '#ff9900', width: 300, borderRadius: 5, marginBottom: 20, shadowColor: "#000",
+                                height: Dimensions.get('window').height / 17, backgroundColor: '#ff9900', width: Dimensions.get('window').width / 1.25, borderRadius: 5, marginBottom: 30, shadowColor: "#000",
                                 shadowOffset: { width: 0, height: 2 }, shadowOpacity: 0.25, shadowRadius: 3.84, elevation: 5, justifyContent: 'center', alignSelf: 'center'
                             }}>
                                 <Text style={{ color: 'white', alignSelf: 'center', fontFamily: 'AvenirNext-Bold', fontSize: 16 }}>Log In</Text>
                             </TouchableOpacity>
                             <TouchableOpacity onPress={() => loginWithGoogle()} style={{
-                                flexDirection: "row", height: 50, backgroundColor: '#4285f4', width: 300, borderRadius: 5, marginBottom: 20, shadowColor: "#000",
+                                flexDirection: "row", height: Dimensions.get('window').height / 17, backgroundColor: '#4285f4', width: Dimensions.get('window').width / 1.25, borderRadius: 5, marginBottom: 10, shadowColor: "#000",
                                 shadowOffset: { width: 0, height: 2 }, shadowOpacity: 0.25, shadowRadius: 3.84, elevation: 5, alignSelf: 'center', alignItems: 'center'
                             }}>
                                 <Image source={require('../assets/logos/google-light-signin-logo.png')} style={{ height: 50, width: 50 }}></Image>
@@ -85,7 +85,8 @@ const Login = ({ login, auth1, business, navigation, loginGoogle, createError, l
                                 buttonType={AppleAuthentication.AppleAuthenticationButtonType.SIGN_IN}
                                 buttonStyle={AppleAuthentication.AppleAuthenticationButtonStyle.BLACK}
                                 cornerRadius={5}
-                                style={{ width: 200, height: 44 }}
+                                style={{ width: Dimensions.get('window').width / 1.25, height: Dimensions.get('window').height / 17, shadowColor: "#000",
+                                        shadowOffset: { width: 0, height: 2 }, shadowOpacity: 0.25, shadowRadius: 3.84, elevation: 5, alignSelf: 'center' }}
                                 onPress={async () => {
                                     try {
                                         const credential = await AppleAuthentication.signInAsync({
@@ -105,7 +106,7 @@ const Login = ({ login, auth1, business, navigation, loginGoogle, createError, l
                                     }
                                 }}
                             />
-                            <View style={{ height: 115, borderBottomColor: 'gainsboro', borderBottomWidth: 0.7 }}></View>
+                            <View style={{ height: 50, borderBottomColor: 'gainsboro', borderBottomWidth: 0.7 }}></View>
                             <View style={{ height: 20 }}></View>
                             <View style={{ flexDirection: 'row', justifyContent: 'center', alignItems: 'center' }}>
                                 <Text style={{ fontFamily: 'Avenir-Light', fontSize: 20, color: 'white' }}>New user? </Text>
