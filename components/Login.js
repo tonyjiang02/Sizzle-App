@@ -68,13 +68,13 @@ const Login = ({ login, auth1, business, navigation, loginGoogle, createError, l
                                 autoCorrect={false}
                             />
                             <TouchableOpacity onPress={auth} style={{
-                                height: Dimensions.get('window').height / 17, backgroundColor: '#ff9900', width: Dimensions.get('window').width / 1.25, borderRadius: 5, marginBottom: 30, shadowColor: "#000",
+                                height: 50, backgroundColor: '#ff9900', width: 300, borderRadius: 5, marginBottom: 30, shadowColor: "#000",
                                 shadowOffset: { width: 0, height: 2 }, shadowOpacity: 0.25, shadowRadius: 3.84, elevation: 5, justifyContent: 'center', alignSelf: 'center'
                             }}>
                                 <Text style={{ color: 'white', alignSelf: 'center', fontFamily: 'AvenirNext-Bold', fontSize: 16 }}>Log In</Text>
                             </TouchableOpacity>
                             <TouchableOpacity onPress={() => loginWithGoogle()} style={{
-                                flexDirection: "row", height: Dimensions.get('window').height / 17, backgroundColor: '#4285f4', width: Dimensions.get('window').width / 1.25, borderRadius: 5, marginBottom: 10, shadowColor: "#000",
+                                flexDirection: "row", height: 50, backgroundColor: '#4285f4', width: 300, borderRadius: 5, marginBottom: 10, shadowColor: "#000",
                                 shadowOffset: { width: 0, height: 2 }, shadowOpacity: 0.25, shadowRadius: 3.84, elevation: 5, alignSelf: 'center', alignItems: 'center'
                             }}>
                                 <Image source={require('../assets/logos/google-light-signin-logo.png')} style={{ height: 50, width: 50 }}></Image>
@@ -86,7 +86,7 @@ const Login = ({ login, auth1, business, navigation, loginGoogle, createError, l
                                 buttonStyle={AppleAuthentication.AppleAuthenticationButtonStyle.BLACK}
                                 cornerRadius={5}
                                 style={{
-                                    width: Dimensions.get('window').width / 1.25, height: Dimensions.get('window').height / 17, shadowColor: "#000",
+                                    width: 300, height: 50, shadowColor: "#000",
                                     shadowOffset: { width: 0, height: 2 }, shadowOpacity: 0.25, shadowRadius: 3.84, elevation: 5, alignSelf: 'center'
                                 }}
                                 onPress={async () => {
