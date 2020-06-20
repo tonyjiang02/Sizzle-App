@@ -70,7 +70,8 @@ export const loginApple = (credential) => async dispatch => {
                 'Content-Type': 'application/json',
             },
             body: JSON.stringify({
-                identityToken: credential.identityToken
+                identityToken: credential.identityToken,
+                authorizationCode: credential.authorizationCode
             })
         });
         if (!res.ok) {
@@ -78,6 +79,7 @@ export const loginApple = (credential) => async dispatch => {
             throw err;
         }
         const json = await res.json();
+        console.log(json);
         dispatch({
             type: LOGIN_SUCCESS,
             payload: json

@@ -85,13 +85,16 @@ const Login = ({ login, auth1, business, navigation, loginGoogle, createError, l
                                 buttonType={AppleAuthentication.AppleAuthenticationButtonType.SIGN_IN}
                                 buttonStyle={AppleAuthentication.AppleAuthenticationButtonStyle.BLACK}
                                 cornerRadius={5}
-                                style={{ width: Dimensions.get('window').width / 1.25, height: Dimensions.get('window').height / 17, shadowColor: "#000",
-                                        shadowOffset: { width: 0, height: 2 }, shadowOpacity: 0.25, shadowRadius: 3.84, elevation: 5, alignSelf: 'center' }}
+                                style={{
+                                    width: Dimensions.get('window').width / 1.25, height: Dimensions.get('window').height / 17, shadowColor: "#000",
+                                    shadowOffset: { width: 0, height: 2 }, shadowOpacity: 0.25, shadowRadius: 3.84, elevation: 5, alignSelf: 'center'
+                                }}
                                 onPress={async () => {
                                     try {
                                         const credential = await AppleAuthentication.signInAsync({
                                             requestedScopes: [
                                                 AppleAuthentication.AppleAuthenticationScope.EMAIL,
+                                                AppleAuthentication.AppleAuthenticationScope.FULL_NAME
                                             ],
                                         });
                                         console.log(credential);
