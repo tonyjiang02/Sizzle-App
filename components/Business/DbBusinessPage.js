@@ -38,7 +38,7 @@ import { updateBusinessReservations } from '../../actions/business';
 import * as Location from 'expo-location';
 import { createError } from '../../actions/auth';
 
-const DbBusinessPage = ({ route: { params: { db } }, checkIn, User, updateBusinessReservations, dbBusiness, updateUserWithoutReturn, createError }) => {
+const DbBusinessPage = ({ route: { params: { db, navigation } }, checkIn, User, updateBusinessReservations, dbBusiness, updateUserWithoutReturn, createError }) => {
     //destructuring
     const [data, setData] = useState(dbBusiness);
     let { _id, name, owner, googleId, publicId, isVerified, images, coverImageUrl, website, phone, address, openStatus, hours, description, population, reservations, announcements, reservationLimit, covid19Information } = data;
@@ -63,6 +63,7 @@ const DbBusinessPage = ({ route: { params: { db } }, checkIn, User, updateBusine
     }
     //modals
     const [liveUpdatesModalVisible, setLiveUpdatesVisible] = useState(false);
+    const [pickupModalVisible, setPickupVisible] = useState(false);
     const [reservationsModalVisible, setReservationsVisible] = useState(false);
     const [covidModalVisible, setCovidModalVisible] = useState(false);
     const [livePopulation, setLivePopulation] = useState(population);
@@ -341,6 +342,33 @@ const DbBusinessPage = ({ route: { params: { db } }, checkIn, User, updateBusine
             </Modal>
             <Modal
                 propagateSwipe={true}
+                isVisible={pickupModalVisible}
+                coverScreen={false}
+                backdropColor={"white"}
+                backdropOpacity={0.8}
+                animationIn={'slideInLeft'}
+                animationOut={'slideOutLeft'}
+                animationInTiming={500}
+                swipeDirection={['left']}
+                onSwipeComplete={(e) => { if (e.swipingDirection === 'left') setPickupVisible(false); }}
+            >
+                <View style={styles.liveUpdatesModalView}>
+                    <TouchableOpacity onPress={() => { setPickupVisible(false); }}>
+                        <View style={{ height: 10 }}></View>
+                        <AntDesign name='leftcircle' color='#ff9900' size={getIconSize(19)} style={{ alignSelf: 'center' }}></AntDesign>
+                        <Text style={{ color: '#ff9900', fontSize: getFontSize(24), fontFamily: 'Avenir-Heavy', paddingBottom: 10 }}>Pickup</Text>
+                    </TouchableOpacity>
+                    <ScrollView showsVerticalScrollIndicator={false}>
+                        <TouchableWithoutFeedback>
+                            <View>
+                                {updates}
+                            </View>
+                        </TouchableWithoutFeedback>
+                    </ScrollView>
+                </View>
+            </Modal>
+            <Modal
+                propagateSwipe={true}
                 isVisible={covidModalVisible}
                 coverScreen={false}
                 backdropColor={"white"}
@@ -411,8 +439,13 @@ const DbBusinessPage = ({ route: { params: { db } }, checkIn, User, updateBusine
                                 height: 250,
                             }}
                         />
+                        <View style={{position: 'absolute', top: 50, left: 20, alignItems: 'baseline'}}>
+                            <TouchableOpacity onPress={()=> navigation.goBack()}>
+                                <AntDesign name="leftcircle" color='#ff9900' size={getIconSize(20)}></AntDesign>
+                            </TouchableOpacity>
+                        </View>
                         <View style={{ position: 'absolute', bottom: 40, alignItems: 'baseline' }}>
-                            <Text style={{ color: 'white', fontSize: getFontSize(30), fontWeight: 'bold', paddingLeft: 20 }}>{name}</Text>
+                        <Text style={{ color: 'white', fontSize: getFontSize(30), fontWeight: 'bold', paddingLeft: 20 }}>{(name.length <= 40) ? name : textTruncateBySpaceTwo(37, name)}</Text>
                             <View style={{ paddingLeft: 20, paddingTop: 10, flexDirection: 'row', alignItems: 'center' }}>
                                 <Text style={{ borderRadius: 5, borderColor: 'white', color: 'white', borderWidth: 1, padding: 3, fontSize: getFontSize(16) }}>
                                     {distance}
@@ -466,23 +499,23 @@ const DbBusinessPage = ({ route: { params: { db } }, checkIn, User, updateBusine
                 </View>
 
                 {(covid19Information != '') && 
-                    <View style={{ paddingTop: 15, paddingHorizontal: 8 }}>
-                        <View style={styles.businessSquareInner}>
-                            <TouchableOpacity onPress={() => setCovidModalVisible(true)}>
-                                <View style={{ paddingHorizontal: 15, height: 140, backgroundColor: '#FDDFDF', borderRadius: 10 }}>
-                                    <View style={{ flexDirection: 'row', paddingTop: 5 }}>
-                                        <Text style={{ color: 'red', fontSize: getFontSize(24), fontFamily: 'Avenir-Heavy', paddingVertical: 5, paddingRight: 10 }}>Guidelines</Text>
-                                        <AntDesign name='rightcircle' color='red' size={getIconSize(18)} style={{ paddingTop: 11 }}></AntDesign>
-                                    </View>
-                                    <Text style={{ fontFamily: 'AvenirNext-Bold', fontSize: getFontSize(17), paddingVertical: 3 }}>
-                                        This business has certain guidelines for its customers. Press on this card for more details.
-                                    </Text>
+                <View style={{ paddingVertical: 15, paddingHorizontal: 8 }}>
+                    <View style={styles.businessSquareInner}>
+                        <TouchableOpacity onPress={() => setCovidModalVisible(true)}>
+                            <View style={{ paddingHorizontal: 15, height: 140, backgroundColor: '#FDDFDF', borderRadius: 10 }}>
+                                <View style={{ flexDirection: 'row', paddingTop: 5 }}>
+                                    <Text style={{ color: 'red', fontSize: getFontSize(24), fontFamily: 'Avenir-Heavy', paddingVertical: 5, paddingRight: 10 }}>Guidelines</Text>
+                                    <AntDesign name='rightcircle' color='red' size={getIconSize(18)} style={{ paddingTop: 11 }}></AntDesign>
                                 </View>
-                            </TouchableOpacity>
-                        </View>
-                    </View>}
+                                <Text style={{ fontFamily: 'AvenirNext-Bold', fontSize: getFontSize(17), paddingVertical: 3 }}>
+                                    This business has certain guidelines for its customers. Press on this card for more details.
+                                </Text>
+                            </View>
+                        </TouchableOpacity>
+                    </View>
+                </View>}
 
-                <View style={{ paddingTop: 15, paddingHorizontal: 8 }}>
+                {(announcements.length !== 0) ? <View style={{ paddingBottom: 15, paddingHorizontal: 8 }}>
                     <View style={styles.businessSquareInner}>
                         <TouchableOpacity onPress={() => { setLiveUpdatesVisible(true); }} style={{ paddingHorizontal: 15, backgroundColor: '#fdeedc', borderRadius: 10 }}>
                             <View style={{ flex: 2, flexDirection: 'row', justifyContent: 'flex-start', alignItems: 'baseline' }}>
@@ -494,9 +527,10 @@ const DbBusinessPage = ({ route: { params: { db } }, checkIn, User, updateBusine
                             </View>
                         </TouchableOpacity>
                     </View>
-                </View>
+                </View> : 
+                <View></View>}
 
-                <View style={{ paddingVertical: 15, paddingHorizontal: 8 }}>
+                {((typeof reservations !== 'undefined') && (reservations.length !== 0)) ? <View style={{ paddingBottom: 15, paddingHorizontal: 8 }}>
                     <View style={styles.businessSquareInner}>
                         <View style={{ paddingHorizontal: 15, backgroundColor: '#E1FDE2', borderRadius: 10 }}>
                             <TouchableOpacity onPress={() => { setReservationsVisible(true); }} style={{ flex: 1, flexDirection: 'row', justifyContent: 'flex-start' }}>
@@ -508,6 +542,18 @@ const DbBusinessPage = ({ route: { params: { db } }, checkIn, User, updateBusine
                                     <ReservationScroll day={currentDay} reserve={reserveSpot} reservations={reservations[currentDay.toLowerCase()]} checkReserved={checkReserved} reservationLimit={reservationLimit} style={{ alignItems: 'flex-start' }}></ReservationScroll>
                                 </View>
                             </View>
+                        </View>
+                    </View>
+                </View> :
+                <View></View>}
+                
+                <View style={{ paddingBottom: 15, paddingHorizontal: 8 }}>
+                    <View style={styles.businessSquareInner}>
+                        <View style={{ paddingHorizontal: 15, backgroundColor: 'lavender', borderRadius: 10 }}>
+                            <TouchableOpacity onPress={() => { setPickupVisible(true); }} style={{ flex: 1, flexDirection: 'row', justifyContent: 'flex-start' }}>
+                                <Text style={{ color: 'purple', fontSize: getFontSize(24), fontFamily: 'Avenir-Heavy', paddingTop: 5, paddingRight: 10 }}>Pickup</Text>
+                                <AntDesign name='rightcircle' color='purple' size={getIconSize(18)} style={{ paddingTop: 11 }}></AntDesign>
+                            </TouchableOpacity>
                         </View>
                     </View>
                 </View>

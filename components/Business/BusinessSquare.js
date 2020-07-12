@@ -26,9 +26,9 @@ const BusinessSquare = ({ business, navigation, db, openBusinessPage, type, User
     const onPress = () => {
         openBusinessPage(business, db);
         if (db.isVerified) {
-            navigation.navigate('BusinessPage', { business: business, db: db });
+            navigation.navigate('BusinessPage', { business: business, db: db, navigation: navigation });
         } else {
-            navigation.navigate('UnverifiedBusinessPage', { business: business, db: db });
+            navigation.navigate('UnverifiedBusinessPage', { business: business, db: db, navigation: navigation });
         }
     };
 

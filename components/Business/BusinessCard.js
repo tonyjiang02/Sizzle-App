@@ -12,7 +12,7 @@ import { straightLineDistance, kmToMi, getCoords } from '../../utils/businessUti
 import * as Location from 'expo-location';
 
 const BusinessCard = ({ business, navigation, db, openBusinessPage, User }) => {
-    const [lineDistance, setLineDistance] = useState('unknown');
+    const [lineDistance, setLineDistance] = useState('...');
     useEffect(() => {
         let distance = 0;
         async function fetchDistance() {
@@ -28,7 +28,6 @@ const BusinessCard = ({ business, navigation, db, openBusinessPage, User }) => {
     }, []);
     //let { vicinity, opening_hours } = business;
     let { isVerified, openStatus, coverImageUrl, population, address, name } = db;
-
     let cardName = "";
     let cardAddress = "";
     if (db.isVerified === true){
@@ -36,22 +35,28 @@ const BusinessCard = ({ business, navigation, db, openBusinessPage, User }) => {
         cardAddress = db.address;
     }
     else{
-        cardName = business.name;
-        cardAddress = business.vicinity;
+        try {
+            cardName = business.name;
+            cardAddress = business.vicinity;
+        }
+        catch (err) {
+            cardName = "Error";
+            cardAddress = "Error";
+        }
     }
     const onPress = () => {
         if (!business){
             console.log('running bc no business');
             openBusinessPage(null, db);
-            navigation.navigate('DbBusinessPage', { db: db });
+            navigation.navigate('DbBusinessPage', { db: db, navigation: navigation });
         }
         else if (db.isVerified) {
             console.log('running bc verified and not just db');
             openBusinessPage(business, db);
-            navigation.navigate('BusinessPage', { business: business, db: db });
+            navigation.navigate('BusinessPage', { business: business, db: db, navigation: navigation });
         } else {
             openBusinessPage(business, db);
-            navigation.navigate('UnverifiedBusinessPage', { business: business, db: db });
+            navigation.navigate('UnverifiedBusinessPage', { business: business, db: db, navigation: navigation });
         }
     };
 

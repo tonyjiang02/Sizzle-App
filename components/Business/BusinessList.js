@@ -32,6 +32,8 @@ export const BusinessList = ({ type, business, navigation }) => {
         }
         else if (type === 'favorites') {
             var favoritesdb = business.dbFavoriteBusinesses;
+            console.log('favoritesdb from businesslist');
+            console.log(favoritesdb);
             setBusinessList(favoritesdb.map((biz, i) => (
                 <BusinessCard key={i} navigation={navigation} db={biz}></BusinessCard>
             )));

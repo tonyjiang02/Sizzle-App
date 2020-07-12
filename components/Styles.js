@@ -91,7 +91,6 @@ const styles = StyleSheet.create({
         borderRadius: 5
     },
     liveUpdatesModalView: {
-        marginHorizontal: 10,
         marginTop: 150,
         marginBottom: 150,
         backgroundColor: "#fdeedc",
@@ -108,8 +107,24 @@ const styles = StyleSheet.create({
         shadowRadius: 3.84,
         elevation: 5
     },
+    pickupModalView: {
+        marginTop: 150,
+        marginBottom: 150,
+        backgroundColor: "lavender",
+        borderRadius: 20,
+        paddingHorizontal: 15,
+        paddingBottom: 35,
+        alignItems: "center",
+        shadowColor: "#000",
+        shadowOffset: {
+            width: 0,
+            height: 2
+        },
+        shadowOpacity: 0.25,
+        shadowRadius: 3.84,
+        elevation: 5
+    },
     covid19ModalView: {
-        marginHorizontal: 10,
         marginTop: 150,
         marginBottom: 150,
         backgroundColor: "#FDE6E6",
@@ -127,7 +142,6 @@ const styles = StyleSheet.create({
         elevation: 5
     },
     sortModalView: {
-        marginHorizontal: 10,
         marginTop: 150,
         marginBottom: 150,
         backgroundColor: "white",
@@ -145,7 +159,6 @@ const styles = StyleSheet.create({
         elevation: 5
     },
     introModalView: {
-        marginHorizontal: 10,
         marginTop: 150,
         marginBottom: 150,
         backgroundColor: "white",
@@ -161,7 +174,6 @@ const styles = StyleSheet.create({
         elevation: 5,
     },
     reservationsModalView: {
-        marginHorizontal: 10,
         marginTop: 150,
         marginBottom: 150,
         backgroundColor: "#E1FDE2",

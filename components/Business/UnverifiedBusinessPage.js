@@ -38,7 +38,7 @@ import { updateUser, updateUserWithoutReturn } from '../../actions/user';
 import { updateBusinessReservations, getAdditionalData } from '../../actions/business';
 import * as Location from 'expo-location';
 
-const UnverifiedBusinessPage = ({ route: { params: { business, db } }, checkIn, updateUser, updateUserWithoutReturn, User, updateBusinessReservations, dbBusiness, checkInWithName, createError }) => {
+const UnverifiedBusinessPage = ({ route: { params: { business, db, navigation } }, checkIn, updateUser, updateUserWithoutReturn, User, updateBusinessReservations, dbBusiness, checkInWithName, createError }) => {
     //destructuring
     let { name, vicinity, geometry, place_id } = business;
     let { _id, googleId, isVerified, population } = dbBusiness;
@@ -234,10 +234,15 @@ const UnverifiedBusinessPage = ({ route: { params: { business, db } }, checkIn, 
                 }}>
                     <View>
                         <LinearGradient
-                            colors={['#ff9900', '#ff5f6d']} style={{ height: 210 }}
+                            colors={['#ff9900', '#ff5f6d']} style={{ height: 240 }}
                         >
+                            <View style={{position: 'absolute', top: 50, left: 20, alignItems: 'baseline'}}>
+                                <TouchableOpacity onPress={()=> navigation.goBack()}>
+                                    <AntDesign name="leftcircle" color='white' size={getIconSize(20)}></AntDesign>
+                                </TouchableOpacity>
+                            </View>
                             <View style={{ position: 'absolute', bottom: 40, alignItems: 'baseline' }}>
-                                <Text style={{ color: 'white', fontSize: getFontSize(30), fontWeight: 'bold', paddingLeft: 20, paddingRight: 10 }}>{business.name.length > 50 ? textTruncateBySpaceTwo(50, business.name) : business.name}</Text>
+                                <Text style={{ color: 'white', fontSize: getFontSize(30), fontWeight: 'bold', paddingLeft: 20, paddingRight: 10 }}>{business.name.length > 40 ? textTruncateBySpaceTwo(37, business.name) : business.name}</Text>
                                 <View style={{ paddingLeft: 20, paddingTop: 10, flexDirection: 'row', alignItems: 'center' }}>
                                     <Text style={{ borderRadius: 5, borderColor: 'white', color: 'white', borderWidth: 1, padding: 3, fontSize: getFontSize(16) }}>
                                         {lineDistance}
