@@ -37,7 +37,9 @@ import { updateUser, updateUserWithoutReturn } from '../../actions/user';
 import { updateBusinessReservations } from '../../actions/business';
 import {textTruncateBySpaceTwo} from '../../utils/TextTruncate';
 import * as Location from 'expo-location';
-const BusinessPage = ({ route: { params: { business, db } }, checkIn, auth, updateUser, User, getBusiness, updateBusinessReservations, dbBusiness, updateUserWithoutReturn, createError }) => {
+import MenuItem from './Pickup/MenuItem';
+
+const BusinessPage = ({ route: { params: { business, db, navigation } }, checkIn, auth, updateUser, User, getBusiness, updateBusinessReservations, dbBusiness, updateUserWithoutReturn, createError }) => {
     //destructuring
     let { vicinity, geometry } = business;
     const [data, setData] = useState(dbBusiness);
@@ -87,6 +89,7 @@ const BusinessPage = ({ route: { params: { business, db } }, checkIn, auth, upda
     };*/
     useEffect(() => {
         console.log("dbBusiness changed");
+        console.log(reservations);
         setData(dbBusiness);
     }, [dbBusiness]);
     useEffect(() => {
@@ -405,8 +408,13 @@ const BusinessPage = ({ route: { params: { business, db } }, checkIn, auth, upda
                                 height: 250,
                             }}
                         />
+                        <View style={{position: 'absolute', top: 50, left: 20, alignItems: 'baseline'}}>
+                            <TouchableOpacity onPress={()=> navigation.goBack()}>
+                                <AntDesign name="leftcircle" color='#ff9900' size={getIconSize(20)}></AntDesign>
+                            </TouchableOpacity>
+                        </View>
                         <View style={{ position: 'absolute', bottom: 40, alignItems: 'baseline' }}>
-                            <Text style={{ color: 'white', fontSize: getFontSize(30), fontWeight: 'bold', paddingLeft: 20 }}>{business.name}</Text>
+                            <Text style={{ color: 'white', fontSize: getFontSize(30), fontWeight: 'bold', paddingLeft: 20 }}>{(business.name.length <= 40) ? business.name : textTruncateBySpaceTwo(37, business.name)}</Text>
                             <View style={{ paddingLeft: 20, paddingTop: 10, flexDirection: 'row', alignItems: 'center' }}>
                                 <Text style={{ borderRadius: 5, borderColor: 'white', color: 'white', borderWidth: 1, padding: 3, fontSize: getFontSize(16) }}>
                                     {lineDistance}
@@ -455,7 +463,7 @@ const BusinessPage = ({ route: { params: { business, db } }, checkIn, auth, upda
                 </View>
 
                 {(covid19Information != '') && 
-                <View style={{ paddingTop: 15, paddingHorizontal: 8 }}>
+                <View style={{ paddingVertical: 15, paddingHorizontal: 8 }}>
                     <View style={styles.businessSquareInner}>
                         <TouchableOpacity onPress={() => setCovidModalVisible(true)}>
                             <View style={{ paddingHorizontal: 15, height: 140, backgroundColor: '#FDDFDF', borderRadius: 10 }}>
@@ -471,7 +479,7 @@ const BusinessPage = ({ route: { params: { business, db } }, checkIn, auth, upda
                     </View>
                 </View>}
 
-                <View style={{ paddingTop: 15, paddingHorizontal: 8 }}>
+                {(announcements.length !== 0) ? <View style={{ paddingBottom: 15, paddingHorizontal: 8 }}>
                     <View style={styles.businessSquareInner}>
                         <TouchableOpacity onPress={() => { setLiveUpdatesVisible(true); }} style={{ paddingHorizontal: 15, backgroundColor: '#fdeedc', borderRadius: 10 }}>
                             <View style={{ flex: 2, flexDirection: 'row', justifyContent: 'flex-start', alignItems: 'baseline' }}>
@@ -483,9 +491,10 @@ const BusinessPage = ({ route: { params: { business, db } }, checkIn, auth, upda
                             </View>
                         </TouchableOpacity>
                     </View>
-                </View>
+                </View> : 
+                <View></View>}
 
-                <View style={{ paddingVertical: 15, paddingHorizontal: 8 }}>
+                {((typeof reservations !== 'undefined') && (reservations.length !== 0)) ? <View style={{ paddingBottom: 15, paddingHorizontal: 8 }}>
                     <View style={styles.businessSquareInner}>
                         <View style={{ paddingHorizontal: 15, backgroundColor: '#E1FDE2', borderRadius: 10 }}>
                             <TouchableOpacity onPress={() => { setReservationsVisible(true); }} style={{ flex: 1, flexDirection: 'row', justifyContent: 'flex-start' }}>
@@ -499,6 +508,21 @@ const BusinessPage = ({ route: { params: { business, db } }, checkIn, auth, upda
                             </View>
                         </View>
                     </View>
+                </View> :
+                <View></View>}
+                
+                <View style={{ paddingBottom: 15, paddingHorizontal: 8 }}>
+                    <View style={styles.businessSquareInner}>
+                        <TouchableOpacity onPress={() => { navigation.navigate('MenuPage', {navigation: navigation, bizimage: coverImageUrl}) }} style={{ paddingHorizontal: 15, backgroundColor: 'lavender', borderRadius: 10, paddingBottom: 10 }}>
+                            <View style={{ flex: 1, flexDirection: 'row', justifyContent: 'flex-start' }}>
+                                <Text style={{ color: 'purple', fontSize: getFontSize(24), fontFamily: 'Avenir-Heavy', paddingTop: 5, paddingRight: 10 }}>Pickup</Text>
+                                <AntDesign name='rightcircle' color='purple' size={getIconSize(18)} style={{ paddingTop: 11 }}></AntDesign>
+                            </View>
+                            <Text style={{ fontFamily: 'AvenirNext-Bold', fontSize: getFontSize(17), paddingVertical: 3 }}>
+                                Currently In Queue: 5
+                            </Text>
+                        </TouchableOpacity>
+                    </View> 
                 </View>
 
                 <View style={{ borderBottomColor: 'azure' }}></View>

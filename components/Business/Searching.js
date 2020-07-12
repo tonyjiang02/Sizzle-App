@@ -28,7 +28,7 @@ const Searching = ({ getNearby, newSearch, newFilter, loadFilter, route: { param
     const [results, setResults] = useState(<SearchLoading></SearchLoading>);
     const [filterPressed, setFilterPressed] = useState(false);
 
-    const fadeAnim = useRef(new Animated.Value(0)).current;
+    const fadeAnim = useRef(new Animated.Value(0.5)).current;
 
     const fadeIn = () => {
         // Will change fadeAnim value to 1 in 5 seconds
@@ -36,11 +36,11 @@ const Searching = ({ getNearby, newSearch, newFilter, loadFilter, route: { param
             Animated.sequence([
               Animated.timing(fadeAnim, {
                 toValue: 1,
-                duration: 800
+                duration: 300
               }), 
               Animated.timing(fadeAnim, {
-                toValue: 0,
-                duration: 800
+                toValue: 0.5,
+                duration: 300
                 })
             ]),
           ).start()

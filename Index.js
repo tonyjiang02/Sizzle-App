@@ -26,6 +26,7 @@ import Favorites from './components/Business/Favorites';
 import UserReservations from './components/Business/UserReservations';
 import DbBusinessPage from './components/Business/DbBusinessPage';
 import ErrorDisplay from './components/layout/ErrorDisplay';
+import MenuPage from './components/Business/Pickup/MenuPage';
 
 const Stack = createStackNavigator();
 const Index = ({ auth }) => {
@@ -106,6 +107,7 @@ const Index = ({ auth }) => {
                     <Stack.Screen name="Favorites" component={Favorites} />
                     <Stack.Screen name="UserReservations" component={UserReservations} />
                     <Stack.Screen name="DbBusinessPage" component={DbBusinessPage} />
+                    <Stack.Screen name="MenuPage" component={MenuPage} />
                 </Fragment>
             );
         }
