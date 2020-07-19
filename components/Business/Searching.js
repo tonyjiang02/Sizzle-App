@@ -168,16 +168,16 @@ const Searching = ({ getNearby, newSearch, newFilter, loadFilter, route: { param
             />
             {!business.loadingSearch ? <View style={{ paddingTop: 5, backgroundColor: '#ff9900'}}>
                 <View flexDirection='row' style={{ height: 40, justifyContent: 'center'}}>
-                    <TouchableOpacity onPress={() => { setWithinFiveMiles(!checkWithinFiveMiles); setFilterPressed(true)}} style={{ paddingHorizontal: 3, flex: 1 }}>
+                    <TouchableOpacity onPress={() => { setWithinFiveMiles(!checkWithinFiveMiles); setFilterPressed(true)}} style={{ paddingHorizontal: 3 }}>
                         {withinFiveMilesDisplay}
                     </TouchableOpacity>
-                    <TouchableOpacity onPress={() => { setLowPopulation(!checkLowPopulation); setFilterPressed(true)}} style={{ paddingHorizontal: 3, flex: 1 }}>
+                    <TouchableOpacity onPress={() => { setLowPopulation(!checkLowPopulation); setFilterPressed(true)}} style={{ paddingHorizontal: 3 }}>
                         {lowPopulationDisplay}
                     </TouchableOpacity>
-                    <TouchableOpacity onPress={() => { setCurrentlyOpen(!checkCurrentlyOpen); setFilterPressed(true)}} style={{ paddingHorizontal: 3, flex: 1 }}>
+                    <TouchableOpacity onPress={() => { setCurrentlyOpen(!checkCurrentlyOpen); setFilterPressed(true)}} style={{ paddingHorizontal: 3 }}>
                         {currentlyOpenDisplay}
                     </TouchableOpacity>
-                    <TouchableOpacity onPress={() => { setVerified(!checkVerified); setFilterPressed(true)}} style={{ paddingHorizontal: 3, flex: 1 }}>
+                    <TouchableOpacity onPress={() => { setVerified(!checkVerified); setFilterPressed(true)}} style={{ paddingHorizontal: 3 }}>
                         {checkVerifiedDisplay}
                     </TouchableOpacity>
                 </View>

@@ -1,4 +1,4 @@
-import { StyleSheet } from 'react-native';
+import { StyleSheet, Dimensions } from 'react-native';
 
 const styles = StyleSheet.create({
     defaultView: {
@@ -110,10 +110,10 @@ const styles = StyleSheet.create({
     pickupModalView: {
         marginTop: 150,
         marginBottom: 150,
-        backgroundColor: "lavender",
+        backgroundColor: "white",
         borderRadius: 20,
-        paddingHorizontal: 15,
-        paddingBottom: 35,
+        paddingHorizontal: 20,
+        paddingVertical: 10,
         alignItems: "center",
         shadowColor: "#000",
         shadowOffset: {

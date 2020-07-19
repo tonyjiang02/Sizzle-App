@@ -20,7 +20,7 @@ export default function Loading() {
             style={{flex: 1}}
         >
             <Animated.View onLayout={fadeIn} style={{ opacity: fadeAnim, flex: 1, justifyContent: "center", alignItems: "center", backgroundColor: 'white'}}>
-                <Image source={require( '../../assets/logos/Sizzle_S_Logo_Transparent.png' )} style={{height: 300, width: 300, alignSelf: 'center'}} ></Image>
+                <Image source={require( '../../assets/logos/Sizzle_S_Logo_Transparent.png' )} style={{height: 150, width: 150, alignSelf: 'center'}} ></Image>
             </Animated.View>
         </LinearGradient>
     );

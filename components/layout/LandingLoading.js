@@ -6,7 +6,7 @@ import { Ionicons, MaterialCommunityIcons, AntDesign, FontAwesome5, MaterialIcon
 import Outlines from '../../assets/Outlines';
 import {LinearGradient} from 'expo-linear-gradient';
 
-export const SearchLoading = ({}) => {
+export const LandingLoading = ({}) => {
 
     const fadeAnim = useRef(new Animated.Value(0.5)).current;
 
@@ -76,4 +76,4 @@ export const SearchLoading = ({}) => {
 };
 
 
-export default SearchLoading;
+export default LandingLoading;

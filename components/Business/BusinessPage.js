@@ -513,7 +513,7 @@ const BusinessPage = ({ route: { params: { business, db, navigation } }, checkIn
                 
                 <View style={{ paddingBottom: 15, paddingHorizontal: 8 }}>
                     <View style={styles.businessSquareInner}>
-                        <TouchableOpacity onPress={() => { navigation.navigate('MenuPage', {navigation: navigation, bizimage: coverImageUrl}) }} style={{ paddingHorizontal: 15, backgroundColor: 'lavender', borderRadius: 10, paddingBottom: 10 }}>
+                        <TouchableOpacity onPress={() => { navigation.navigate('MenuPage', {navigation: navigation, bizimage: coverImageUrl, name: business.name}) }} style={{ paddingHorizontal: 15, backgroundColor: 'lavender', borderRadius: 10, paddingBottom: 10 }}>
                             <View style={{ flex: 1, flexDirection: 'row', justifyContent: 'flex-start' }}>
                                 <Text style={{ color: 'purple', fontSize: getFontSize(24), fontFamily: 'Avenir-Heavy', paddingTop: 5, paddingRight: 10 }}>Pickup</Text>
                                 <AntDesign name='rightcircle' color='purple' size={getIconSize(18)} style={{ paddingTop: 11 }}></AntDesign>
