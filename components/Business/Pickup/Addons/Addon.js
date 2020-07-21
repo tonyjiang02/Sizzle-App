@@ -1,14 +1,14 @@
 import React, { useEffect, useState } from 'react';
 import { Text, View, StyleSheet, TouchableWithoutFeedback, TouchableOpacity, Dimensions} from 'react-native';
 import { getFontSize, getIconSize } from '../../../../utils/fontsizes'
-import { FontAwesome, AntDesign } from '@expo/vector-icons';
+import { FontAwesome, AntDesign, Entypo } from '@expo/vector-icons';
 
 const Addon = ( {name, price, index, onPress} ) => {
     const [selected, setSelected] = useState(false);
     let borderStyle = {flexDirection: 'row', padding: 10, borderRadius: 15, borderWidth: 1, borderColor: 'black', width: Dimensions.get('window').width-100}
     let textColor = 'black';
     let priceDisplay = "";
-    let checked = <AntDesign name="plussquare" size={getIconSize(18)}></AntDesign>
+    let checked = <FontAwesome name="square-o" size={getIconSize(18)}></FontAwesome>
     if (price === 0){
         priceDisplay = "Free";
     }
@@ -18,12 +18,12 @@ const Addon = ( {name, price, index, onPress} ) => {
     if (selected === false){
       borderStyle = {flexDirection: 'row', padding: 10, borderRadius: 15, borderWidth: 1, borderColor: '#e6e6e6', backgroundColor: '#e6e6e6', width: Dimensions.get('window').width-100, alignItems: 'center'}
       textColor = 'black';
-      checked = <AntDesign name="plussquare" size={getIconSize(18)} color='black'></AntDesign>
+      checked = <FontAwesome name="square-o" size={getIconSize(18)}></FontAwesome>
     }
     if (selected === true){
       borderStyle = {flexDirection: 'row', padding: 10, borderRadius: 15, borderWidth: 1, borderColor: '#ff9900', backgroundColor: '#ff9900', width: Dimensions.get('window').width-100}
       textColor = 'white';
-      checked = <AntDesign name="checksquare" size={getIconSize(18)} color='white'></AntDesign>
+      checked = <FontAwesome name="check-square" size={getIconSize(18)} color='white'></FontAwesome>
     }
 
     return (

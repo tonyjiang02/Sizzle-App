@@ -11,6 +11,7 @@ import { styles } from '../../Styles';
 import MenuItem from './MenuItem';
 import MenuCategory from './MenuCategory';
 import Addons from './Addons/Addons';
+import Option from './Option';
 
 export const MenuPage = ({ route: { params: { navigation, bizimage, name } }}) => {
     const [itemAddons, setAddons] = useState(null);
@@ -34,7 +35,13 @@ export const MenuPage = ({ route: { params: { navigation, bizimage, name } }}) =
 
     const showModal = (name, image, options, addons, price, desc) => {
         setAddons(<Addons obj={addons}></Addons>);
-        setOptions(options);
+        console.log(options);
+        if (options.length === 0){
+            setOptions(<Text style={{paddingVertical: 15, fontFamily: 'Avenir', fontSize: getFontSize(18), textAlign: 'center'}}>No Options Available</Text>)
+        }
+        else {
+            setOptions(options.map((x)=><Option obj={x}></Option>));
+        }
         setItemName(name);
         setItemImage(image);
         setItemPrice(price);
@@ -57,7 +64,8 @@ export const MenuPage = ({ route: { params: { navigation, bizimage, name } }}) =
                         outofstock: false,
                         addons: [{title:"onions", price:0}, {title:"pickles", price:0}, {title:"extra patty", price:1.00}], 
                         options: [{name: 'Patty Style', options: [{name: 'medium rare', price: 0}, {name: 'medium', price: 0}, {name: 'well done', price: 0}]}, {name: 'Bun Style', options: [{name: 'Regular', price: 0}, {name: 'Protein Style', price: 0}]}],
-                        dealPrice: 2.45
+                        dealPrice: 2.45,
+                        key: 'a'
                     },
                     {
                         name: 'Cheeseburger', 
@@ -66,7 +74,8 @@ export const MenuPage = ({ route: { params: { navigation, bizimage, name } }}) =
                         desc: "This burger can add cheese, onions, pickles, one patty, and a charred bun.",
                         outofstock: false,
                         addons: [{title:"cheese", price:0.5}, {title:"onions", price:0}, {title:"pickles", price:0}], 
-                        options: [{name: 'Patty Style', options: [{name: 'medium rare', price: 0}, {name: 'medium', price: 0}, {name: 'well done', price: 0}]}, {name: 'Bun Style', options: [{name: 'Regular', price: 0}, {name: 'Protein Style', price: 0}]}]
+                        options: [{name: 'Patty Style', options: [{name: 'medium rare', price: 0}, {name: 'medium', price: 0}, {name: 'well done', price: 0}]}, {name: 'Bun Style', options: [{name: 'Regular', price: 0}, {name: 'Protein Style', price: 0}]}],
+                        key: 'b'
                     },
                     {
                         name: 'Hamburger', 
@@ -75,7 +84,8 @@ export const MenuPage = ({ route: { params: { navigation, bizimage, name } }}) =
                         desc: "This burger can add onions, pickles, one patty, and a charred bun.",
                         outofstock: false,
                         addons: [{title:"onions", price:0}, {title:"pickles", price:0}],  
-                        options: [{name: 'Patty Style', options: [{name: 'medium rare', price: 0}, {name: 'medium', price: 0}, {name: 'well done', price: 0}]}, {name: 'Bun Style', options: [{name: 'Regular', price: 0}, {name: 'Protein Style', price: 0}]}]
+                        options: [{name: 'Patty Style', options: [{name: 'medium rare', price: 0}, {name: 'medium', price: 0}, {name: 'well done', price: 0}]}, {name: 'Bun Style', options: [{name: 'Regular', price: 0}, {name: 'Protein Style', price: 0}]}],
+                        key: 'c'
                     }
                 ]
             },
@@ -89,7 +99,8 @@ export const MenuPage = ({ route: { params: { navigation, bizimage, name } }}) =
                         desc: "Medium and large upgrades available.",
                         outofstock: false,
                         addons: [],
-                        options: [{name: 'Size', options: [{name: 'small', price: 0}, {name: 'medium', price: 0.2}, {name: 'large', price: 0.3}]}, {name: 'Drink', options: [{name: 'Sprite', price: 0}, {name: 'Coke', price: 0}]}]
+                        options: [{name: 'Size', options: [{name: 'small', price: 0}, {name: 'medium', price: 0.2}, {name: 'large', price: 0.3}]}, {name: 'Drink', options: [{name: 'Sprite', price: 0}, {name: 'Coke', price: 0}]}],
+                        key: 'd'
                     },
                     {
                         name: 'Shake', 
@@ -98,7 +109,8 @@ export const MenuPage = ({ route: { params: { navigation, bizimage, name } }}) =
                         desc: "Medium and large upgrades available",
                         outofstock: false,
                         addons: [],
-                        options: [{name: 'Size', options: [{name: 'small', price: 0}, {name: 'medium', price: 0.3}, {name: 'large', price: 0.5}]}, {name: 'Flavor', options: [{name: 'Strawberry', price: 0}, {name: 'Vanilla', price: 0}, {name: 'Chocolate', price: 0}]}]
+                        options: [{name: 'Size', options: [{name: 'small', price: 0}, {name: 'medium', price: 0.3}, {name: 'large', price: 0.5}]}, {name: 'Flavor', options: [{name: 'Strawberry', price: 0}, {name: 'Vanilla', price: 0}, {name: 'Chocolate', price: 0}]}],
+                        key: 'e'
                     }
                 ]
             }
@@ -170,6 +182,11 @@ export const MenuPage = ({ route: { params: { navigation, bizimage, name } }}) =
                         <View style={{paddingTop: 10}}>
                             <Text style={{fontFamily: 'Avenir', fontSize: getFontSize(15), color: 'black', textAlign: 'center'}}>{itemDesc}</Text>
                         </View>
+                        <View style={{height: 10}}></View>
+                        {<View style={{alignItems: 'center'}}>
+                            <Text style={{fontFamily: 'AvenirNext-Bold', fontSize: getFontSize(22), textAlign: 'center'}}>Options</Text>
+                            {itemOptions}
+                        </View>}
                         <View style={{height: 10}}></View>
                         <View style={{alignItems: 'center'}}>
                             <Text style={{fontFamily: 'AvenirNext-Bold', fontSize: getFontSize(22), textAlign: 'center'}}>Addons</Text>

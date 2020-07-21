@@ -8,16 +8,20 @@ import { add } from 'react-native-reanimated';
 const Addons = ({obj}) => {
     const [addons, setAddons] = useState([]);
     let selected = [];
-    const [pressed, setPressed ] = useState(false);
-    const [changed, setChanged ] = useState(false);
+
 
     useEffect(() => {
       let tempAddon = [];
-      for (let k = 0; k < obj.length; k++){
-        tempAddon.push(<Addon name={obj[k].title} price={obj[k].price} index={k} onPress={changeSelection}></Addon>)
-        selected.push(false);
+      if (obj.length === 0){
+        setAddons(<Text style={{paddingVertical: 15, fontFamily: 'Avenir', fontSize: getFontSize(18), textAlign: 'center'}}>No Addons Available</Text>)
       }
-      setAddons(tempAddon);
+      else {
+        for (let k = 0; k < obj.length; k++){
+          tempAddon.push(<Addon name={obj[k].title} price={obj[k].price} index={k} onPress={changeSelection}></Addon>)
+          selected.push(false);
+        }
+        setAddons(tempAddon);
+      }
     }, [])
 
     const changeSelection = (index) => {
@@ -27,7 +31,6 @@ const Addons = ({obj}) => {
       else {
         selected[index] = true;
       }
-      setChanged(true);
       console.log(selected);
     }
 
