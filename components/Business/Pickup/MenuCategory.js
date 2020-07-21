@@ -9,7 +9,7 @@ export const MenuCategory = ({ navigation, name, items, onPress }) => {
     useEffect(()=> {
         let list = [];
         for (let k = 0; k < items.length; k++){
-            list.push(<MenuItem name={items[k].name} price={items[k].price} image={items[k].image} desc={items[k].desc} outofstock={items[k].outofstock} options={items[k].options} addons={items[k].addons} dealPrice={items[k].dealPrice} onPress={onPress}></MenuItem>)
+            list.push(<MenuItem name={items[k].name} price={items[k].price} image={items[k].image} desc={items[k].desc} outofstock={items[k].outofstock} options={items[k].options} addons={items[k].addons} dealPrice={items[k].dealPrice} onPress={onPress} id={items[k].id}></MenuItem>)
         }
         if (list.length > 0){
             setItemsList(list);

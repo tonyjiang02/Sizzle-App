@@ -5,7 +5,7 @@ import Addon from './Addon';
 import { processFontFamily } from 'expo-font';
 import { add } from 'react-native-reanimated';
 
-const Addons = ({obj}) => {
+const Addons = ({obj, addAddon}) => {
     const [addons, setAddons] = useState([]);
     let selected = [];
 
@@ -31,6 +31,7 @@ const Addons = ({obj}) => {
       else {
         selected[index] = true;
       }
+      addAddon(obj[index]);
       console.log(selected);
     }
 

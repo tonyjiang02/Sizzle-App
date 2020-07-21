@@ -3,9 +3,9 @@ import { Text, View, StyleSheet, TouchableWithoutFeedback, TouchableOpacity, Dim
 import { getFontSize, getIconSize } from '../../../utils/fontsizes'
 import { FontAwesome, AntDesign, Entypo } from '@expo/vector-icons';
 
-const Option = ({obj}) => {
+const Option = ({obj, addOption}) => {
     const [selectedArray, setSelectedArray] = useState(obj.options.map((x) => false));
-    
+      
     const getPriceDisplay = (price) => {
       if (price === 0){
           return "Free";
@@ -37,9 +37,7 @@ const Option = ({obj}) => {
         if (k === index){
           if (temp[index] === false){
             temp[index] = true;
-          }
-          else {
-            temp[index] = false;
+            addOption({id: obj.id, selected: obj.options[index]})
           }
         }
         else {
@@ -63,10 +61,10 @@ const Option = ({obj}) => {
 
     return (
         <View style={{width: Dimensions.get('window').width-100}}>
-          <Text style={{fontFamily: 'Avenir', fontSize: getFontSize(18)}}> {obj.name}</Text>
+          <Text style={{fontFamily: 'Avenir', fontSize: getFontSize(18), fontWeight: 'bold'}}> {obj.name}</Text>
           <View style={{height: 5}}></View>
             {list}
-          <View style={{height: 5}}></View>
+          <View style={{height: 15}}></View>
         </View>
     );
 }

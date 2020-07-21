@@ -69,6 +69,7 @@ const styles = StyleSheet.create({
         shadowRadius: 2.22,
         elevation: 3,
         borderRadius: 10,
+        height: 115
     },
     infoOuterBlock: {
         paddingBottom: 15,

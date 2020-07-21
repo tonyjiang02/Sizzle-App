@@ -10,7 +10,7 @@ import { Ionicons, MaterialCommunityIcons, AntDesign, FontAwesome5, MaterialIcon
 import { connect } from 'react-redux';
 import { getFontSize, getIconSize } from '../../../utils/fontsizes';
 
-const MenuItem = ({ name, price, image, desc, outofstock, options, addons, onPress, dealPrice }) => {
+const MenuItem = ({ name, price, image, desc, outofstock, options, addons, onPress, dealPrice, id }) => {
     let picture = <Image source={image ? { uri: image } : require('../../../assets/logos/image_unavailable.png')} style={{ height: 115, width: 115, borderTopLeftRadius: 10, borderBottomLeftRadius: 10 }}></Image>
     if (outofstock === true){
         picture = <Image source={image ? { uri: image } : require('../../../assets/logos/image_unavailable.png')} style={{ height: 115, width: 115, borderTopLeftRadius: 10, borderBottomLeftRadius: 10, opacity: 0.5 }}></Image>
@@ -19,7 +19,6 @@ const MenuItem = ({ name, price, image, desc, outofstock, options, addons, onPre
     let priceDisplay = <Text style={{ fontSize: getFontSize(16), paddingBottom: 5, color: 'black', fontFamily: 'Avenir-Light' }}>${price.toFixed(2)}</Text>
     let actualPrice = price;
     if (typeof dealPrice !== 'undefined'){
-        console.log("dealPrice");
         actualPrice = dealPrice;
         priceDisplay = <View style={{flexDirection: 'row', flexWrap: 'wrap'}}>
             <Text style={{ fontSize: getFontSize(16), paddingBottom: 5, color: 'red', fontFamily: 'Avenir-Light' }}>${dealPrice.toFixed(2)}</Text>
@@ -30,7 +29,7 @@ const MenuItem = ({ name, price, image, desc, outofstock, options, addons, onPre
     return (
         <View>
             <View style={styles.businessCardOuter}>
-                <TouchableOpacity style={styles.businessCardInner} onPress={() => {onPress(name, image, options, addons, actualPrice, desc)}}>
+                <TouchableOpacity style={styles.businessCardInner} onPress={() => {onPress(name, image, options, addons, actualPrice, desc, id)}}>
                     <View style={{ flex: 10 }}>
                         {picture}
                     </View>
