@@ -8,7 +8,7 @@ import {LinearGradient} from 'expo-linear-gradient';
 
 export const SearchLoading = ({}) => {
 
-    const fadeAnim = useRef(new Animated.Value(0)).current;
+    const fadeAnim = useRef(new Animated.Value(0.5)).current;
 
     const fadeIn = () => {
         // Will change fadeAnim value to 1 in 5 seconds
@@ -16,11 +16,11 @@ export const SearchLoading = ({}) => {
             Animated.sequence([
               Animated.timing(fadeAnim, {
                 toValue: 1,
-                duration: 800
+                duration: 400
               }), 
               Animated.timing(fadeAnim, {
-                toValue: 0,
-                duration: 800
+                toValue: 0.5,
+                duration: 400
                 })
             ]),
           ).start()

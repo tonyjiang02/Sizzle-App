@@ -137,13 +137,11 @@ const ExampleBusinessPage = () => {
     //Live updates display
 
     const updates = <View>
-            <LiveUpdate title={'Out of Stock'} content={'Eggplants, Organic Cherries, Grade AAA Eggs'} time={30} key={1}></LiveUpdate>
-            <LiveUpdate title={'Closed on Monday'} content={'Memorial Day'} time={200} key={1}></LiveUpdate>
-            <LiveUpdate title={'Deals'} content={'All dairy products are half off.'} time={200} key={1}></LiveUpdate>
-            <LiveUpdate title={'Out of Stock'} content={'Paper towels'} time={1000} key={1}></LiveUpdate>
-            <LiveUpdate title={'FLASH SALE'} content={'Storewide 20% off today (some exclusions apply).'} time={8000} key={1}></LiveUpdate>
-            <LiveUpdate title={'Out of Stock'} content={'Eggplants, Organic Cherries, Grade AAA Eggs'} time={14000} key={1}></LiveUpdate>
-            <LiveUpdate title={'Out of Stock'} content={'Eggplants, Organic Cherries, Grade AAA Eggs'} key={1}></LiveUpdate>
+            <LiveUpdate title={'Out of Stock'} content={'Eggplants, Organic Cherries, Grade AAA Eggs'} time={new Date(2020, 5, 17, 21, 25, 44, 2)} key={1}></LiveUpdate>
+            <LiveUpdate title={'Closed on Monday'} content={'Memorial Day'} time={new Date(2020, 5, 15, 21, 25, 44, 2)} key={1}></LiveUpdate>
+            <LiveUpdate title={'Deals'} content={'All dairy products are half off.'} time={new Date(2020, 5, 11, 21, 25, 44, 2)} key={1}></LiveUpdate>
+            <LiveUpdate title={'Out of Stock'} content={'Paper towels'} time={new Date(2020, 4, 29, 21, 25, 44, 2)} key={1}></LiveUpdate>
+            <LiveUpdate title={'FLASH SALE'} content={'Storewide 20% off today (some exclusions apply).'} time={new Date(2020, 4, 17, 21, 25, 44, 2)} key={1}></LiveUpdate>
         </View>
 
     return (

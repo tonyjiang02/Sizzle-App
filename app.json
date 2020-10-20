@@ -7,7 +7,7 @@
       "android",
       "web"
     ],
-    "version": "1.0.3",
+    "version": "1.0.5",
     "orientation": "portrait",
     "icon": "./assets/logos/Sizzle_Icon.png",
     "splash": {
@@ -24,10 +24,10 @@
     "ios": {
       "supportsTablet": false,
       "bundleIdentifier": "com.jasyzhang.sizzle",
-      "buildNumber": "1.0.3",
+      "buildNumber": "1.0.5",
       "usesAppleSignIn": true,
       "infoPlist": {
-        "NSCamerUsageDescription": "Sizzle requests access to your camera to check-in to verified locations with QR Codes.",
+        "NSCameraUsageDescription": "Sizzle requests access to your camera to check-in to verified locations with QR Codes.",
         "NSLocationWhenInUseUsageDescription": "Sizzle requests access to your location to provide nearby location results and verify your location upon check-in."
       },
       "config": {
